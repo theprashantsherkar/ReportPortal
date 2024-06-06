@@ -1,0 +1,11 @@
+
+.changepass{
+    margin: 30px 40px;
+    display:flexbox;
+    align-items: center;
+    justify-content: center;
+}
+
+.inputs button{
+    margin-top: 25px;
+}

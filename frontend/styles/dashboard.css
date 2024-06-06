@@ -1,0 +1,43 @@
+
+.Dashboard{
+     margin: 20px 0;
+    padding: 0 20px;
+    display: flexbox;
+    align-items: center;
+    justify-content: center;
+    width: 150vb;
+
+
+}
+.dashContent{
+    margin: 20px 0;
+    padding: 0 20px;
+    
+}
+
+
+
+.dashHeader{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 20px 10px;
+}
+
+.tableContent{
+    padding: 0 30px;
+}
+
+
+th{
+    padding: 10px 0;
+}
+td{
+    padding: 8px 0;
+}
+
+.box{
+    border: 1px solid black;
+    border-radius: 3px;
+}
+

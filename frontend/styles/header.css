@@ -1,0 +1,16 @@
+.heading{
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+    padding-right: 8%;
+}
+
+.headingCont{
+    
+    padding: 20px 30px;
+    background-color: black;
+    color: white;
+
+}
+
+
