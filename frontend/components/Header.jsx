@@ -1,9 +1,18 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import '../styles/header.css'
+import UserContext from '../context/userContext'
+import userContextProvider from '../context/userContextProvider'
+import axios from 'axios'
 
-function Header() {
 
-    const [user, setUser] = useState('')
+function Header () {
+    const userData = axios.get(`${backendPath}/users/userData`).then((data) => {
+        
+    }).catch((err) => {
+        
+    })
+
+    const {user, setUser} = useContext(UserContext)
     return (
         <>
             <div className="headingCont">

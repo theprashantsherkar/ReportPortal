@@ -12,16 +12,17 @@ export const landing = (req, res) => {
 
 export const loginFunc = async(req, res) => {
     const { email, password } = req.body;
-    const user = await db.query(`SELECT * FROM adminDb WHERE email= ?`[email]);
+    const user = await db.query(`SELECT * FROM user WHERE email= ?`,[email]);
     if (!user) return res.json({
         success: false,
-        message: 'user does not exists, login first'
+        message: 'user does not exists, Register first'
     })
     const isMatched = await bcrypt.compare(password, user.password);
     if (!isMatched) return res.json({
         successs:false,
         message:"incorrect password",
     })
+
     const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY);
 
 
@@ -37,21 +38,21 @@ export const loginFunc = async(req, res) => {
 
 export const signinFunc = async(req, res) => {
     const { name, email, password } = req.body;
-    const oldUser = await db.query(`SELECT * FROM adminDb WHERE email=?`[email]);
+
+    const oldUser = await db.query("SELECT email FROM user WHERE email=?",[email])
 
     if (oldUser) return res.json({
         success: false,
         message: 'User Already Exists, go and login!'
-    }).redirect('/login');
+    });
 
     const hashedPass = await bcrypt.hash(password, 10);
 
-    const user = await db.query(`INSERT INTO admin (name, email, password) VALUES (?,?,?)`,
-        [name, email, hashedPass]);
+    const user = await db.query(`INSERT INTO user SET ?`, { name: name, email: email, password: hashedPass });
 
     const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY);
 
-    if (user) return res.cookie("token", token, {
+    res.cookie("token", token, {
         httpOnly: true,
         maxAge: 15 * 60 * 1000,
     }).json({
@@ -62,9 +63,9 @@ export const signinFunc = async(req, res) => {
 }
 
 
-export const logout = (req, res) => { 
+export const logout = (req, res) => {
     res.cookie("token", null, {
-        httpOnly: true, 
+        httpOnly: true,
         maxAge: new Date(Date.now()),
 
     }).json({

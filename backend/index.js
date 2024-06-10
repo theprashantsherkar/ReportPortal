@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 import cors from 'cors';
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import { dbConnection } from "./data/database.js";
+import  dbConnection  from "./data/database.js";
 
 export const app = express();
 app.use(cors())
@@ -17,15 +17,11 @@ app.use(express.json())
 app.use('/admin', adminRouter)
 
 export const DbConnected = () => {
-    dbConnection.connect((error) => {
-        if (error) {
-            console.log(error);
-        }
-    }).then(() => {
-        console.log('databse connected successfully!')
-    }).catch((err) => {
-        console.log(err);
+    dbConnection.query('SELECT 1').then(() => {
+        console.log('Database connected!')
+    }).catch((error) => {
+        console.log(error);
     })
-}
 
+}
 

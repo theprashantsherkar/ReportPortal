@@ -1,0 +1,67 @@
+section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 30px 0;
+
+}
+
+form {
+    margin: 20px;
+}
+
+form input {
+    margin-bottom: 20px;
+}
+
+form button {
+
+    background-color: black;
+    width: 200px;
+    height: 45px;
+    color: white;
+    margin: 20px;
+    border: 3px solid black;
+    border-radius: 3px;
+    font-size: 15px;
+    padding: 0 30px;
+}
+
+form button:hover {
+    background-color: white;
+    color: black;
+    transition: ease-in 0.4s;
+    cursor: pointer;
+}
+
+form h4 {
+    text-align: center;
+}
+
+form input {
+    width: 250px;
+    height: 40px;
+    padding-left: 20px;
+}
+
+
+.btns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.link {
+    margin-top: 25px;
+    display: flex;
+    /* align-items: center; */
+    justify-content: center;
+
+}
+
+.signup {
+    text-decoration: none;
+    font-size: 17px;
+    color: black;
+
+}

@@ -1,10 +1,10 @@
 import mysql from 'mysql2';
 
- var dbConnection = mysql.createConnection({
-    host: "localhost",
+ var dbConnection = mysql.createPool({
+    host: process.env.DB_HOST,
     user: 'root',
     password: "Prashu@8484",
-    database: "adminDb",
+    database: "admindb",
 }).promise()
 
 

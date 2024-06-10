@@ -12,34 +12,27 @@ import Profile from '../pages/Profile.jsx'
 function App() {
   return (
     <>
-      <div className="layout">
-        <div className="header">
-          <Header />
-        </div>
-        <BrowserRouter>
-
-          <div className="mainDiv">
-            <div className="sidebar">
-              <Sidebar />
-            </div>
-            <div className='w-75'>
-              <Routes>
-                <Route path='/' element={<Dashboard /> } />
-                <Route path='/profile' element={<Profile /> } />
-                <Route path='/exam' element={<Exam /> } />
-                <Route path='/changepassword' element={<Passchange /> } />
-              </Routes>
-            </div>
-            
-
+        <div className="layout">
+          <div className="header">
+            <Header />
           </div>
-        
-        
-        </BrowserRouter>
+          <BrowserRouter>
+            <div className="mainDiv">
+              <div className="sidebar">
+                <Sidebar />
+              </div>
+              <div className='w-75'>
+                <Routes>
+                  <Route path='/' element={<Dashboard />} />
+                  <Route path='/profile' element={<Profile />} />
+                  <Route path='/exam' element={<Exam />} />
+                  <Route path='/changepassword' element={<Passchange />} />
+                </Routes>
+              </div>
+            </div>
+          </BrowserRouter>
+        </div>
 
-      </div>
-     
-      
     </>
   )
 }
