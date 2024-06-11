@@ -1,9 +1,10 @@
 import { app } from "./index.js";
-import { DbConnected } from "./index.js";
+import { ConnectDB } from "./data/database.js";
+import colors from 'colors';
 
-DbConnected();
+ConnectDB();
 
 app.listen(process.env.PORT, () => {
-    console.log(`the app is running at port: ${process.env.PORT}`);
+    console.log(`the app is running at port: ${process.env.PORT}`.black.bgMagenta);
 
 })

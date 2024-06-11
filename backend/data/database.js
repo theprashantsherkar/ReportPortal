@@ -1,11 +1,13 @@
-import mysql from 'mysql2';
+import mongoose from "mongoose";
 
- var dbConnection = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: 'root',
-    password: "Prashu@8484",
-    database: "admindb",
-}).promise()
+export const ConnectDB = () => {
+    mongoose.connect("mongodb://localhost:27017", { dbName: "admin" })
+        .then(() => {
+            console.log('Database connected.'.bgBlue.black)
+        }).catch((err) => {
+            console.log(err)
+        })
+}
 
 
-export default dbConnection;
+

@@ -1,4 +1,4 @@
-import db from '../data/database.js'
+import { Users } from '../model/userModel.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
@@ -12,12 +12,13 @@ export const landing = (req, res) => {
 
 export const loginFunc = async(req, res) => {
     const { email, password } = req.body;
-    const user = await db.query(`SELECT * FROM user WHERE email= ?`,[email]);
+    const user = await Users.findOne({ email });
     if (!user) return res.json({
         success: false,
         message: 'user does not exists, Register first'
     })
     const isMatched = await bcrypt.compare(password, user.password);
+
     if (!isMatched) return res.json({
         successs:false,
         message:"incorrect password",
@@ -37,9 +38,7 @@ export const loginFunc = async(req, res) => {
 
 export const signinFunc = async(req, res) => {
     const { name, email, password } = req.body;
-
-    const [rows] = await db.query("SELECT email FROM user WHERE email=?", [email])
-    const oldUser = rows[1];
+    const oldUser = await Users.findOne({ email });
     console.log(oldUser);
     if (oldUser) return res.json({
         success: false,
@@ -48,8 +47,12 @@ export const signinFunc = async(req, res) => {
 
     const hashedPass = await bcrypt.hash(password, 10);
 
-    const user = await db.query(`INSERT INTO user SET ?`, { name: name, email: email, password: hashedPass });
+    const user = await Users.create({
+        name,
+        email,
+        password: hashedPass,
 
+    })
     const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY);
 
     res.cookie("token", token, {
@@ -78,10 +81,10 @@ export const dashboardAPI = (req, res) => {
     //input of the excel sheet, read its content and list it
 }
 
-export const changePass = (req, res) => {
+export const changePass = async(req, res) => {
     try {
         const { oldPassoword, newPassword, confPassword } = req.body;
-        const originalPass = db.query(``);
+        const originalPass = await Users.find(req.user.password);
         if (oldPassoword !== originalPass) return res.json({
             success: false,
             message: 'Incorrect old password.'
@@ -91,7 +94,7 @@ export const changePass = (req, res) => {
             message: 'Passowrd not confirmed!'
         })
 
-        db.query(`UPDATE user SET password = ? WHERE email = ?`, [newPassword, req.user.email]);
+        //update password mongo query.
         res.json({
             success: true,
             message: 'Password changed successfully.'

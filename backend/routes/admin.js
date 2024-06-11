@@ -14,12 +14,12 @@ import { isAuthenticated } from '../middlewares/auth.js';
 const router = express.Router()
 
 router.get('/', landing)
-router.post('/login', loginFunc)
-router.post('/register', signinFunc)
-router.post('/changePass', isAuthenticated, changePass)
-router.get('/profile', isAuthenticated, profile)
+router.post('/login', loginFunc)  //tested
+router.post('/register', signinFunc)  //tested
+router.post('/changePass', isAuthenticated, changePass);
+router.get('/profile', isAuthenticated, profile); //tested
 router.get('/dashboard', isAuthenticated, dashboardAPI)
-router.get('/logout', logout)
+router.get('/logout', logout);   //tested
 
 
 export default router;
