@@ -16,9 +16,9 @@ const router = express.Router()
 router.get('/', landing)
 router.post('/login', loginFunc)  //tested
 router.post('/register', signinFunc)  //tested
-router.post('/changePass', isAuthenticated, changePass);
+router.post('/changePass', isAuthenticated, changePass); //pemding
 router.get('/profile', isAuthenticated, profile); //tested
-router.get('/dashboard', isAuthenticated, dashboardAPI)
+router.get('/dashboard', isAuthenticated, dashboardAPI) //pending
 router.get('/logout', logout);   //tested
 
 
