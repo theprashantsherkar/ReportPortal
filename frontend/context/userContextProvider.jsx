@@ -9,7 +9,7 @@ function userContextProvider({ children }) {
                 {children}
             </UserContext.Provider>
         </>
-    )
+    ) 
 }
 
 export default userContextProvider

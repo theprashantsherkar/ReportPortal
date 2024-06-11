@@ -2,13 +2,14 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import '../styles/login.css'
 import toast from 'react-hot-toast';
+import { backend_URL } from '../src/App';
 
 function Login() {
 
     const submitHandler = (e) => {
         e.preventdefault();
         try {
-            const { data } = axios.get(`${backendURL}/login`).then().catch()
+            const { data } = axios.get(`${backend_URL}/login`).then().catch()
             toast.success(data.message);
             
         } catch (error) {

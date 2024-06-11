@@ -3,16 +3,17 @@ import '../styles/header.css'
 import UserContext from '../context/userContext'
 import userContextProvider from '../context/userContextProvider'
 import axios from 'axios'
+import { backend_URL } from '../src/App'
 
 
 function Header () {
-    const userData = axios.get(`${backendPath}/users/userData`).then((data) => {
-        
+    const userData = axios.get(`${backend_URL}/users/userData`).then((data) => {
+
     }).catch((err) => {
-        
+
     })
 
-    const {user, setUser} = useContext(UserContext)
+   const [user, setUser] = useState("")
     return (
         <>
             <div className="headingCont">

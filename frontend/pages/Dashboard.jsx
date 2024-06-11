@@ -2,9 +2,10 @@ import React from 'react'
 import '../styles/dashboard.css'
 
 function Dashboard() {
+    //dashboard api goes here
   return (
       <>
-          
+
               <div className="Dashboard">
                   <div className="dashContent">
                       <h3>Students</h3>
@@ -39,7 +40,6 @@ function Dashboard() {
 
                       </table>
                   </div>
-              
           </div>
       </>
   )

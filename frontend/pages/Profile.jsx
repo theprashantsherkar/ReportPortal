@@ -3,6 +3,7 @@ import '../styles/profile.css'
 
 function Profile() {
   const [user, setUser] = useState('');
+  //profile details display api goes here
 
   return (
     <>

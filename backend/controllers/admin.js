@@ -25,7 +25,6 @@ export const loginFunc = async(req, res) => {
 
     const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY);
 
-
     res.cookie("token", token, {
         httpOnly: true,
         maxAge: 15 * 60 * 1000,
@@ -39,8 +38,9 @@ export const loginFunc = async(req, res) => {
 export const signinFunc = async(req, res) => {
     const { name, email, password } = req.body;
 
-    const oldUser = await db.query("SELECT email FROM user WHERE email=?",[email])
-
+    const [rows] = await db.query("SELECT email FROM user WHERE email=?", [email])
+    const oldUser = rows[1];
+    console.log(oldUser);
     if (oldUser) return res.json({
         success: false,
         message: 'User Already Exists, go and login!'
@@ -74,3 +74,42 @@ export const logout = (req, res) => {
     })
 }
 
+export const dashboardAPI = (req, res) => {
+    //input of the excel sheet, read its content and list it
+}
+
+export const changePass = (req, res) => {
+    try {
+        const { oldPassoword, newPassword, confPassword } = req.body;
+        const originalPass = db.query(``);
+        if (oldPassoword !== originalPass) return res.json({
+            success: false,
+            message: 'Incorrect old password.'
+        })
+        if (newPassword !== confPassword) return res.json({
+            success: false,
+            message: 'Passowrd not confirmed!'
+        })
+
+        db.query(`UPDATE user SET password = ? WHERE email = ?`, [newPassword, req.user.email]);
+        res.json({
+            success: true,
+            message: 'Password changed successfully.'
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const profile = (req, res, next) => {
+    const User = req.user;
+    if (!User) return res.json({
+        success: false,
+        message: 'login first!'
+    })
+    res.json({
+        success: true,
+        message: `welcome ${User.name}`,
+        User,
+    })
+}
