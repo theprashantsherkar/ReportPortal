@@ -83,18 +83,25 @@ export const dashboardAPI = (req, res) => {
 
 export const changePass = async(req, res) => {
     try {
+        const User = req.user;
         const { oldPassoword, newPassword, confPassword } = req.body;
-        const originalPass = await Users.find(req.user.password);
-        if (oldPassoword !== originalPass) return res.json({
+        
+        const isMatched = await bcrypt.compare(oldPassoword, User.password);
+        if (!isMatched) return res.json({
             success: false,
-            message: 'Incorrect old password.'
+            message:'incorrect old password.'
         })
+        
         if (newPassword !== confPassword) return res.json({
             success: false,
             message: 'Passowrd not confirmed!'
         })
 
-        //update password mongo query.
+        const result = await Users.UpdateOne({ email: User.email }, { $set: { password: newPassword } });
+        if (result.nModified == 0) return res.json({
+            success: false,
+            message: "Couldn't find the user."
+        })
         res.json({
             success: true,
             message: 'Password changed successfully.'
