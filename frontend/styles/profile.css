@@ -4,8 +4,20 @@
     padding: 0 20px;
 }
 
-
-.ProfileCont{
-    margin: 20px 40px;
+.table-row td{
+    padding: 10px;
 }
 
+.ProfileCont{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 40px 0;
+    height: 40vh;
+    width: 100%;
+}
+
+.tableCont{
+    width: 80vb;
+  
+}

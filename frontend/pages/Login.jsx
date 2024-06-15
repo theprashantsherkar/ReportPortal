@@ -58,7 +58,7 @@ function Login() {
                             Or
                         </h4>
                         <div className="link">
-                            {/* <Link className='signup' to={"/register"}>Sign Up</Link> */}
+                            <Link className='signup' to={"/register"}>Sign Up</Link>
                         </div>
                     </form>
                 </div>

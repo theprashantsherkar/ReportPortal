@@ -1,12 +1,14 @@
 import React from 'react'
 import '../styles/passchange.css'
+import Header from '../components/Header'
 
 function Passchange() {
   //change password api integration
   return (
     <>
+      <Header/>
       <div className="changepass">
-        <div className="inputs">
+        <div className="pass_inputs">
           <label for="inputPassword5" className="form-label w-100">Enter Old password</label>
           <input type="password" id="inputPassword5" className="form-control w-100" aria-describedby="passwordHelpBlock" />
           <label for="inputPassword6" className="form-label w-100">Enter new password</label>

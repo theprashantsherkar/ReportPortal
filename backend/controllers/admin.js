@@ -85,13 +85,13 @@ export const changePass = async(req, res) => {
     try {
         const User = req.user;
         const { oldPassoword, newPassword, confPassword } = req.body;
-        
+
         const isMatched = await bcrypt.compare(oldPassoword, User.password);
         if (!isMatched) return res.json({
             success: false,
             message:'incorrect old password.'
         })
-        
+
         if (newPassword !== confPassword) return res.json({
             success: false,
             message: 'Passowrd not confirmed!'

@@ -1,48 +1,56 @@
 import React from 'react'
 import '../styles/dashboard.css'
+import Header from '../components/Header.jsx'
 
 function Dashboard() {
     //dashboard api goes here
-  return (
-      <>
+    return (
+        <>
+                <Header />
+            <div className="dashboard">
+                <div className="dash">
+                    <div className="students">
+                        <h1>Students</h1>
+                    </div>
+                    <div className="inputs">
+                        <input type="file" name="excel" id="excel" />
+                        <button type="submit">Upload</button>
+                    </div>
+                    <hr />
+                    <div className="searches">
+                        <p>show
+                            <select name="" id="">
+                                <option value="">1</option>
+                                <option value="">2</option>
+                                <option value="">3</option>
+                            </select>
+                            entries.
+                        </p>
+                        <div className="tab">
+                            <label htmlFor="search">Search: </label>
+                            <input type="search" name="" id="search" />
+                        </div>
+                    </div>
+                    <table className='table table-bordered' id='table1'>
+                        {/* use the map function here to generate table */}
+                        <tr>
+                            <th>Student name</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                        <tr>
+                            <td>avid</td>
+                            <td>avid@gmail.com</td>
+                            <td><button type='buton' className='buttons'>View</button></td>
+                        </tr>
 
-              <div className="Dashboard">
-                  <div className="dashContent">
-                      <h3>Students</h3>
-                  </div>
-                  <div className="inputs dashContent">
-                      <div class="mb-3">
-                          <input class="form-control" type="file" id="formFile" />
-                      </div>
-                      <button type="button" class="btn btn-primary">Upload</button>
-                  </div>
-                  <hr />
-                  <div className="dashHeader">
-                      <p>show <select className='box' name="strength" id="">
-                          <option value="">1</option>
-                          <option value="">2</option>
-                          <option value="">3</option>
-                      </select> entries</p>
-                      <p>Search: <input className='box' type="search" name="" id="" /> </p>
-                  </div>
-                  <div className="tableContent">
-                      <table className='table table-bordered'>
-                          <tr>
-                              <th>Student name</th>
-                              <th>Email</th>
-                              <th>Action</th>
-                          </tr>
-                          <tr>
-                              <td>avid</td>
-                              <td>avid@gmail.com</td>
-                              <td><button type='button' className='view btn btn-primary'>view</button></td>
-                          </tr>
+                    </table>
 
-                      </table>
-                  </div>
-          </div>
-      </>
-  )
+                </div>
+            </div>
+            
+        </>
+    )
 }
 
 export default Dashboard

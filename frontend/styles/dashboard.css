@@ -1,43 +1,59 @@
-
-.Dashboard{
-     margin: 20px 0;
-    padding: 0 20px;
-    display: flexbox;
-    align-items: center;
-    justify-content: center;
-    width: 150vb;
-
-
-}
-.dashContent{
-    margin: 20px 0;
-    padding: 0 20px;
-    
+*{
+margin: 0;
+padding: 0;
 }
 
-
-
-.dashHeader{
+.dashboard{
     display: flex;
-    align-items: center;
-    justify-content: space-around;
-    margin: 20px 10px;
+    margin-top: 30px;
+    justify-content: center;
+    height: 100vh;
+
 }
 
-.tableContent{
-    padding: 0 30px;
-}
-
-
-th{
+.students h1{
+    font-size: 1.4em;
+    font-weight: 500;
     padding: 10px 0;
 }
-td{
-    padding: 8px 0;
+
+input{
+padding: 0 20px;
+border: 1px solid black;
 }
 
-.box{
-    border: 1px solid black;
-    border-radius: 3px;
+.buttons{
+    margin-top: 0;
+    padding:5px 10px;
+    background-color: rgb(51, 113, 194);
+    border-radius: 6px;
+    color: white;
+    margin: 0 10px;
 }
 
+#table1{
+    position: relative;
+    top: 50px;
+}
+
+
+.inputs button{
+    margin-top: 0;
+    padding:5px 10px;
+   
+    background-color: rgb(51, 113, 194);
+    border-radius: 6px;
+    color: white;
+    margin: 0 10px;
+}
+
+.inputs{
+    margin: 30px ;
+}
+
+.searches{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 5px;
+}

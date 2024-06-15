@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import React, {useState} from 'react'
 import toast from 'react-hot-toast';
 import { backend_URL } from '../src/App';
@@ -68,7 +69,7 @@ function Register() {
                             Or
                         </h4>
                         <div className="link">
-                            {/* <Link className='signup' to={""}>Log in</Link> */}
+                            <Link className='signup' to={"/login"}>Log in</Link>
                         </div>
                     </form>
                 </div>

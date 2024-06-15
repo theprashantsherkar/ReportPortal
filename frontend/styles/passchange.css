@@ -1,11 +1,20 @@
 
 .changepass{
     margin: 30px 40px;
-    display:flexbox;
+    display:flex;
     align-items: center;
     justify-content: center;
+    height: 50vh;
 }
 
-.inputs button{
-    margin-top: 25px;
+.pass_inputs button{
+    margin: 30px;
+}
+
+.pass_inputs{
+    width: 50vb;
+}
+
+.form-label{
+    margin-top: 10px;
 }

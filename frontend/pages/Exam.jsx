@@ -1,9 +1,13 @@
 import React from 'react'
+import Header from '../components/Header'
 
 function Exam() {
   return (
     //exam dashboard ui goes here
-    <div>Exam</div>
+    <>
+    <Header />
+    <div className="exam">Exam</div>
+    </>
   )
 }
 
