@@ -1,26 +1,47 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { IoEyeOutline } from "react-icons/io5";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/login.css'
 import toast from 'react-hot-toast';
 import { backend_URL } from '../src/App';
+import LoginContext from '../context/LoginContext';
+import axios from 'axios';
+
 
 function Login() {
     const [toggle, setToggle] = useState(false);
+    const navigate = useNavigate()
+    const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext);
     const onTap = () => {
         setToggle(!toggle);
     }
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const submitHandler = (e) => {
-        e.preventdefault();
-        // try {
-        //     const { data } = axios.get(`${backend_URL}/login`).then().catch()
-        //     toast.success(data.message);
 
-        // } catch (error) {
-        //     console.log(error);
-        // }
+    const submitHandler = async(e) => {
+        e.preventDefault();
+        try {
+            const { data } = await axios.post(`${backend_URL}/admin/login`, {
+                email,
+                password,
+            },
+                {
+                    headers: {
+                    "Content-Type":"application/json"
+                }
+                })
+
+            if (!data.success) {
+                return toast.error(data.message)
+            }
+            toast.success(data.message);
+            setIsLoggedIn(true);
+            navigate('/dashboard', { state: { id: data.message } });
+
+        } catch (error) {
+            console.log(error)
+            toast.error("Something went wrong")
+        }
 
 
     }

@@ -28,7 +28,7 @@ function Dashboard() {
                         </p>
                         <div className="tab">
                             <label htmlFor="search">Search: </label>
-                            <input type="search" name="" id="search" />
+                            <input className='search' type="search" name="" id="search" />
                         </div>
                     </div>
                     <table className='table table-bordered' id='table1'>

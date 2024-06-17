@@ -7,7 +7,7 @@ padding: 0;
     display: flex;
     margin-top: 30px;
     justify-content: center;
-    height: 100vh;
+    height: 80vh;
 
 }
 
@@ -17,7 +17,7 @@ padding: 0;
     padding: 10px 0;
 }
 
-input{
+.search{
 padding: 0 20px;
 border: 1px solid black;
 }

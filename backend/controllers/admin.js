@@ -39,7 +39,7 @@ export const loginFunc = async(req, res) => {
 export const signinFunc = async(req, res) => {
     const { name, email, password } = req.body;
     const oldUser = await Users.findOne({ email });
-    console.log(oldUser);
+
     if (oldUser) return res.json({
         success: false,
         message: 'User Already Exists, go and login!'
@@ -53,9 +53,10 @@ export const signinFunc = async(req, res) => {
         password: hashedPass,
 
     })
+
     const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY);
 
-    res.cookie("token", token, {
+    res.status(200).cookie("token", token, {
         httpOnly: true,
         maxAge: 15 * 60 * 1000,
     }).json({
@@ -84,20 +85,22 @@ export const dashboardAPI = (req, res) => {
 export const changePass = async(req, res) => {
     try {
         const User = req.user;
-        const { oldPassoword, newPassword, confPassword } = req.body;
+        const { oldPassword, newPassword, confPassword } = req.body;
 
-        const isMatched = await bcrypt.compare(oldPassoword, User.password);
+        const isMatched = await bcrypt.compare(oldPassword, User.password);
         if (!isMatched) return res.json({
             success: false,
             message:'incorrect old password.'
         })
+        console.log('hello again')
 
         if (newPassword !== confPassword) return res.json({
             success: false,
             message: 'Passowrd not confirmed!'
         })
+        const newHashed = await bcrypt.hash(newPassword, 10);
 
-        const result = await Users.UpdateOne({ email: User.email }, { $set: { password: newPassword } });
+        const result = await Users.updateOne({ email: User.email }, { $set: { password: newHashed } });
         if (result.nModified == 0) return res.json({
             success: false,
             message: "Couldn't find the user."

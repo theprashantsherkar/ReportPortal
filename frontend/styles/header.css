@@ -12,14 +12,14 @@
 
 }
 
-.navs ul li {
+.links {
     margin: 0 10px;
     font-weight: 600;
     padding:5px 13px;
     border-radius: 20px;
     font-size: 1.1rem;
 }
-.navs ul li:hover {
+.links:hover, .links.active {
     cursor: pointer;
     background-color: rgb(120, 192, 231);
     transition: linear 0.3s;
@@ -35,14 +35,40 @@
     font-weight: 600;
 }
 
+
 .user{
-    padding: 10px 10px;
-    border-radius: 25px;
+  
+   padding: 10px 10px;
+   border-radius: 20px;
 }
 
 .user:hover{
    cursor: pointer;
    background-color: rgb(120, 192, 231);
     transition: linear 0.3s;
+}
 
+.drop{
+    position: absolute;
+    text-align: center;
+    height: 120px;
+    width: 140px;
+    top: 50px;
+    right: 47px;
+    font-size: 18px;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: rgb(120, 192, 231);
+}
+
+.drop ul li:hover{
+    font-weight: 700;
+    transition: linear 0.2s;
+    background-color: rgb(86, 148, 184);
+   
+}
+
+.drop ul li{
+    padding: 10px;
+     border-radius: 20px;
 }

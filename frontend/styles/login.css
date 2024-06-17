@@ -38,7 +38,7 @@ form {
     margin: 20px;
 }
 
-form input {
+.loginPass, .loginEmail {
     margin-bottom: 20px;
     border-left: 1px solid black;
     border-bottom: 1px solid black;
