@@ -11,7 +11,6 @@ import {
 import { upload } from '../index.js';
 import { isAuthenticated } from '../middlewares/auth.js';
 
-
 const router = express.Router()
 
 router.get('/', landing)

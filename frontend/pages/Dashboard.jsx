@@ -1,12 +1,48 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '../styles/dashboard.css'
 import Header from '../components/Header.jsx'
+import { backend_URL } from '../src/App.jsx';
+import toast from 'react-hot-toast';
+import { AxiosHeaders } from 'axios';
 
 function Dashboard() {
     //dashboard api goes here
+    const [data, setData] = useState("");
+    const [file, setFile] = useState("");
+
+    const handleFileChange = (e) => {
+        setFile(e.target.value[0]);
+    }
+
+    const handleUpload = async () => {
+        if (!file) {
+            return toast.error('upload file first')
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+        try {
+            const response = await axios.post('http://localhost:8000/upload', formData, {
+                headers: {
+                    "Content-Type": "multipart-form-data"
+                },
+                withCredentials: true
+            });
+
+            if (response.data.data) {
+                setData(response.data.data)
+                toast.success(response.data.message)
+            } else {
+                toast.error(response.data.message);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Internal Server Error, try after sometime!')
+        }
+    }
     return (
         <>
-                <Header />
+            <Header />
             <div className="dashboard">
                 <div className="dash">
                     <div className="students">
@@ -48,7 +84,7 @@ function Dashboard() {
 
                 </div>
             </div>
-            
+
         </>
     )
 }
