@@ -11,7 +11,7 @@ import axios from 'axios';
 function Login() {
     const [toggle, setToggle] = useState(false);
     const navigate = useNavigate()
-    const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext);
+    const { isLoggedIn, setIsLoggedIn, setUser, user } = useContext(LoginContext);
     const onTap = () => {
         setToggle(!toggle);
     }
@@ -28,7 +28,8 @@ function Login() {
                 {
                     headers: {
                     "Content-Type":"application/json"
-                }
+                    },
+                    withCredentials: true
                 })
 
             if (!data.success) {
@@ -36,6 +37,7 @@ function Login() {
             }
             toast.success(data.message);
             setIsLoggedIn(true);
+
             navigate('/dashboard', { state: { id: data.message } });
 
         } catch (error) {
@@ -52,7 +54,7 @@ function Login() {
                     <img src="../src/logo.png" alt="" />
                 </div>
                 <div className='content'>
-                    <form onSubmit={submitHandler}>
+                    <form className="form" onSubmit={submitHandler}>
 
                         <h1>LOGIN</h1>
                         <input

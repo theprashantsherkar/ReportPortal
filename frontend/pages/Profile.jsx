@@ -1,10 +1,39 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import '../styles/profile.css'
 import Header from '../components/Header';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { backend_URL } from '../src/App';
+import LoginContext from '../context/LoginContext.js';
 
 function Profile() {
-  const [user, setUser] = useState('');
-  //profile details display api goes here
+  const [user, setUser] = useState("")
+
+  // const { isLoggedIn, setIsLoggedIn, user, setUser } = useContext(LoginContext)
+
+  //do this by context api instead.
+  useEffect(() => {
+    async function onLoad() {
+      try {
+        const { data } = await axios.get(`${backend_URL}/admin/profile`, {
+          headers: {
+            "Content-Type": "application/json"
+          },
+        })
+        console.log(data)
+        if (!data.success) {
+          return toast.error('internal server error')
+        }
+        console.log(data.User.name);
+        setUser(data.User.name)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    onLoad();
+  })
+
+
 
   return (
     <>

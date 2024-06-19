@@ -1,16 +1,17 @@
 import { Users } from '../model/userModel.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-
+import multer from 'multer';
+import XLSX from 'xlsx';
 
 export const landing = (req, res) => {
     res.send({
         success: true,
-        message:"app started!"
+        message: "app started!"
     })
 }
 
-export const loginFunc = async(req, res) => {
+export const loginFunc = async (req, res) => {
     const { email, password } = req.body;
     const user = await Users.findOne({ email });
     if (!user) return res.json({
@@ -20,8 +21,8 @@ export const loginFunc = async(req, res) => {
     const isMatched = await bcrypt.compare(password, user.password);
 
     if (!isMatched) return res.json({
-        successs:false,
-        message:"incorrect password",
+        successs: false,
+        message: "incorrect password",
     })
 
     const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY);
@@ -29,14 +30,15 @@ export const loginFunc = async(req, res) => {
     res.cookie("token", token, {
         httpOnly: true,
         maxAge: 15 * 60 * 1000,
-
+        secure: true,
+        sameSite: 'Strict'
     }).json({
         success: true,
         message: `welcome back ${user.name}`,
     })
 }
 
-export const signinFunc = async(req, res) => {
+export const signinFunc = async (req, res) => {
     const { name, email, password } = req.body;
     const oldUser = await Users.findOne({ email });
 
@@ -58,31 +60,58 @@ export const signinFunc = async(req, res) => {
 
     res.status(200).cookie("token", token, {
         httpOnly: true,
-        maxAge: 15 * 60 * 1000,
+        expires: 15 * 60 * 1000,
     }).json({
         success: true,
-        message:'user created successfully!'
+        message: 'user created successfully!'
     })
 
 }
 
 
 export const logout = (req, res) => {
-    res.cookie("token", null, {
+    res.clearCookie("token", {
         httpOnly: true,
-        maxAge: new Date(Date.now()),
 
     }).json({
         success: true,
-        message:'signed out successfully!'
+        message: 'signed out successfully!'
     })
 }
 
 export const dashboardAPI = (req, res) => {
     //input of the excel sheet, read its content and list it
+    try {
+        const file = req.file;
+        if (!file) {
+            return res.status(404).json({
+                success: false,
+                message: "file not uploaded",
+            })
+        }
+        const workbook = XLSX.read(file.buffer, { type: 'buffer' });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+
+        const data = XLSX.utils.sheet_to_json(sheet);
+        res.status(200).json({
+            success: true,
+            message: "sheet uploaded and data fetched successfully.",
+            data: data,
+        })
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: "Error in processing file",
+        })
+    }
+
 }
 
-export const changePass = async(req, res) => {
+export const changePass = async (req, res) => {
     try {
         const User = req.user;
         const { oldPassword, newPassword, confPassword } = req.body;
@@ -90,9 +119,8 @@ export const changePass = async(req, res) => {
         const isMatched = await bcrypt.compare(oldPassword, User.password);
         if (!isMatched) return res.json({
             success: false,
-            message:'incorrect old password.'
+            message: 'incorrect old password.'
         })
-        console.log('hello again')
 
         if (newPassword !== confPassword) return res.json({
             success: false,
@@ -126,3 +154,4 @@ export const profile = (req, res, next) => {
         User,
     })
 }
+

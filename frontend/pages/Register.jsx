@@ -11,7 +11,7 @@ import LoginContext from '../context/LoginContext';
 function Register() {
     const navigate = useNavigate();
     const [toggle, setToggle] = useState(false);
-    const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext);
+    const { isLoggedIn, setIsLoggedIn, setUser } = useContext(LoginContext);
     const onTap = () => {
         setToggle(!toggle);
     }
@@ -22,6 +22,12 @@ function Register() {
     const submitHandler = async(e) => {
         e.preventDefault();
         try {
+            // const { result } = await axios.get(`${backend_URL}/admin/profile`, {
+            //     headers: {
+            //         "Content-Type": "application/json"
+            //     }
+            // })
+            // setUser(result.User.name);
             const { data } = await axios.post(`${backend_URL}/admin/register`, {
                 name,
                 email,
@@ -48,10 +54,10 @@ function Register() {
         <>
             <div className="login">
                 <div className="empty">
-                    <img src="../src/logo.png" alt="" />
+                    <img src="../src/logo.png" alt="school logo" />
                 </div>
                 <div className='content'>
-                    <form onSubmit={submitHandler}>
+                    <form className='form' onSubmit={submitHandler}>
 
                         <h1>SIGN IN</h1>
                         <input

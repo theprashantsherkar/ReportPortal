@@ -27,26 +27,26 @@
     height: 100%;
 }
 
-form h1{
+.form h1{
     margin-bottom: 30px;
     text-align: center;
     font-weight: 400;
     font-size: 30px;
 }
 
-form {
+.form {
     border: 1px solid black;
     padding: 60px 30px;
     margin: 20px;
 }
 
-form input {
+.form input {
     margin-bottom: 20px;
     border-left: 1px solid black;
     border-bottom: 1px solid black;
 }
 
-form button {
+.form button {
 
     background-color: black;
     width: 200px;
@@ -59,18 +59,18 @@ form button {
     padding: 0 30px;
 }
 
-form button:hover {
+.form button:hover {
     background-color: white;
     color: black;
     transition: ease-in 0.4s;
     cursor: pointer;
 }
 
-form h4 {
+.form h4 {
     text-align: center;
 }
 
-form input {
+.form input {
     width: 250px;
     height: 40px;
     padding-left: 20px;
@@ -118,7 +118,7 @@ right: -220px;
 .eye:hover{
     cursor: pointer;
 }
-form input:focus{
+.form input:focus{
     font-weight: 600;
 
 }

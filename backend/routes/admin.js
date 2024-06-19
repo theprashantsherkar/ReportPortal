@@ -8,6 +8,7 @@ import {
     profile,
     signinFunc
 } from '../controllers/admin.js';
+import { upload } from '../index.js';
 import { isAuthenticated } from '../middlewares/auth.js';
 
 
@@ -18,7 +19,7 @@ router.post('/login', loginFunc)  //tested
 router.post('/register', signinFunc)  //tested
 router.put('/changepass', isAuthenticated, changePass);//tested
 router.get('/profile', isAuthenticated, profile); //tested
-router.get('/dashboard', isAuthenticated, dashboardAPI);
+router.get('/upload', upload.single('file'), dashboardAPI);
 router.get('/logout', logout);   //tested
 
 

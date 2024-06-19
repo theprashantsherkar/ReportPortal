@@ -16,11 +16,12 @@ import LoginContext from '../context/LoginContext.js';
 export const backend_URL = 'http://localhost:8000';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState("")
 
 
   return (
 
-    <LoginContext.Provider value={{isLoggedIn, setIsLoggedIn}}>
+    <LoginContext.Provider value={{isLoggedIn, setIsLoggedIn, user, setUser}}>
       <Router>
         <Routes>
           <Route path='/login' element={<Login />} />

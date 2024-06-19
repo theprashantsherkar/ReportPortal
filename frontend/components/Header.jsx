@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom'
 import '../styles/header.css'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import toast from 'react-hot-toast'
 import { FaUserAlt } from "react-icons/fa";
 import { backend_URL } from '../src/App'
 
@@ -10,13 +11,19 @@ function Drop() {
     const navigate = useNavigate()
     const logoutFunc = async() => {
         try {
-            await axios.get(`${backend_URL}/admin/logout`, {
+            const { data } = await axios.get(`${backend_URL}/admin/logout`, {
                 headers: {
                     "Content-Type": "application/json"
                 }
             })
+            if (!data.success) {
+                return toast.error('something went wrong');
+            }
+            toast.success(data.message)
+
         } catch (error) {
             console.log(error)
+            toast.error('something went wrong');
         }
         navigate('/login')
     }

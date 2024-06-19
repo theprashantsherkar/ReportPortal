@@ -4,16 +4,23 @@ import cookieParser from "cookie-parser";
 import cors from 'cors';
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
-
+import multer from 'multer';
 
 export const app = express();
-app.use(cors())
+app.use(cors({
+    origin:"http://localhost:5173",
+    credentials: true,
+}))
 dotenv.config({
     path: './data/config.env'
 })
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json())
+const storage = multer.memoryStorage()
+export const upload = multer({ storage: storage });
+
+
 app.use('/admin', adminRouter)
 
 
