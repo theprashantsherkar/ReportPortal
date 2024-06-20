@@ -5,22 +5,24 @@ import toast from 'react-hot-toast';
 import { backend_URL } from '../src/App';
 import { IoEyeOutline } from "react-icons/io5";
 import '../styles/register.css'
-import LoginContext from '../context/LoginContext';
+import { LoginContext } from '../src/main';
+
 
 
 function Register() {
+    const {isLoggedIn, setIsLoggedIn, loading, setLoading} = useContext(LoginContext)
     const navigate = useNavigate();
     const [toggle, setToggle] = useState(false);
-    const { isLoggedIn, setIsLoggedIn, setUser } = useContext(LoginContext);
     const onTap = () => {
         setToggle(!toggle);
     }
-    const eye = <IoEyeOutline />;
+   
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const submitHandler = async(e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             // const { result } = await axios.get(`${backend_URL}/admin/profile`, {
             //     headers: {
@@ -38,11 +40,13 @@ function Register() {
                 }
             })
             if (!data.success) {
-                return toast.error(data.message)
+                 toast.error(data.message)
+                return setLoading(false)
             }
             toast.success(data.message);
             navigate('/dashboard', { state: { id: data.message } });
             setIsLoggedIn(true);
+            setLoading(false);
        } catch (error) {
            console.log(error)
            toast.error('something went wrong')
@@ -86,7 +90,7 @@ function Register() {
 
                         <br />
                         <div className="btns">
-                            <button type="submit">Sign In</button>
+                            <button disabled={loading} type="submit">Sign In</button>
                         </div>
                         <h4>
                             Or

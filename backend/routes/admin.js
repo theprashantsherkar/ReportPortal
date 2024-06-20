@@ -18,7 +18,7 @@ router.post('/login', loginFunc)  //tested
 router.post('/register', signinFunc)  //tested
 router.put('/changepass', isAuthenticated, changePass);//tested
 router.get('/profile', isAuthenticated, profile); //tested
-router.get('/upload', upload.single('file'), dashboardAPI);
+// router.get('/upload', upload.single('file'), dashboardAPI);
 router.get('/logout', logout);   //tested
 
 

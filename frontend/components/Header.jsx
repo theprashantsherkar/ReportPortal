@@ -5,9 +5,12 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import { FaUserAlt } from "react-icons/fa";
-import { backend_URL } from '../src/App'
+import { backend_URL } from '../src/App.jsx'
+import { LoginContext } from '../src/main.jsx'
 
 function Drop() {
+
+    const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext);
     const navigate = useNavigate()
     const logoutFunc = async() => {
         try {
@@ -18,12 +21,15 @@ function Drop() {
             })
             if (!data.success) {
                 return toast.error('something went wrong');
+                setIsLoggedIn(true);
             }
             toast.success(data.message)
+            setIsLoggedIn(false);
 
         } catch (error) {
             console.log(error)
             toast.error('something went wrong');
+            setIsLoggedIn(true);
         }
         navigate('/login')
     }

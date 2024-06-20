@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import '../styles/App.css'
 import Dashboard from '../pages/Dashboard.jsx'
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
@@ -8,33 +8,48 @@ import Profile from '../pages/Profile.jsx'
 import { Toaster } from 'react-hot-toast';
 import Login from '../pages/Login.jsx';
 import Register from '../pages/Register.jsx';
-import LoginContext from '../context/LoginContext.js';
+import axios from 'axios';
+import { LoginContext } from './main.jsx';
+
 
 
 
 
 export const backend_URL = 'http://localhost:8000';
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState("")
 
+  const { setUser, user, setIsLoggedIn } = useContext(LoginContext);
+  useEffect(() => {
+    axios.get(`${backend_URL}/admin/profile`, {
+      withCredentials: true,
+    }).then((res) => {
+      console.log("data is being set")
+      setUser(res.data.User)
+      setIsLoggedIn(true)
+    }).catch((error) => {
+      setUser({})
+      console.log("error in App.js")
+      console.log(error)
+      setIsLoggedIn(false);
+    })
+  }, [])
 
   return (
 
-    <LoginContext.Provider value={{isLoggedIn, setIsLoggedIn, user, setUser}}>
-      <Router>
-        <Routes>
-          <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<Register />} />
-          <Route path='/' element={<Dashboard />} />
-          <Route path='/dashboard' element={<Dashboard />} />
-          <Route path='/profile' element={<Profile />} />
-          <Route path='/exam' element={<Exam />} />
-          <Route path='/changepassword' element={<Passchange />} />
-        </Routes>
-        <Toaster />
-      </Router>
-    </LoginContext.Provider>
+
+    <Router>
+      <Routes>
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
+        <Route path='/' element={<Dashboard />} />
+        <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/profile' element={<Profile />} />
+        <Route path='/exam' element={<Exam />} />
+        <Route path='/changepassword' element={<Passchange />} />
+      </Routes>
+      <Toaster />
+    </Router>
+
 
   )
 }

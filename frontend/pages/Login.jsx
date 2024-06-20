@@ -4,22 +4,24 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../styles/login.css'
 import toast from 'react-hot-toast';
 import { backend_URL } from '../src/App';
-import LoginContext from '../context/LoginContext';
 import axios from 'axios';
+import { LoginContext } from '../src/main';
 
 
 function Login() {
     const [toggle, setToggle] = useState(false);
+    const { isLoggedIn, setIsLoggedIn, loading, setLoading } = useContext(LoginContext);
     const navigate = useNavigate()
-    const { isLoggedIn, setIsLoggedIn, setUser, user } = useContext(LoginContext);
+
     const onTap = () => {
         setToggle(!toggle);
     }
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    const submitHandler = async(e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const { data } = await axios.post(`${backend_URL}/admin/login`, {
                 email,
@@ -27,22 +29,25 @@ function Login() {
             },
                 {
                     headers: {
-                    "Content-Type":"application/json"
+                        "Content-Type": "application/json"
                     },
                     withCredentials: true
                 })
 
             if (!data.success) {
-                return toast.error(data.message)
+                toast.error(data.message)
+                return setIsLoggedIn(false);
             }
             toast.success(data.message);
             setIsLoggedIn(true);
+            setLoading(false);
 
             navigate('/dashboard', { state: { id: data.message } });
 
         } catch (error) {
             console.log(error)
             toast.error("Something went wrong")
+            setIsLoggedIn(false)
         }
 
 
@@ -67,15 +72,15 @@ function Login() {
                         <br />
                         <input
                             className='loginPass'
-                            type={(toggle == true)?"text":"password"}
+                            type={(toggle == true) ? "text" : "password"}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
                             placeholder='Password' />
                         <br />
-                        <IoEyeOutline className='loginEye' onClick={onTap}/>
+                        <IoEyeOutline className='loginEye' onClick={onTap} />
                         <div className="btns">
-                            <button type="submit">Log in</button>
+                            <button disabled={loading} type="submit">Log in</button>
                         </div>
                         <h4>
                             Or
