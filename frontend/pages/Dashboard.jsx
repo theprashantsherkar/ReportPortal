@@ -3,6 +3,7 @@ import '../styles/dashboard.css'
 import Header from '../components/Header.jsx'
 import { backend_URL } from '../src/App.jsx';
 import toast from 'react-hot-toast';
+import axios from 'axios';
 
 
 function Dashboard() {
@@ -12,6 +13,8 @@ function Dashboard() {
 
     const handleFileChange = (e) => {
         setFile(e.target.value[0]);
+        console.log('check1')
+
     }
 
     const handleUpload = async () => {
@@ -28,13 +31,15 @@ function Dashboard() {
                 },
                 withCredentials: true
             });
-
+            console.log('check2')
             if (response.data.data) {
                 setData(response.data.data)
                 toast.success(response.data.message)
             } else {
                 toast.error(response.data.message);
             }
+            console.log('check3')
+
         } catch (error) {
             console.log(error);
             toast.error('Internal Server Error, try after sometime!')
@@ -44,13 +49,13 @@ function Dashboard() {
         <>
             <Header />
             <div className="dashboard">
-                <div className="dash">
+                <div className="dash w-75">
                     <div className="students">
                         <h1>Students</h1>
                     </div>
-                    <div className="inputs">
-                        <input type="file" name="excel" id="excel" />
-                        <button type="submit">Upload</button>
+                    <div className="inputs border-2 bg-black-500 rounded p-3 flex justify-center w-100 ">
+                        <input className='border-1 border-black p-2' type="file" onChange={handleFileChange} name="excel" id="excel" />
+                        <button onClick={handleUpload} type="submit">Upload</button>
                     </div>
                     <hr />
                     <div className="searches">
@@ -67,21 +72,13 @@ function Dashboard() {
                             <input className='search' type="search" name="" id="search" />
                         </div>
                     </div>
-                    <table className='table table-bordered' id='table1'>
-                        {/* use the map function here to generate table */}
-                        <tr>
-                            <th>Student name</th>
-                            <th>Email</th>
-                            <th>Action</th>
-                        </tr>
-                        <tr>
-                            <td>avid</td>
-                            <td>avid@gmail.com</td>
-                            <td><button type='buton' className='buttons'>View</button></td>
-                        </tr>
 
-                    </table>
 
+
+                    <div className='bg-orange-600 underline mt-5 w-full h-full'>
+                        <h2>data fetched: </h2>
+                        <pre>{JSON.stringify(data, null, 2)}</pre>
+                    </div>
                 </div>
             </div>
 

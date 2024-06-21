@@ -49,6 +49,9 @@ border: 1px solid black;
 
 .inputs{
     margin: 30px ;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .searches{

@@ -10,6 +10,7 @@ import Login from '../pages/Login.jsx';
 import Register from '../pages/Register.jsx';
 import axios from 'axios';
 import { LoginContext } from './main.jsx';
+// import ProtectedRoute from '../ProtectedRoute/ProtectedRoute.jsx';
 
 
 
@@ -41,11 +42,13 @@ function App() {
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+
         <Route path='/' element={<Dashboard />} />
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/exam' element={<Exam />} />
         <Route path='/changepassword' element={<Passchange />} />
+
       </Routes>
       <Toaster />
     </Router>

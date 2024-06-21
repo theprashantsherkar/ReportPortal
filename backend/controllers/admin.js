@@ -80,34 +80,34 @@ export const logout = (req, res) => {
 }
 
 export const dashboardAPI = (req, res) => {
-    //input of the excel sheet, read its content and list it
-    // try {
-    //     const file = req.file;
-    //     if (!file) {
-    //         return res.status(404).json({
-    //             success: false,
-    //             message: "file not uploaded",
-    //         })
-    //     }
-    //     const workbook = XLSX.read(file.buffer, { type: 'buffer' });
-    //     const sheetName = workbook.SheetNames[0];
-    //     const sheet = workbook.Sheets[sheetName];
+    // input of the excel sheet, read its content and list it
+    try {
+        const file = req.file;
+        if (!file) {
+            return res.status(404).json({
+                success: false,
+                message: "file not uploaded",
+            })
+        }
+        const workbook = XLSX.read(file.buffer, { type: "buffer" });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
 
-    //     const data = XLSX.utils.sheet_to_json(sheet);
-    //     res.status(200).json({
-    //         success: true,
-    //         message: "sheet uploaded and data fetched successfully.",
-    //         data: data,
-    //     })
+        const data = XLSX.utils.sheet_to_json(sheet);
+        res.status(200).json({
+            success: true,
+            message: "sheet uploaded and data fetched successfully.",
+            data: data,
+        })
 
 
-    // } catch (error) {
-    //     console.log(error);
-    //     res.status(500).json({
-    //         success: false,
-    //         message: "Error in processing file",
-    //     })
-    // }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: "Error in processing file",
+        })
+    }
 
 }
 
