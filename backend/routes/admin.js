@@ -1,5 +1,4 @@
 import express from 'express';
-import multer from 'multer';
 import {
     changePass,
     dashboardAPI,
@@ -9,19 +8,22 @@ import {
     profile,
     signinFunc
 } from '../controllers/admin.js';
-
 import { isAuthenticated } from '../middlewares/auth.js';
+import { upload } from '../middlewares/multer.js';
 
-const storage = multer.memoryStorage()
-const upload = multer({ storage: storage });
+
+
+
 const router = express.Router()
 
-router.get('/', landing)
+
+
+
 router.post('/login', loginFunc)  //tested
 router.post('/register', signinFunc)  //tested
 router.put('/changepass', isAuthenticated, changePass);//tested
 router.get('/profile', isAuthenticated, profile); //tested
-router.post('/upload', upload.single('file'), dashboardAPI);
+router.post('/upload', upload.single('file'), dashboardAPI);//checking
 router.get('/logout', logout);   //tested
 
 

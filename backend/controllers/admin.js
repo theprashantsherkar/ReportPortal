@@ -1,8 +1,10 @@
 import { Users } from '../model/userModel.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import multer from 'multer';
-import XLSX from 'xlsx';
+import fs from 'fs';
+import { Student } from '../model/studentsModel.js';
+import xlsx from 'xlsx';
+
 
 export const landing = (req, res) => {
     res.send({
@@ -79,37 +81,49 @@ export const logout = (req, res) => {
     })
 }
 
-export const dashboardAPI = (req, res) => {
-    // input of the excel sheet, read its content and list it
+
+export const dashboardAPI = async(req, res, next) => {
+    //multer and other api code
     try {
-        const file = req.file;
-        if (!file) {
-            return res.status(404).json({
-                success: false,
-                message: "file not uploaded",
+
+        console.log(req.file);
+        const workbook = xlsx.read(req.file, { type: 'buffer' });
+        console.log(workbook);
+        if (!workbook.SheetNames || !workbook.Sheets === 0) {
+            return res.json({
+                success:false,
+                message: "file uploaded is empty",
             })
         }
-        const workbook = XLSX.read(file.buffer, { type: "buffer" });
         const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
+        const worksheet = workbook.Sheets[sheetName];
+        console.log(worksheet);// worksheet is empty
+        const jsonData = xlsx.utils.sheet_to_json(worksheet);
 
-        const data = XLSX.utils.sheet_to_json(sheet);
+        console.log(jsonData);
+
+        // const studentData = jsonData.map((row) => {
+            // column logic
+        // })
+
+        // await Student.insertMany(studentData); 
+        // fs.unlinkSync(filePath);
         res.status(200).json({
             success: true,
-            message: "sheet uploaded and data fetched successfully.",
-            data: data,
-        })
-
+            message: "excel file imported successfully",
+            data: jsonData
+        });
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({
+        res.json({
             success: false,
-            message: "Error in processing file",
+            message: "internal server error",
+            issue: error.message,
         })
     }
-
 }
+
 
 export const changePass = async (req, res) => {
     try {

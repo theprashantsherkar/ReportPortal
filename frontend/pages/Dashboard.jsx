@@ -53,10 +53,12 @@ function Dashboard() {
                     <div className="students">
                         <h1>Students</h1>
                     </div>
-                    <div className="inputs border-2 bg-black-500 rounded p-3 flex justify-center w-100 ">
-                        <input className='border-1 border-black p-2' type="file" onChange={handleFileChange} name="excel" id="excel" />
-                        <button onClick={handleUpload} type="submit">Upload</button>
-                    </div>
+                    <form method='POST' encType='multipart-form-data'>
+                        <div className="inputs border-2 bg-black-500 rounded p-3 flex justify-center w-100 ">
+                            <input className='border-1 border-black p-2' type="file"  name="file" id="excel"/>
+                            <button type="submit">Upload</button>
+                        </div>
+                    </form>
                     <hr />
                     <div className="searches">
                         <p>show
