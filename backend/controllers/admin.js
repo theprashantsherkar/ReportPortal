@@ -2,8 +2,11 @@ import { Users } from '../model/userModel.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import fs from 'fs';
+import path, {dirname} from 'path';
 import { Student } from '../model/studentsModel.js';
 import xlsx from 'xlsx';
+import { fileURLToPath } from 'url';
+
 
 
 export const landing = (req, res) => {
@@ -85,9 +88,18 @@ export const logout = (req, res) => {
 export const dashboardAPI = async(req, res, next) => {
     //multer and other api code
     try {
-
+        const __fileName = fileURLToPath(import.meta.url);
+        const __dirname = dirname(__fileName);
+        const file = req.file;
+        if (!file) {
+            return res.json({
+                success: false,
+                message:"no file is uploaded!"
+            })
+        }
         console.log(req.file);
-        const workbook = xlsx.read(req.file, { type: 'buffer' });
+        console.log(__dirname);
+        const workbook = xlsx.readFile(path.join(__dirname,"../",file.path));
         console.log(workbook);
         if (!workbook.SheetNames || !workbook.Sheets === 0) {
             return res.json({
