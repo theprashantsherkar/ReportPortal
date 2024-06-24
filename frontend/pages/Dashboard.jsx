@@ -30,11 +30,9 @@ function Dashboard() {
                 },
                 withCredentials: true
             });
-            console.log(response);
-            console.log('check2')
-            setData(response.data);
-            console.log(data);
-            toast.success(response.message)
+            setData(response.data.data);
+            console.log(response.data.data);
+            toast.success(response.data.message)
 
         } catch (error) {
             console.log(error);
@@ -79,22 +77,32 @@ function Dashboard() {
                     <div className='bg-orange-600 underline mt-5 w-full h-full'>
                         <h2>data fetched: </h2>
                         {/* <p>{data}</p> */}
-                        {/* <table>
+                        {
+                            (!data) ? (
+                                <>
+                                    <h2>no data</h2>
+                                </>
+                            ) : (
+                                    <>
+                                        <table className='table table-bordered'>
 
-                            <thead>
+                                            <thead>
 
-                                <tr>
-                                    {data.length > 0 && Object.keys(data[0]).map((key)=><th key={key}>{key}</th>)}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {data.map((row, index) => (
-                                    <tr key={index}>
-                                        {Object.values(row).map((value, i) => <td key={i}>{value}</td>)}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table> */}
+                                                <tr>
+                                                    {data.length > 0 && Object.keys(data[0]).map((key) => <th key={key}>{key}</th>)}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {data.map((row, index) => (
+                                                    <tr key={index}>
+                                                        {Object.values(row).map((value, i) => <td key={i}>{value}</td>)}
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </>
+                           )
+                        }
                     </div>
                 </div>
             </div>
