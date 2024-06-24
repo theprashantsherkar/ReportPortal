@@ -31,7 +31,6 @@ function Dashboard() {
                 withCredentials: true
             });
             setData(response.data.data);
-            console.log(response.data.data);
             toast.success(response.data.message)
 
         } catch (error) {
