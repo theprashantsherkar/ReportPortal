@@ -12,12 +12,11 @@ function Dashboard() {
     const [file, setFile] = useState("");
 
     const handleFileChange = (e) => {
-        setFile(e.target.value[0]);
-        console.log('check1')
-
+        setFile(e.target.files[0]);
     }
 
-    const handleUpload = async () => {
+    const submitHandler = async (e) => {
+        e.preventDefault();
         if (!file) {
             return toast.error('upload file first')
         }
@@ -31,14 +30,11 @@ function Dashboard() {
                 },
                 withCredentials: true
             });
+            console.log(response);
             console.log('check2')
-            if (response.data.data) {
-                setData(response.data.data)
-                toast.success(response.data.message)
-            } else {
-                toast.error(response.data.message);
-            }
-            console.log('check3')
+            setData(response.data);
+            console.log(data);
+            toast.success(response.message)
 
         } catch (error) {
             console.log(error);
@@ -50,12 +46,15 @@ function Dashboard() {
             <Header />
             <div className="dashboard">
                 <div className="dash w-75">
-                    <div className="students">
-                        <h1>Students</h1>
+                    <div className="students text-2xl border-black">
+                        <select  className= "p-2 border-black" name="" id="">
+                            <option className='p-2' value=""><h1 className='text-2xl' >Students</h1></option>
+                            <option className='p-2' value=""><h1 className='text-2xl'>Teachers</h1></option>
+                        </select>
                     </div>
-                    <form method='POST' encType='multipart-form-data'>
+                    <form onSubmit={submitHandler}>
                         <div className="inputs border-2 bg-black-500 rounded p-3 flex justify-center w-100 ">
-                            <input className='border-1 border-black p-2' type="file"  name="file" id="excel"/>
+                            <input onChange={handleFileChange} className='border-1 border-black p-2' type="file"  name="file" id="excel"/>
                             <button type="submit">Upload</button>
                         </div>
                     </form>
@@ -79,7 +78,23 @@ function Dashboard() {
 
                     <div className='bg-orange-600 underline mt-5 w-full h-full'>
                         <h2>data fetched: </h2>
-                        <pre>{JSON.stringify(data, null, 2)}</pre>
+                        {/* <p>{data}</p> */}
+                        {/* <table>
+
+                            <thead>
+
+                                <tr>
+                                    {data.length > 0 && Object.keys(data[0]).map((key)=><th key={key}>{key}</th>)}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {data.map((row, index) => (
+                                    <tr key={index}>
+                                        {Object.values(row).map((value, i) => <td key={i}>{value}</td>)}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table> */}
                     </div>
                 </div>
             </div>

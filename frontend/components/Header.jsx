@@ -17,7 +17,8 @@ function Drop() {
             const { data } = await axios.get(`${backend_URL}/admin/logout`, {
                 headers: {
                     "Content-Type": "application/json"
-                }
+                },
+                withCredentials: true,
             })
             if (!data.success) {
                 return toast.error('something went wrong');

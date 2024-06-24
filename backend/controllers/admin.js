@@ -97,10 +97,7 @@ export const dashboardAPI = async(req, res, next) => {
                 message:"no file is uploaded!"
             })
         }
-        console.log(req.file);
-        console.log(__dirname);
         const workbook = xlsx.readFile(path.join(__dirname,"../",file.path));
-        console.log(workbook);
         if (!workbook.SheetNames || !workbook.Sheets === 0) {
             return res.json({
                 success:false,
@@ -109,21 +106,16 @@ export const dashboardAPI = async(req, res, next) => {
         }
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
-        console.log(worksheet);// worksheet is empty
-        const jsonData = xlsx.utils.sheet_to_json(worksheet);
+        const arrayData = xlsx.utils.sheet_to_json(worksheet);
 
-        console.log(jsonData);
+        console.log(arrayData);
+        await Student.insertMany(arrayData);
 
-        // const studentData = jsonData.map((row) => {
-            // column logic
-        // })
-
-        // await Student.insertMany(studentData); 
-        // fs.unlinkSync(filePath);
+        // fs.unlinkSync(file.path);
         res.status(200).json({
             success: true,
             message: "excel file imported successfully",
-            data: jsonData
+            data: arrayData
         });
 
     } catch (error) {

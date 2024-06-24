@@ -1,7 +1,7 @@
 import React, { useState, createContext } from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
-import '../styles/index.css'
+import './index.css'
 
 
 export const LoginContext = createContext({ isLoggedIn: false , loading:false});

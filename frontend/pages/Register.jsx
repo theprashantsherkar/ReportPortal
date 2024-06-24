@@ -24,12 +24,6 @@ function Register() {
         e.preventDefault();
         setLoading(true);
         try {
-            // const { result } = await axios.get(`${backend_URL}/admin/profile`, {
-            //     headers: {
-            //         "Content-Type": "application/json"
-            //     }
-            // })
-            // setUser(result.User.name);
             const { data } = await axios.post(`${backend_URL}/admin/register`, {
                 name,
                 email,
@@ -37,7 +31,8 @@ function Register() {
             }, {
                 headers: {
                     "Content-Type": "application/json"
-                }
+                },
+                withCredentials: true
             })
             if (!data.success) {
                  toast.error(data.message)

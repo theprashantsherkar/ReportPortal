@@ -8,13 +8,13 @@ const studentSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true,
+        
 
     },
     rollNum: {
         type: Number,
         required: true,
-        unique: true,
+      
 
     },
     createdAt:{
