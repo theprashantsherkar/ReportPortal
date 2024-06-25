@@ -56,11 +56,11 @@ function Profile() {
               </tr>
               <tr className='table-row'>
                 <th>Last Name</th>
-                <td>{ user.name}</td>
+                <td>{user.name}</td>
               </tr>
               <tr className='table-row'>
                 <th>Email</th>
-                <td>{ user.email}</td>
+                <td>{user.email}</td>
               </tr>
               <tr className='table-row'>
                 <th>Contact no.</th>
@@ -68,14 +68,14 @@ function Profile() {
               </tr>
               <tr className='table-row'>
                 <th>Reg. Date</th>
-                <td>{ user.createdAt}</td>
+                <td>{user.createdAt}</td>
               </tr>
             </table>
           </div>
 
         </div>
       </div>
-    
+
     </>
   )
 }

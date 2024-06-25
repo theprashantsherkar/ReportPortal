@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import React, {useState, useContext} from 'react'
+import React, { useState, useContext } from 'react'
 import toast from 'react-hot-toast';
 import { backend_URL } from '../src/App';
 import { IoEyeOutline } from "react-icons/io5";
@@ -10,17 +10,17 @@ import { LoginContext } from '../src/main';
 
 
 function Register() {
-    const {isLoggedIn, setIsLoggedIn, loading, setLoading} = useContext(LoginContext)
+    const { isLoggedIn, setIsLoggedIn, loading, setLoading } = useContext(LoginContext)
     const navigate = useNavigate();
     const [toggle, setToggle] = useState(false);
     const onTap = () => {
         setToggle(!toggle);
     }
-   
+
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const submitHandler = async(e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
@@ -35,17 +35,17 @@ function Register() {
                 withCredentials: true
             })
             if (!data.success) {
-                 toast.error(data.message)
+                toast.error(data.message)
                 return setLoading(false)
             }
             toast.success(data.message);
             navigate('/dashboard', { state: { id: data.message } });
             setIsLoggedIn(true);
             setLoading(false);
-       } catch (error) {
-           console.log(error)
-           toast.error('something went wrong')
-       }
+        } catch (error) {
+            console.log(error)
+            toast.error('something went wrong')
+        }
 
 
     }
@@ -75,13 +75,13 @@ function Register() {
                         <br />
                         <input
                             className='pass'
-                            type={(toggle==true)?"text":"password"}
+                            type={(toggle == true) ? "text" : "password"}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
                             placeholder='Password'
                         />
-                        <IoEyeOutline className='eye' onClick={onTap}/>
+                        <IoEyeOutline className='eye' onClick={onTap} />
 
                         <br />
                         <div className="btns">

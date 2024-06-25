@@ -12,7 +12,7 @@ function Drop() {
 
     const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext);
     const navigate = useNavigate()
-    const logoutFunc = async() => {
+    const logoutFunc = async () => {
         try {
             const { data } = await axios.get(`${backend_URL}/admin/logout`, {
                 headers: {
@@ -37,10 +37,10 @@ function Drop() {
 
     return (
         <>
-        <ul>
-            <li><Link to={'/profile'}>Profile</Link></li>
-            <li onClick={logoutFunc}>Log Out</li>
-        </ul>
+            <ul>
+                <li><Link to={'/profile'}>Profile</Link></li>
+                <li onClick={logoutFunc}>Log Out</li>
+            </ul>
         </>
     )
 }
@@ -77,7 +77,7 @@ function Header() {
                     </ul>
                 </div>
                 <div className="user" onClick={() => setView(!view)}>
-                    <FaUserAlt  />
+                    <FaUserAlt />
                     {view ? (<div className="drop">
                         <Drop />
                     </div>) : (<>
