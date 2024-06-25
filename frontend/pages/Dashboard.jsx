@@ -42,7 +42,7 @@ function Dashboard() {
         <>
             <Header />
             <div className="dashboard">
-                <div className="dash w-75">
+                <div className="w-75 dash">
                     <div className="students text-2xl border-black">
                         <select  className= "p-2 border-black" name="" id="">
                             <option className='p-2' value=""><h1 className='text-2xl' >Students</h1></option>

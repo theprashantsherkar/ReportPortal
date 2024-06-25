@@ -1,0 +1,9 @@
+.options{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.head{
+    font-size: 1.3rem;
+}
