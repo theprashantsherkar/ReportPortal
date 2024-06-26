@@ -8,19 +8,18 @@ const studentSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        
-
+        unique: true,
     },
     rollNum: {
         type: Number,
         required: true,
-      
+        unique: true,
 
     },
     createdAt:{
-        type: Date,
+        type: String,
         required: true,
-        default:Date.now()
+        default: `${new Date(Date.now()).getDate()}-${new Date(Date.now()).getMonth()}-${new Date(Date.now()).getFullYear()}`
 
     }
 })

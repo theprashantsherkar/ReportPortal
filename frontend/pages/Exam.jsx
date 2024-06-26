@@ -1,17 +1,20 @@
 import React, { useState } from 'react'
 import Header from '../components/Header'
 import '../styles/exam.css'
+import axios from 'axios'
+import { backend_URL } from '../src/App'
+import toast from 'react-hot-toast'
 
 function Exam() {
   const [Class, setClass] = useState('')
   const [session, setSession] = useState('')
   const [section, setSection] = useState('')
   const [teacher, setTeacher] = useState('')
-  const [examData, setExamData] = useState([])
+  const [examData, setExamData] = useState([{}])
 
   const classSubmit = (e) => {
     setClass(e.target.value)
-    
+
   }
   const sessionSubmit = (e) => {
     setSession(e.target.value)
@@ -24,17 +27,43 @@ function Exam() {
   }
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-const date = new Date()
-    const createdOn = `${date.getDate()}-${date.getMonth().toString()}-${date.getFullYear()}`
-    const newData = [Class, session, section, teacher, createdOn];
-    setExamData(examData.push(newData));
-    console.log(examData);
+    if (!Class || !session || !section || !teacher) {
+      return toast.error('Please enter all input fields.');
+    }
+    try {
+      const response  = await axios.post(`${backend_URL}/admin/exam`, {
+        Class,
+        session,
+        section,
+        teacher
+      }, {
+        headers: {
+          "Content-Type": "application/json"
+        },
+        withCredentials: true
+
+      })
+      if (!response.data.success) {
+        return toast.error(response.data.message);
+      }
+      setExamData(response.data.exam);
+      // setExamData(examData.reverse())
+      toast.success(response.data.message)
+      console.log(examData);
+      console.log(response.data.exam);
+
+    } catch (error) {
+      toast.error('Something went wrong!')
+      console.log(error)
+    }
 
   }
-  //exam api goes here
+
+  if (examData) {
+    var headers = Object.keys(examData[0]).filter((header)=> header !== "_id" && header !== "__v");
+  }
   return (
     //exam dashboard ui goes here
     <>
@@ -74,7 +103,7 @@ const date = new Date()
             <div className='mx-2 max-w-fit'>
               <label htmlFor="admins" className=" mx-2 text-sm font-medium text-gray-700">Select Class Teacher</label>
               <select
-                id="admins"  onChange={teacherSubmit}
+                id="admins" onChange={teacherSubmit}
                 className="mt-1 pl-3 pr-10 py-2 text-base border border-black  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
               >
                 <option value="Vivek Kumar">Vivek Kumar</option>
@@ -127,25 +156,42 @@ const date = new Date()
         </div>
 
         <div>
-          {examData && examData.length > 0 ? (
-            <table className="min-w-full border-collapse border border-gray-300">
-              <thead>
-                <tr>
-                  {examData.map((item, index) => (
-                    <th key={index} className="border border-gray-300 px-4 py-2">{`Field ${index + 1}`}</th>
+          {examData.length > 0 && (
+            <div className="mt-10 flex items-center justify-center">
+              <h2 className="text-xl font-bold mb-4">Submitted Data</h2>
+              <table className="min-w-full border-collapse  border border-gray-300 ">
+                <thead>
+                  <tr>
+                    
+                    {headers.map((header, index) => (
+                      <>
+                        <th key={index} className="border border-gray-300 px-4 py-2">{header.charAt(0).toUpperCase() + header.slice(1)}</th>
+                      </>
+                    ))}
+                    {examData.length > 0 && (<>
+                      <th className='border border-gray-300 px-4 py-2'>Config</th>
+                      <th className='border border-gray-300 px-4 py-2'>Action</th></>)}
+                  </tr>
+                </thead>
+                <tbody>
+                  {examData.map((item, rowIndex) => (
+                    <tr key={rowIndex}>
+                      {headers.map((header, colIndex) => (
+                        <>
+                          <td key={colIndex} className="border border-gray-300 px-4 py-2">{item[header].toString()}</td>
+                        </>
+                      )
+                      )}
+                      {examData.length > 0 && (<>
+                        <td className='border border-gray-300 '><button className='btn btn-primary m-2'>Add Subjects</button><button className='btn btn-primary m-2'>Assessments</button></td>
+                        <td className='border border-gray-300 '><button className='btn btn-warning m-2'>Edit</button><button className='btn btn-danger m-2'>Delete</button></td>
+                      </>)
+                     }
+                    </tr>
                   ))}
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  {examData.map((item, index) => (
-                    <td key={index} className="border border-gray-300 px-4 py-2">{item.toString()}</td>
-                  ))}
-                </tr>
-              </tbody>
-            </table>
-          ) : (
-            <p>No data available</p>
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
       </div>

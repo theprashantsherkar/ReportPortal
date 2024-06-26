@@ -3,12 +3,14 @@ import '../styles/passchange.css'
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import Header from '../components/Header'
+import { useNavigate } from 'react-router-dom';
 import { backend_URL } from '../src/App';
 
 function Passchange() {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confPassword, setConfPassword] = useState("");
+  const navigate = useNavigate()
 
   //change password api integration
   const submitHandler = async (e) => {
@@ -26,6 +28,7 @@ function Passchange() {
       })
     console.log(data)
     if (!data || !data.success) {
+      navigate('/login')
       return toast.error(data.message);
     }
     toast.success(data.message);

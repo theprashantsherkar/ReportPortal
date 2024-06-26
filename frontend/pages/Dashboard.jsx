@@ -30,6 +30,9 @@ function Dashboard() {
                 },
                 withCredentials: true
             });
+            if (!response.data.success) {
+                return toast.error(response.data.message);
+            }
             setData(response.data.data);
             toast.success(response.data.message)
 
@@ -38,20 +41,34 @@ function Dashboard() {
             toast.error('Internal Server Error, try after sometime!')
         }
     }
+    if (data) {
+        var headers = Object.keys(data[0]).filter((title) => title !== "__v" && title !== "_id");
+    }
+
+    function generate() {
+        for (let i = 0; i < data.length; i++){
+            return (
+                <>
+                    <option value={i}>{i}</option>
+                </>
+            )
+        }
+    }
+
     return (
         <>
             <Header />
             <div className="dashboard">
                 <div className="w-75 dash">
                     <div className="students text-2xl border-black">
-                        <select  className= "p-2 border-black" name="" id="">
+                        <select className="p-2 border-black" name="" id="">
                             <option className='p-2' value=""><h1 className='text-2xl' >Students</h1></option>
                             <option className='p-2' value=""><h1 className='text-2xl'>Teachers</h1></option>
                         </select>
                     </div>
                     <form onSubmit={submitHandler}>
                         <div className="inputs border-2 bg-black-500 rounded p-3 flex justify-center w-100 ">
-                            <input onChange={handleFileChange} className='border-1 border-black p-2' type="file"  name="file" id="excel"/>
+                            <input onChange={handleFileChange} className='border-1 border-black p-2' type="file" name="file" id="excel" />
                             <button type="submit">Upload</button>
                         </div>
                     </form>
@@ -59,9 +76,7 @@ function Dashboard() {
                     <div className="searches">
                         <p>show
                             <select name="" id="">
-                                <option value="">1</option>
-                                <option value="">2</option>
-                                <option value="">3</option>
+                                {generate}
                             </select>
                             entries.
                         </p>
@@ -82,25 +97,30 @@ function Dashboard() {
                                     <h2>no data</h2>
                                 </>
                             ) : (
-                                    <>
-                                        <table className='table table-bordered'>
+                                <>
+                                    <table className='table table-bordered'>
 
-                                            <thead>
+                                        <thead>
 
-                                                <tr>
-                                                    {data.length > 0 && Object.keys(data[0]).map((key) => <th key={key}>{key}</th>)}
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {data.map((row, index) => (
-                                                    <tr key={index}>
-                                                        {Object.values(row).map((value, i) => <td key={i}>{value}</td>)}
+                                            <tr>
+                                                {data.length > 0 && headers.map((key) => <th key={key}>{key}</th>)}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                {data.map((item, rowIndex) => (
+                                                    <tr key={rowIndex}>
+                                                        {headers.map((header, colIndex) => (
+                                                            <>
+                                                                <td key={colIndex} className="border border-gray-300 px-4 py-2">{item[header].toString()}</td>
+                                                            </>
+                                                        )
+                                                        )}
                                                     </tr>
                                                 ))}
-                                            </tbody>
-                                        </table>
-                                    </>
-                           )
+                                        </tbody>
+                                    </table>
+                                </>
+                            )
                         }
                     </div>
                 </div>

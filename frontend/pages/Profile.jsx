@@ -4,16 +4,18 @@ import Header from '../components/Header';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { backend_URL } from '../src/App';
+import { useNavigate } from 'react-router-dom';
 import { LoginContext } from '../src/main';
 
 
 function Profile() {
+  const navigate = useNavigate();
   const { user, isLoggedIn, loading } = useContext(LoginContext);
   // console.log('data been shown')
   // console.log(user);
   // console.log("code blown");
-  console.log(isLoggedIn)
-
+  
+  console.log(isLoggedIn);
 
   //do this by context api instead.
   // useEffect(() => {
@@ -42,7 +44,7 @@ function Profile() {
     <>
       <Header />
       <div className="ProfileCont">
-        <div className="profileHeading">
+        {user && <div className="profileHeading">
           <h1>
             <strong>
               {`${user.name || "Vivek"}'s Profile`}
@@ -73,7 +75,7 @@ function Profile() {
             </table>
           </div>
 
-        </div>
+        </div>}
       </div>
 
     </>

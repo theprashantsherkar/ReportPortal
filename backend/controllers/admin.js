@@ -6,15 +6,9 @@ import path, {dirname} from 'path';
 import { Student } from '../model/studentsModel.js';
 import xlsx from 'xlsx';
 import { fileURLToPath } from 'url';
+import { Exam } from '../model/examModel.js';
 
 
-
-export const landing = (req, res) => {
-    res.send({
-        success: true,
-        message: "app started!"
-    })
-}
 
 export const loginFunc = async (req, res) => {
     const { email, password } = req.body;
@@ -108,14 +102,15 @@ export const dashboardAPI = async(req, res, next) => {
         const worksheet = workbook.Sheets[sheetName];
         const arrayData = xlsx.utils.sheet_to_json(worksheet);
 
-        console.log(arrayData);
+        
         await Student.insertMany(arrayData);
 
+        const entireData = await Student.find({});
         // fs.unlinkSync(file.path);
         res.status(200).json({
             success: true,
             message: "excel file imported successfully",
-            data: arrayData
+            data: entireData
         });
 
     } catch (error) {
@@ -173,3 +168,27 @@ export const profile = (req, res, next) => {
     })
 }
 
+export const createExam = async(req, res, next) => {
+    const { Class, section, session, teacher } = req.body;
+    if (!Class || !section || !session || !teacher) {
+        return res.status(500).json({
+            success: false,
+            message:"enter all required fields!"
+        })
+    }
+    await Exam.create({
+        Class,
+        section,
+        session,
+        teacher
+    })
+
+    const entireExams = await Exam.find({});
+
+    res.status(200).json({
+        success: true,
+        message: 'Exam created!',
+        exam: entireExams,
+    })
+
+}
