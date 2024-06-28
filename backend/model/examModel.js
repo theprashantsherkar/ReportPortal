@@ -15,7 +15,8 @@ const examSchema = new mongoose.Schema({
     },
     teacher: {
         type: String,
-        required:true,
+        required: true,
+        
     },
     createdAt: {
         type: String,

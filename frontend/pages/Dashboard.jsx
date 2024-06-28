@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../styles/dashboard.css'
 import Header from '../components/Header.jsx'
 import { backend_URL } from '../src/App.jsx';
@@ -14,6 +14,10 @@ function Dashboard() {
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
     }
+
+    useEffect(() => {
+        
+    }, [])
 
     const submitHandler = async (e) => {
         e.preventDefault();

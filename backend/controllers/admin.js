@@ -103,14 +103,13 @@ export const dashboardAPI = async(req, res, next) => {
         const arrayData = xlsx.utils.sheet_to_json(worksheet);
 
         
-        await Student.insertMany(arrayData);
+        const studentData = await Student.insertMany(arrayData);
 
-        const entireData = await Student.find({});
         // fs.unlinkSync(file.path);
         res.status(200).json({
             success: true,
             message: "excel file imported successfully",
-            data: entireData
+            data: studentData
         });
 
     } catch (error) {
@@ -122,6 +121,9 @@ export const dashboardAPI = async(req, res, next) => {
         })
     }
 }
+
+
+
 
 
 export const changePass = async (req, res) => {
@@ -176,19 +178,35 @@ export const createExam = async(req, res, next) => {
             message:"enter all required fields!"
         })
     }
-    await Exam.create({
+    const arrayData = await Exam.create({
         Class,
         section,
         session,
         teacher
     })
 
-    const entireExams = await Exam.find({});
-
     res.status(200).json({
         success: true,
         message: 'Exam created!',
-        exam: entireExams,
+        exam: arrayData,
     })
 
+}
+
+export const getStudents = async(req, res, next) => {
+    const allStudents = await Student.find({});
+    res.status(200).json({
+        success: true,
+        message: "students fetched successfully",
+        students:allStudents,
+    })
+}
+
+export const prevExams = async(req, res, next) => {
+    const allExams = await Exam.find({});
+    res.status(200).json({
+        success: true,
+        message: "Exams fetched",
+        allExams,
+    })
 }
