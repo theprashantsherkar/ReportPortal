@@ -1,12 +1,11 @@
 import { Users } from '../model/userModel.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import fs from 'fs';
 import path, {dirname} from 'path';
 import { Student } from '../model/studentsModel.js';
 import xlsx from 'xlsx';
 import { fileURLToPath } from 'url';
-import { Exam } from '../model/examModel.js';
+
 
 
 
@@ -170,43 +169,11 @@ export const profile = (req, res, next) => {
     })
 }
 
-export const createExam = async(req, res, next) => {
-    const { Class, section, session, teacher } = req.body;
-    if (!Class || !section || !session || !teacher) {
-        return res.status(500).json({
-            success: false,
-            message:"enter all required fields!"
-        })
-    }
-    const arrayData = await Exam.create({
-        Class,
-        section,
-        session,
-        teacher
-    })
-
-    res.status(200).json({
-        success: true,
-        message: 'Exam created!',
-        exam: arrayData,
-    })
-
-}
-
 export const getStudents = async(req, res, next) => {
     const allStudents = await Student.find({});
     res.status(200).json({
         success: true,
         message: "students fetched successfully",
         students:allStudents,
-    })
-}
-
-export const prevExams = async(req, res, next) => {
-    const allExams = await Exam.find({});
-    res.status(200).json({
-        success: true,
-        message: "Exams fetched",
-        allExams,
     })
 }

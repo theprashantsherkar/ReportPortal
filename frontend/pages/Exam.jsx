@@ -1,16 +1,23 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import '../styles/exam.css'
 import axios from 'axios'
 import { backend_URL } from '../src/App'
 import toast from 'react-hot-toast'
+import SubjectCard from '../components/SubjectCard'
+import { useRef } from 'react'
+import DialogBox from '../components/Dialogbox'
 
 function Exam() {
   const [Class, setClass] = useState('')
   const [session, setSession] = useState('')
   const [section, setSection] = useState('')
   const [teacher, setTeacher] = useState('')
-  const [examData, setExamData] = useState([{}])
+  const [examData, setExamData] = useState([{}]);
+  const [showSub, setShowSub] = useState(false)
+  const [activeRow, setActiveRow] = useState(null)
+  const [isDialogVisible, setIsDialogVisible] = useState(false);
+  const dialogRef = useRef(null);
 
   const classSubmit = (e) => {
     setClass(e.target.value)
@@ -26,14 +33,13 @@ function Exam() {
     setTeacher(e.target.value)
   }
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!Class || !session || !section || !teacher) {
       return toast.error('Please enter all input fields.');
     }
     try {
-      const response  = await axios.post(`${backend_URL}/admin/exam`, {
+      const response = await axios.post(`${backend_URL}/exam/createExam`, {
         Class,
         session,
         section,
@@ -48,11 +54,11 @@ function Exam() {
       if (!response.data.success) {
         return toast.error(response.data.message);
       }
-      setExamData(response.data.exam);
+      // setExamData(response.data.exam);
       // setExamData(examData.reverse())
       toast.success(response.data.message)
-      console.log(examData);
-      console.log(response.data.exam);
+      // console.log(examData);
+      // console.log(response.data.exam);
 
     } catch (error) {
       toast.error('Something went wrong!')
@@ -60,9 +66,47 @@ function Exam() {
     }
 
   }
+  const subjectHandler = (id) => {
+    setIsDialogVisible(true);
+    console.log(`button clicked with id:${id}`)
+    setActiveRow(id === activeRow ? null : id)
+  }
+
+  const handleClickOutside = (event) => {
+    if (dialogRef.current && !dialogRef.current.contains(event.target)) {
+      setIsDialogVisible(false);
+    }
+  };
+  useEffect(() => {
+    if (isDialogVisible) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isDialogVisible]);
+
+  useEffect(() => {
+    axios.get(`${backend_URL}/exam/allExams`, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      withCredentials: true,
+    }).then((res) => {
+      setExamData(res.data.exam)
+      // console.log(examData);
+    }).catch((err) => console.log(err));
+
+  }, [handleSubmit])
+
+
+
 
   if (examData) {
-    var headers = Object.keys(examData[0]).filter((header)=> header !== "_id" && header !== "__v");
+    var headers = Object.keys(examData[0]).filter((header) => header !== "Subjects" && header !== "_id" && header !== "__v");
   }
   return (
     //exam dashboard ui goes here
@@ -156,13 +200,13 @@ function Exam() {
         </div>
 
         <div>
-          {examData.length > 0 && (
+          {(examData) ? (
             <div className="mt-10 flex items-center justify-center">
               <h2 className="text-xl font-bold mb-4">Submitted Data</h2>
               <table className="min-w-full border-collapse  border border-gray-300 ">
                 <thead>
                   <tr>
-                    
+
                     {headers.map((header, index) => (
                       <>
                         <th key={index} className="border border-gray-300 px-4 py-2">{header.charAt(0).toUpperCase() + header.slice(1)}</th>
@@ -183,16 +227,23 @@ function Exam() {
                       )
                       )}
                       {examData.length > 0 && (<>
-                        <td className='border border-gray-300 '><button className='btn btn-primary m-2'>Add Subjects</button><button className='btn btn-primary m-2'>Assessments</button></td>
+                        <td className='border border-gray-300 '><button onClick={() => subjectHandler(item._id)} className='btn btn-primary m-2'>Add Subjects</button>{isDialogVisible && (
+                          <div ref={dialogRef}>
+                            <DialogBox title="Dialog Title" onClose={() => setIsDialogVisible(false)}>
+                              <SubjectCard/>
+                            </DialogBox>
+                          </div>
+                        )}<button className='btn btn-primary m-2'>Assessments</button></td>
                         <td className='border border-gray-300 '><button className='btn btn-warning m-2'>Edit</button><button className='btn btn-danger m-2'>Delete</button></td>
                       </>)
-                     }
+                      }
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-          )}
+          ) : (<>
+            no data found</>)}
         </div>
       </div>
 

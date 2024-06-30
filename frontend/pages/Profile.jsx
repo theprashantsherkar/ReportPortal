@@ -15,6 +15,9 @@ function Profile() {
   // console.log(user);
   // console.log("code blown");
   
+  useEffect(() => {
+    console.log('refreshed')
+  },[])
   console.log(isLoggedIn);
 
   //do this by context api instead.

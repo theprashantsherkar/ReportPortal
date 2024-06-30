@@ -18,6 +18,10 @@ const examSchema = new mongoose.Schema({
         required: true,
         
     },
+    subjects: {
+        type: [String],
+        enum:["english", "math", "science"]
+}    ,
     createdAt: {
         type: String,
         default:`${new Date(Date.now()).getDate()}-${new Date(Date.now()).getMonth()}-${new Date(Date.now()).getFullYear()}`

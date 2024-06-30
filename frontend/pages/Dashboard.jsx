@@ -14,11 +14,6 @@ function Dashboard() {
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
     }
-
-    useEffect(() => {
-        
-    }, [])
-
     const submitHandler = async (e) => {
         e.preventDefault();
         if (!file) {
@@ -37,7 +32,7 @@ function Dashboard() {
             if (!response.data.success) {
                 return toast.error(response.data.message);
             }
-            setData(response.data.data);
+
             toast.success(response.data.message)
 
         } catch (error) {
@@ -45,6 +40,24 @@ function Dashboard() {
             toast.error('Internal Server Error, try after sometime!')
         }
     }
+
+    useEffect(() => {
+        axios.get(`${backend_URL}/admin/fetchStudents`, {
+            headers: {
+                "Content-Type":"application'json"
+            },
+            withCredentials: true,
+            
+        }).then((res) => {
+            setData(res.data.students);
+        }).catch((err) => {
+            console.log(err);
+            toast.error(err);
+        })
+
+    }, [submitHandler])
+
+    
     if (data) {
         var headers = Object.keys(data[0]).filter((title) => title !== "__v" && title !== "_id");
     }
