@@ -100,13 +100,16 @@ export const updateExam = async(req, res) => {
                 message: "exam not found."
             })
         }
+        const {Class, session, section, subjects, teacher} = req.body
+        // if( || )
         const updatedSubjects = [];
-        exam.Class = req.body.Class;
-        exam.session = req.body.session;
-        exam.section = req.body.section;
-        exam.teacher = req.body.teacher;
+        Class ? (exam.Class = Class) : exam.Class
+        session ? (exam.session = Class) : exam.session
+        section ? (exam.section = Class) : exam.section
+        teacher ? (exam.teacher = Class) : exam.teacher
+        let bodySubs = [];
+        subjects ? (bodySubs = subjects) : exam.subjects;
 
-        const bodySubs = req.body.subjects
         bodySubs.forEach((element) => {
             updatedSubjects.push(element)
         })

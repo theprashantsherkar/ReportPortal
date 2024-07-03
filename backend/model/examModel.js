@@ -7,7 +7,7 @@ const examSchema = new mongoose.Schema({
     },
     session: {
         type: String,
-        required:true
+        required: true,
     },
     section: {
         type: String,
@@ -20,9 +20,12 @@ const examSchema = new mongoose.Schema({
     },
     subjects: {
         type: [String],
-        // enum:["english", "math", "science"]
         default:[],
-}    ,
+    },
+    madeBy: {
+        type: mongoose.Schema.Types.String,
+        ref:"PortalUsers"
+    },
     createdAt: {
         type: String,
         default:`${new Date(Date.now()).getDate()}-${new Date(Date.now()).getMonth()}-${new Date(Date.now()).getFullYear()}`

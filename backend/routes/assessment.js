@@ -1,10 +1,11 @@
 import express from 'express'
-import { getAssessments } from '../controllers/assessment.js';
+import { getAssessments, newAss } from '../controllers/assessment.js';
 
 const router = express.Router()
 
 
-router.get('/url', getAssessments);
+router.get('/getAll', getAssessments);
+router.post('/new', newAss);
 
 
 export default router;
