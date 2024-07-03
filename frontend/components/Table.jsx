@@ -33,7 +33,7 @@ const rows = [
     { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
 ];
 
-export default function Table() {
+export default function Table({ columns }) {
     return (
         <div style={{ height: 400, width: '100%' }}>
             <DataGrid

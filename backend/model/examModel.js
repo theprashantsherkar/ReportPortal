@@ -16,11 +16,12 @@ const examSchema = new mongoose.Schema({
     teacher: {
         type: String,
         required: true,
-        
+
     },
     subjects: {
         type: [String],
-        enum:["english", "math", "science"]
+        // enum:["english", "math", "science"]
+        default:[],
 }    ,
     createdAt: {
         type: String,

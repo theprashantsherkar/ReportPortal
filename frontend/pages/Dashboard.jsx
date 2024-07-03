@@ -4,11 +4,12 @@ import Header from '../components/Header.jsx'
 import { backend_URL } from '../src/App.jsx';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import Table from '../components/Table.jsx'
 
 
 function Dashboard() {
     //dashboard api goes here
-    const [data, setData] = useState("");
+    const [data, setData] = useState([]);
     const [file, setFile] = useState("");
 
     const handleFileChange = (e) => {
@@ -58,8 +59,8 @@ function Dashboard() {
     }, [submitHandler])
 
     
-    if (data) {
-        var headers = Object.keys(data[0]).filter((title) => title !== "__v" && title !== "_id");
+    if (data && data.length>1) {
+        var headers = Object.keys(data[0]).filter((title)=> title!=="_id" && title!=="__v")
     }
 
     function generate() {
@@ -105,7 +106,7 @@ function Dashboard() {
 
 
 
-                    <div className='bg-orange-600 underline mt-5 w-full h-full'>
+                    <div className=' underline mt-5 w-full h-full'>
                         <h2>data fetched: </h2>
                         {/* <p>{data}</p> */}
                         {
@@ -114,16 +115,16 @@ function Dashboard() {
                                     <h2>no data</h2>
                                 </>
                             ) : (
-                                <>
-                                    <table className='table table-bordered'>
+                                    <>
+                                        <table className='table table-bordered'>
 
-                                        <thead>
+                                            <thead>
 
-                                            <tr>
-                                                {data.length > 0 && headers.map((key) => <th key={key}>{key}</th>)}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
+                                                <tr>
+                                                    {data.length > 1 && headers.map((key) => <th key={key}>{key}</th>)}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
                                                 {data.map((item, rowIndex) => (
                                                     <tr key={rowIndex}>
                                                         {headers.map((header, colIndex) => (
@@ -134,9 +135,9 @@ function Dashboard() {
                                                         )}
                                                     </tr>
                                                 ))}
-                                        </tbody>
-                                    </table>
-                                </>
+                                            </tbody>
+                                        </table>
+                                    </>
                             )
                         }
                     </div>

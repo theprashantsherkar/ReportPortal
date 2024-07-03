@@ -11,6 +11,7 @@ import Login from '../pages/Login.jsx';
 import Register from '../pages/Register.jsx';
 import axios from 'axios';
 import { LoginContext } from './main.jsx';
+import Assessment from '../pages/Assessment.jsx';
 // import ProtectedRoute from '../ProtectedRoute/ProtectedRoute.jsx';
 
 
@@ -49,8 +50,9 @@ function App() {
         <Route path='/profile' element={<Profile />} />
         <Route path='/exam' element={<Exam />} />
         <Route path='/changepassword' element={<Passchange />} />
+        <Route path='/assessment/:id' element={<Assessment />} />
 
-      </Routes>
+      </Routes> 
       <Toaster />
     </Router>
 

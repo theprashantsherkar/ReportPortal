@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css'
 import Temp from './Temp.jsx';
 import Table from '../components/Table.jsx';
+// import { Tab } from 'bootstrap';
 
 
 export const LoginContext = createContext({ isLoggedIn: false, loading: false });
@@ -30,5 +31,7 @@ const AppWrapper = () => {
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AppWrapper />
+    {/* <Temp/>
+    <Table/> */}
   </React.StrictMode>,
 )

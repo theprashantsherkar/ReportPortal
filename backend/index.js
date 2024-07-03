@@ -7,7 +7,7 @@ import adminRouter from './routes/admin.js';
 import bodyParser from "body-parser";
 import path from 'path';
 import { fileURLToPath } from "url";
-import fs from 'fs';
+import assessmentRoutes from './routes/assessment.js'
 import examRouter from './routes/exam.js'
 
 
@@ -32,5 +32,6 @@ app.use(express.static(path.resolve(__dirname, 'public')))
 
 app.use('/admin', adminRouter)
 app.use('/exam', examRouter);
+app.use('/assessments', assessmentRoutes)
 
 

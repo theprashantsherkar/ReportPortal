@@ -4,20 +4,25 @@ import '../styles/exam.css'
 import axios from 'axios'
 import { backend_URL } from '../src/App'
 import toast from 'react-hot-toast'
-import SubjectCard from '../components/SubjectCard'
 import { useRef } from 'react'
-import DialogBox from '../components/Dialogbox'
+import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom'
+import Dialogbox from '../components/Dialogs/Dialogbox'
+import DeleteBtn from '../components/Buttons/DeleteBtn'
+import EditBtn from '../components/Buttons/EditBtn'
+import UpdateDialogs from '../components/Dialogs/UpdateDialogs'
+
 
 function Exam() {
   const [Class, setClass] = useState('')
   const [session, setSession] = useState('')
   const [section, setSection] = useState('')
   const [teacher, setTeacher] = useState('')
-  const [examData, setExamData] = useState([{}]);
-  const [showSub, setShowSub] = useState(false)
+  const [examData, setExamData] = useState([]);
   const [activeRow, setActiveRow] = useState(null)
-  const [isDialogVisible, setIsDialogVisible] = useState(false);
-  const dialogRef = useRef(null);
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const classSubmit = (e) => {
     setClass(e.target.value)
@@ -31,6 +36,18 @@ function Exam() {
   }
   const teacherSubmit = (e) => {
     setTeacher(e.target.value)
+  }
+
+
+  const handleClickOpen = (id) => {
+    console.log(`button clicked with id:${id}`)
+    setActiveRow(id === activeRow ? null : id)
+    setOpen(true);
+  };
+  const handleAssessments = (id) => {
+    console.log(`exam with id:${id} was clicked`)
+    console.log('entered in the handler')
+    navigate(`/assessment/${id}`);
   }
 
   const handleSubmit = async (e) => {
@@ -54,40 +71,31 @@ function Exam() {
       if (!response.data.success) {
         return toast.error(response.data.message);
       }
-      // setExamData(response.data.exam);
-      // setExamData(examData.reverse())
       toast.success(response.data.message)
-      // console.log(examData);
-      // console.log(response.data.exam);
-
     } catch (error) {
       toast.error('Something went wrong!')
       console.log(error)
     }
 
   }
-  const subjectHandler = (id) => {
-    setIsDialogVisible(true);
-    console.log(`button clicked with id:${id}`)
-    setActiveRow(id === activeRow ? null : id)
+ 
+
+
+  const DeleteHandler = async (id) => {
+    // e.preventDefault();
+    const response = await axios.delete(`${backend_URL}/exam/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    })
+    if (!response.data.success) {
+      return toast.error("something went wrong")
+    }
+    toast.success(response.data.message)
+
   }
 
-  const handleClickOutside = (event) => {
-    if (dialogRef.current && !dialogRef.current.contains(event.target)) {
-      setIsDialogVisible(false);
-    }
-  };
-  useEffect(() => {
-    if (isDialogVisible) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isDialogVisible]);
 
   useEffect(() => {
     axios.get(`${backend_URL}/exam/allExams`, {
@@ -100,12 +108,12 @@ function Exam() {
       // console.log(examData);
     }).catch((err) => console.log(err));
 
-  }, [handleSubmit])
+  }, [handleSubmit, DeleteHandler])
 
 
 
 
-  if (examData) {
+  if (examData && examData.length > 1) {
     var headers = Object.keys(examData[0]).filter((header) => header !== "Subjects" && header !== "_id" && header !== "__v");
   }
   return (
@@ -207,34 +215,35 @@ function Exam() {
                 <thead>
                   <tr>
 
-                    {headers.map((header, index) => (
+                    {examData.length > 1 && headers.map((header, index) => (
                       <>
                         <th key={index} className="border border-gray-300 px-4 py-2">{header.charAt(0).toUpperCase() + header.slice(1)}</th>
                       </>
                     ))}
-                    {examData.length > 0 && (<>
+                    {examData.length > 1 && (<>
                       <th className='border border-gray-300 px-4 py-2'>Config</th>
                       <th className='border border-gray-300 px-4 py-2'>Action</th></>)}
                   </tr>
                 </thead>
                 <tbody>
-                  {examData.map((item, rowIndex) => (
+                  {examData.length > 1 && examData.map((item, rowIndex) => (
                     <tr key={rowIndex}>
-                      {headers.map((header, colIndex) => (
+                      {examData.length > 1 && headers.map((header, colIndex) => (
                         <>
-                          <td key={colIndex} className="border border-gray-300 px-4 py-2">{item[header].toString()}</td>
+                          <td key={colIndex} className="border border-gray-300 px-3 py-2">{item[header].toString()}</td>
                         </>
                       )
                       )}
                       {examData.length > 0 && (<>
-                        <td className='border border-gray-300 '><button onClick={() => subjectHandler(item._id)} className='btn btn-primary m-2'>Add Subjects</button>{isDialogVisible && (
-                          <div ref={dialogRef}>
-                            <DialogBox title="Dialog Title" onClose={() => setIsDialogVisible(false)}>
-                              <SubjectCard/>
-                            </DialogBox>
-                          </div>
-                        )}<button className='btn btn-primary m-2'>Assessments</button></td>
-                        <td className='border border-gray-300 '><button className='btn btn-warning m-2'>Edit</button><button className='btn btn-danger m-2'>Delete</button></td>
+                        <td className='border border-gray-300 '><Button variant="outlined" onClick={() => handleClickOpen(item._id)}>
+                          Subjects
+                        </Button>{open && (<Dialogbox title={"Add Subjects"} open={open} setOpen={setOpen} id={item._id} />)}<button onClick={() => handleAssessments(item._id)} className='btn btn-primary mx-2'>Assessments</button></td>
+                        <td className='border border-gray-300 px-1'><button className='btn btn-warning mx-1' onClick={() => setDialogOpen(true)}><EditBtn /></button>{dialogOpen && <><UpdateDialogs
+                          open={dialogOpen}
+                          onClose={() => setDialogOpen(false)}
+                          id={item._id}
+                        /></>}
+                          <button onClick={() => DeleteHandler(item._id)} className='btn btn-danger m-1'><DeleteBtn /></button></td>
                       </>)
                       }
                     </tr>
