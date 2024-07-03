@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
 import Header from '../components/Header'
-import Dialogbox from '../components/Dialogs/Dialogbox'
 import { Button } from '@mui/material'
-import Table from '../components/Table'
+import DialogList from '../components/Dialogs/DialogList'
+import '../styles/assessments.css'
 
 
 
-
-function Assessment() {
-    const [type, setType] = useState("");
+function Assessment({id}) {
     const [open, setOpen] = useState(false);
     const handleOpen = () => {
         setOpen(true);
@@ -20,7 +18,7 @@ function Assessment() {
         <>
             <Header />
             <div className='p-5'>
-                <div className='font-extrabold'><h1>Assessment</h1></div>
+                <div className='Ass-Title font-extrabold'><h1>Assessment</h1></div>
                 <hr />
                 <div className='d-flex align-items-center justify-content-center'>
                     <form action="" className='p-3'>
@@ -47,8 +45,8 @@ function Assessment() {
                                 <div>
 
                                     <div className='p-2'>
-                                        <label htmlFor="assessment-type">Select Assessment Type: </label>
-                                        <select className='border border-black mx-2' name="" id="assessment-type" value={type}>
+                                        <label htmlFor="assessment-type">Assessment Type: </label>
+                                        <select className='border border-black mx-2' name="" id="assessment-type">
                                             <option value="rubrics">rubrics</option>
                                             <option value="marks">marks</option>
 
@@ -75,7 +73,7 @@ function Assessment() {
                         <div className='p-2'>
                             <Button variant="outlined" onClick={handleOpen}>
                                 Add Subjects
-                            </Button>{open && (<Dialogbox title={"Add Subjects"} open={open} setOpen={setOpen} />)}
+                            </Button>{open && (<DialogList open={open} onClose={()=>setOpen(false)} />)}
                             <button type="submit" className='btn btn-primary px-3 mx-3'>Submit</button>
                         </div>
 

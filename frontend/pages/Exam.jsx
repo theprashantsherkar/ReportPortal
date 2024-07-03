@@ -46,7 +46,6 @@ function Exam() {
   };
   const handleAssessments = (id) => {
     console.log(`exam with id:${id} was clicked`)
-    console.log('entered in the handler')
     navigate(`/assessment/${id}`);
   }
 

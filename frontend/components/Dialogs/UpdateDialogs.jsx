@@ -48,7 +48,6 @@ function UpdateDialogs({ open, onClose, id }) {
 
     }
     const handleUpdate = async(id) => {
-        // Here you would typically handle form submission to your database
         console.log('Form values:', formValues);
         if (!formValues) {
             onClose();
@@ -72,7 +71,7 @@ function UpdateDialogs({ open, onClose, id }) {
             toast.error("something went wrong")
             onClose();
         }
-        // onUpdate(formValues);
+        
     };
 
     return (
@@ -144,7 +143,7 @@ function UpdateDialogs({ open, onClose, id }) {
                         <Button onClick={onClose} color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={()=>handleUpdate(id)} color="primary">
+                        <Button onClick={()=>handleUpdate(id, onClose)} color="primary">
                             Update
                         </Button>
                     </DialogActions>
