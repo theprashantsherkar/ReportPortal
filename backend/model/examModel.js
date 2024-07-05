@@ -22,10 +22,7 @@ const examSchema = new mongoose.Schema({
         type: [String],
         default:[],
     },
-    madeBy: {
-        type: mongoose.Schema.Types.String,
-        ref:"PortalUsers"
-    },
+    
     createdAt: {
         type: String,
         default:`${new Date(Date.now()).getDate()}-${new Date(Date.now()).getMonth()}-${new Date(Date.now()).getFullYear()}`

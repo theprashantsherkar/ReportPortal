@@ -9,9 +9,9 @@ const router = express.Router()
 router.get('/allExams', isAuthenticated, prevExams);//tested
 router.post('/createExam', isAuthenticated, createExam); // tested
 router.route('/:id')
-    .post(addSubs)
-    .put(updateExam)
-    .delete(isAuthenticated, removeExam);
+    .post(addSubs)//validation error
+    .put(updateExam)//tested
+    .delete(removeExam); // tested
 
 
 export default router;

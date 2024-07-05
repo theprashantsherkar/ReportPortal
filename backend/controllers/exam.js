@@ -38,7 +38,8 @@ export const createExam = async (req, res, next) => {
         Class,
         section,
         session,
-        teacher
+        teacher,
+
     })
 
     res.status(200).json({
@@ -58,8 +59,8 @@ export const addSubs = async (req, res) => {
             message: "no exam found."
         })
     }
-    const subs = req.body;
-    // console.log(req.body);
+    const { subs } = req.body;
+    console.log(subs);
     const subjects = [];
     subs.forEach((element => {
         subjects.push(element.title);
@@ -74,7 +75,9 @@ export const addSubs = async (req, res) => {
     const uniqueSubjects = [...new Set(subjects)];
     const updatedSubjects = [...new Set([...exam.subjects, ...uniqueSubjects])];
     exam.subjects = updatedSubjects;
+    console.log("check")
     const isAdded = await exam.save();
+    console.log("check2")
     if ((!isAdded) || (!exam.subjects)) {
         return res.json({
             success: false,
@@ -100,16 +103,16 @@ export const updateExam = async(req, res) => {
                 message: "exam not found."
             })
         }
+      
         const {Class, session, section, subjects, teacher} = req.body
-        // if( || )
         const updatedSubjects = [];
         Class ? (exam.Class = Class) : exam.Class
-        session ? (exam.session = Class) : exam.session
-        section ? (exam.section = Class) : exam.section
-        teacher ? (exam.teacher = Class) : exam.teacher
+        session ? (exam.session = session) : exam.session
+        section ? (exam.section = section) : exam.section
+        teacher ? (exam.teacher = teacher) : exam.teacher
         let bodySubs = [];
         subjects ? (bodySubs = subjects) : exam.subjects;
-
+        
         bodySubs.forEach((element) => {
             updatedSubjects.push(element)
         })
@@ -120,8 +123,6 @@ export const updateExam = async(req, res) => {
                 message: "subjects not added/updated",
             })
         }
-        // const uniqueSubjs = [...new Set(updatedSubjects)];
-        // const finalSubs = [...new Set(...exam.subjects,...uniqueSubjs)];
         exam.subjects = updatedSubjects;
         const isAdded = await exam.save();
         if (!isAdded) {

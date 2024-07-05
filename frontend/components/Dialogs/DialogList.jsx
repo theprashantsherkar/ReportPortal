@@ -6,7 +6,6 @@ import {
     DialogContent,
     DialogTitle,
     Button,
-    TextField,
     Grid,
     Select,
     MenuItem,
@@ -35,8 +34,9 @@ function DialogList({ open, onClose, id }) {
         });
     };
 
-    const handleUpdate = () => {
-        // Handle form submission to your backend
+    const handleUpdate = (e) => {
+        // API call
+
         console.log('Form values:', formValues);
         onClose();
 

@@ -4,8 +4,8 @@ import { getAssessments, newAss } from '../controllers/assessment.js';
 const router = express.Router()
 
 
-router.get('/getAll', getAssessments);
-router.post('/new', newAss);
+router.get('/all', getAssessments);
+router.post('/:id', newAss);
 
 
 export default router;

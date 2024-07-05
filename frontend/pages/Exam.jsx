@@ -39,11 +39,6 @@ function Exam() {
   }
 
 
-  const handleClickOpen = (id) => {
-    console.log(`button clicked with id:${id}`)
-    setActiveRow(id === activeRow ? null : id)
-    setOpen(true);
-  };
   const handleAssessments = (id) => {
     console.log(`exam with id:${id} was clicked`)
     navigate(`/assessment/${id}`);
@@ -77,7 +72,7 @@ function Exam() {
     }
 
   }
- 
+
 
 
   const DeleteHandler = async (id) => {
@@ -113,7 +108,7 @@ function Exam() {
 
 
   if (examData && examData.length > 1) {
-    var headers = Object.keys(examData[0]).filter((header) => header !== "Subjects" && header !== "_id" && header !== "__v");
+    var headers = Object.keys(examData[0]).filter((header) => header !== "madeBy" && header !== "_id" && header !== "__v");
   }
   return (
     //exam dashboard ui goes here
@@ -207,9 +202,9 @@ function Exam() {
         </div>
 
         <div>
-          {(examData) ? (
-            <div className="mt-10 flex items-center justify-center">
-              <h2 className="text-xl font-bold mb-4">Submitted Data</h2>
+          {(examData) ? (<>
+            <h2 className="text-xl font-bold mb-4">Submitted Data:</h2>
+            <div className="mt-10 d-flex align-items-center justify-content-center">
               <table className="min-w-full border-collapse  border border-gray-300 ">
                 <thead>
                   <tr>
@@ -234,9 +229,7 @@ function Exam() {
                       )
                       )}
                       {examData.length > 0 && (<>
-                        <td className='border border-gray-300 '><Button variant="outlined" onClick={() => handleClickOpen(item._id)}>
-                          Subjects
-                        </Button>{open && (<Dialogbox title={"Add Subjects"} open={open} setOpen={setOpen} id={item._id} />)}<button onClick={() => handleAssessments(item._id)} className='btn btn-primary mx-2'>Assessments</button></td>
+                        <td className='border border-gray-300 '><button  onClick={() => handleAssessments(item._id)} className='btn btn-primary mx-2' >Assessments</button></td>
                         <td className='border border-gray-300 px-1'><button className='btn btn-warning mx-1' onClick={() => setDialogOpen(true)}><EditBtn /></button>{dialogOpen && <><UpdateDialogs
                           open={dialogOpen}
                           onClose={() => setDialogOpen(false)}
@@ -250,6 +243,8 @@ function Exam() {
                 </tbody>
               </table>
             </div>
+
+          </>
           ) : (<>
             no data found</>)}
         </div>

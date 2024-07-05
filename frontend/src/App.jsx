@@ -52,7 +52,7 @@ function App() {
         <Route path='/changepassword' element={<Passchange />} />
         <Route path='/assessment/:id' element={<Assessment />} />
 
-      </Routes> 
+      </Routes>
       <Toaster />
     </Router>
 

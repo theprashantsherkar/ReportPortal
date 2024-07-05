@@ -22,7 +22,11 @@ const AssessmentSchema = new mongoose.Schema({
 
     },
     subjects: {
-        type: mongoose.Schema.Types.Array,
+        type: String
+        
+    },
+    parentExam: {
+        type: mongoose.Schema.Types.ObjectId,
         ref:"exam datas"
     }
 })
