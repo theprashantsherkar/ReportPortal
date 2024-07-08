@@ -30,12 +30,34 @@ function Assessment() {
         setSubjects(e.target.value.split(','));
     };
 
-    useEffect(() => {
-        
-    }, [])
+    
+
+
+    const DeleteHandler = async(id) => {
+        try {
+            const response = await axios.delete(`${backend_URL}/assessments/${id}`, {
+                headers: {
+                    "Content-Type":"application/json"
+                },
+                withCredentials: true,
+            })
+            if (!response.data.success) {
+                return toast.error("internal server error.")
+            }
+            toast.success(response.data.message);
+        } catch (error) {
+            console.log(error);
+            toast.error('something went wrong, try after sometime')
+        }
+    }
+
     const handleSubmit = async() => {
         //todo:api call on form submit
         try {
+            if (!title || !term || !type || !maxMarks || !rubrics || !subjects) {
+                console.log("Every field is mandatory!")
+                return toast.error("Every field is mandatory!")
+            }
 
            const response = await axios.post(`${backend_URL}/assessments/${exam.id}`, {
                title,
@@ -51,13 +73,26 @@ function Assessment() {
                    },
                    withCredentials:true,
            })
-           setAssessments(response.data.assessments);
+           
            toast.success(response.data.message)
        } catch (error) {
            console.log(error)
            toast.error("something went wrong")
        }
     }
+
+    useEffect(() => {
+        //todo:DB call on load and form submit
+        //todo: term, type, rubrics to be droppped down!
+        axios.get(`${backend_URL}/assessments/${exam.id}`, {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            withCredentials: true,
+        }).then((response) => {
+            setAssessments(response.data.assessments);
+        })
+    }, [handleSubmit, DeleteHandler])
 
     return (
         <>
@@ -67,7 +102,6 @@ function Assessment() {
                 <hr />
                 <div className=''>
                     <form action="" className='p-3'>
-
                         <div className='d-flex align-items-center justify-content-center flex-wrap '>
                             <div className=''>
                                 <TextField className='px-2' label="Title" value={title} onChange={(e) => setTitle(e.target.value)}  margin="normal" />
@@ -82,13 +116,11 @@ function Assessment() {
                             </div>
 
                         </div>
-
                         <div className='d-flex align-items-center justify-content-center py-3'  >
                             <Button variant="contained" color="primary" onClick={handleSubmit}>
                                 Create Assessments
                             </Button>
                         </div>
-
                     </form>
                 </div>
                 <hr />
@@ -117,7 +149,7 @@ function Assessment() {
                                         <TableCell>{Array.isArray(assessment.subjects) ? assessment.subjects.join(', ') : assessment.subjects}</TableCell>
                                         <TableCell><Button>Add Rubrics</Button></TableCell>
                                         <TableCell><button className='btn btn-warning'><EditBtn /></button></TableCell>
-                                        <TableCell><button className='btn btn-danger'><DeleteBtn /></button></TableCell>
+                                        <TableCell><button onClick={() => DeleteHandler(assessment._id)} className='btn btn-danger'><DeleteBtn /></button></TableCell>
 
                                     </TableRow>
                                 ))}
@@ -135,57 +167,3 @@ function Assessment() {
 export default Assessment;
 
 
-
-// <div className='d-flex align-item-center justify-content-center'>
-//                             <div>
-//                                 <div className='p-2'>
-//                                     <label htmlFor="">Assessment Title: </label>
-//                                     <input type="text" className='border border-black rounded-lg px-1  mx-2' />
-//                                 </div>
-
-
-//                                 <div className='p-2'>
-//                                     <label htmlFor="term">Select Term: </label>
-//                                     <select name="term" id="term" className='border border-black mx-2'>
-//                                         <option value="Term 1">Term 1</option>
-//                                         <option value="Mid Term">Mid Term</option>
-//                                         <option value="End Term">End Term</option>
-//                                     </select>
-//                                 </div>
-
-//                             </div>
-//                             <div>
-//                                 <div>
-
-//                                     <div className='p-2'>
-//                                         <label htmlFor="assessment-type">Assessment Type: </label>
-//                                         <select className='border border-black mx-2' name="" id="assessment-type">
-//                                             <option value="rubrics">rubrics</option>
-//                                             <option value="marks">marks</option>
-
-//                                         </select>
-//                                     </div>
-//                                     < div className='p-2' >
-//                                         <label htmlFor="max">Maximum Marks:</label>
-//                                         <input type="text" name="" id="max" className='border border-black mx-2 px-1' />
-
-
-
-//                                         <label className='mx-2' htmlFor="rubrics">Select Rubrics: </label>
-//                                         <select name="" className='border border-black ' id="">
-//                                             <option value="English">English</option>
-//                                             <option value="Hindi">Hindi</option>
-//                                             <option value="Marathi">Marathi</option>
-//                                         </select>
-//                                     </div >
-//                                 </div>
-//                             </div>
-
-
-//                         </div>
-//                         <div className='p-2'>
-//                             <Button variant="outlined" onClick={handleOpen}>
-//                                 Add Subjects
-//                             </Button>{open && (<DialogList open={open} onClose={()=>setOpen(false)} />)}
-//                             <button type="submit" onClick={() => submitHandler(id)} className='btn btn-primary px-3 mx-3'>Submit</button>
-//                         </div>

@@ -33,7 +33,7 @@ export const newAss = async (req, res) => {
         }
 
         subs.forEach(element => {
-            const newAssessment = Assessment.create({
+            Assessment.create({
                 title,
                 term,
                 type,
@@ -59,3 +59,51 @@ export const newAss = async (req, res) => {
         });
     }
 };
+
+export const getExamsAss = async(req, res, next) => {
+    const exam = await Exam.findById({ _id: req.params.id })
+    // console.log(req.params)
+    // console.log(exam)
+    if ((!exam) || (exam.length == 0)) {
+        return res.status(404).json({
+            success: false,
+            message:"no exam found for the given id."
+        })
+    }
+    const assessments = await Assessment.find({ parentExam: exam._id })
+    // console.log(assessments)
+    if (!assessments || assessments.length == 0) {
+        return res.status(404).json({
+            success: false,
+            message:"no assessments added yet"
+        })
+    }
+    res.status(200).json({
+        success: true,
+        message: "assessments fetched",
+        assessments
+    })
+}
+
+
+export const DeleteExam =async(req, res, next) => {
+    const assessment = await Assessment.findById({ _id: req.params.id })
+    if (!assessment) {
+        return res.status(404).json({
+            success: false,
+            message:"no assessment found"
+        })
+    }
+    const isDeleted = await assessment.deleteOne();
+    if (!isDeleted) {
+        return res.status(500).json({
+            success: false,
+            message: "delete operation failed",
+            
+        })
+    }
+    return res.status(200).json({
+        success: true,
+        message:"assessment deleted successfully"
+    })
+}

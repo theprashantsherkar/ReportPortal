@@ -71,7 +71,6 @@ function UpdateDialogs({ open, onClose, id }) {
             toast.error("something went wrong")
             onClose();
         }
-        
     };
 
     return (
