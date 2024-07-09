@@ -1,5 +1,5 @@
 import express from 'express'
-import { DeleteExam, getAssessments, getExamsAss, newAss } from '../controllers/assessment.js';
+import { DeleteExam, UpdateAss, getAssessments, getExamsAss, newAss } from '../controllers/assessment.js';
 
 const router = express.Router()
 
@@ -9,6 +9,7 @@ router.route('/:id')
     .post(newAss)
     .get(getExamsAss)
     .delete(DeleteExam)
+    .put(UpdateAss)
 
 
 

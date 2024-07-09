@@ -107,3 +107,35 @@ export const DeleteExam =async(req, res, next) => {
         message:"assessment deleted successfully"
     })
 }
+
+
+export const UpdateAss = async(req, res, next) => {
+    const assessment = await Assessment.findById({ _id: req.params.id })
+    if (!assessment) {
+        return res.status(404).json({
+            success: false,
+            message: "no assessment found"
+        })
+    }
+    const { title, term, type, maxMarks, rubrics } = req.body;
+
+    title ? assessment.title = title : assessment.title
+    term ? assessment.term = term : assessment.term
+    type ? assessment.type = type : assessment.type
+    maxMarks ? assessment.maxMarks = maxMarks : assessment.maxMarks
+    rubrics ? assessment.rubrics = rubrics : assessment.rubrics
+
+    const isUpdated = await assessment.save();
+    if (!isUpdated) {
+        return res.status(500).json({
+            success: false,
+            message: "Couldn't Update, Internal Server Error!"
+        })
+    }
+
+    res.status(200).json({
+        success: true,
+        message: "Updated successully",
+        assessment
+    })
+}

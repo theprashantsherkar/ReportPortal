@@ -11,36 +11,11 @@ import { LoginContext } from '../src/main';
 function Profile() {
   const navigate = useNavigate();
   const { user, isLoggedIn, loading } = useContext(LoginContext);
-  // console.log('data been shown')
-  // console.log(user);
-  // console.log("code blown");
   
   useEffect(() => {
     console.log('refreshed')
-  },[])
+  },[isLoggedIn])
   console.log(isLoggedIn);
-
-  //do this by context api instead.
-  // useEffect(() => {
-  //   async function onLoad() {
-  //     try {
-  //       const { data } = await axios.get(`${backend_URL}/admin/profile`, {
-  //         headers: {
-  //           "Content-Type": "application/json"
-  //         },
-  //       })
-  //       console.log(data)
-  //       if (!data.success) {
-  //         return toast.error('internal server error')
-  //       }
-  //       console.log(data.User.name);
-  //       setUser(data.User.name)
-  //     } catch (error) {
-  //       console.log(error)
-  //     }
-  //   }
-  //   onLoad();
-  // })
 
 
   return (

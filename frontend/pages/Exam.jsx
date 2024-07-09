@@ -4,10 +4,7 @@ import '../styles/exam.css'
 import axios from 'axios'
 import { backend_URL } from '../src/App'
 import toast from 'react-hot-toast'
-import { useRef } from 'react'
-import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom'
-import Dialogbox from '../components/Dialogs/Dialogbox'
 import DeleteBtn from '../components/Buttons/DeleteBtn'
 import EditBtn from '../components/Buttons/EditBtn'
 import UpdateDialogs from '../components/Dialogs/UpdateDialogs'
@@ -102,8 +99,7 @@ function Exam() {
       // console.log(examData);
     }).catch((err) => console.log(err));
 
-  }, [handleSubmit, DeleteHandler])
-
+  }, [handleSubmit, DeleteHandler, dialogOpen])
 
 
 

@@ -4,7 +4,6 @@ import Header from '../components/Header.jsx'
 import { backend_URL } from '../src/App.jsx';
 import toast from 'react-hot-toast';
 import axios from 'axios';
-import Table from '../components/Table.jsx'
 
 
 function Dashboard() {

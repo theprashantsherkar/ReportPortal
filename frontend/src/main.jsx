@@ -4,7 +4,6 @@ import App from './App.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css'
 import Temp from './Temp.jsx';
-import Table from '../components/Table.jsx';
 // import { Tab } from 'bootstrap';
 
 

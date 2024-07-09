@@ -14,8 +14,6 @@ import {
     Checkbox,
     ListItemText,
 } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import { Box } from '@mui/system';
 import axios from 'axios';
 import { backend_URL } from '../../src/App';
 import toast from 'react-hot-toast';
