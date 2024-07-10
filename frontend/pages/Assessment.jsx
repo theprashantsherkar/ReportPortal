@@ -19,6 +19,7 @@ import toast from 'react-hot-toast'
 import EditBtn from '../components/Buttons/EditBtn'
 import DeleteBtn from '../components/Buttons/DeleteBtn'
 import AssessmentDialog from '../components/Dialogs/AssessmentDialog'
+import GradeSelect from '../components/Dialogs/GradeSelect'
 
 
 
@@ -32,8 +33,16 @@ function Assessment() {
     const [subjects, setSubjects] = useState([]);
     const [assessments, setAssessments] = useState([]);
     const [open, setOpen] = useState(false);
+    const [openRubrics, setOpenRubrics] = useState(false);
     const subjectsList = ['Math', 'Science', 'History', 'English', 'Physical Education'];
 
+    const handleRubrics = (id) => {
+        console.log(`button id:${id} clicked`);
+        setOpenRubrics(!openRubrics);
+        if (openRubrics) {
+            
+        }
+    }
 
     const MenuProps = {
         PaperProps: {
@@ -96,7 +105,6 @@ function Assessment() {
     }
 
     const handleSubmit = async() => {
-        //todo:api call on form submit
         try {
             if (!title || !term || !type || !maxMarks || !rubrics || !subjects) {
                 console.log("Every field is mandatory!")
@@ -126,7 +134,7 @@ function Assessment() {
     }
 
     useEffect(() => {
-        //todo: term, type, rubrics to be droppped down!
+        //todo: term, type, rubrics to be droppped down! //done
         axios.get(`${backend_URL}/assessments/${exam.id}`, {
             headers: {
                 "Content-Type": "application/json"
@@ -135,7 +143,7 @@ function Assessment() {
         }).then((response) => {
             setAssessments(response.data.assessments);
         })
-    }, [handleSubmit, DeleteHandler])
+    }, [handleSubmit, DeleteHandler, openRubrics])
 
     return (
         <>
@@ -245,7 +253,7 @@ function Assessment() {
                                     <TableCell>Type</TableCell>
                                     <TableCell>Max Marks</TableCell>
                                     <TableCell>Subjects</TableCell>
-                                    <TableCell>Add Rubrics</TableCell>
+                                    <TableCell>Rubrics</TableCell>
                                     <TableCell>Edit</TableCell>
                                     <TableCell>Delete</TableCell>
                                 </TableRow>
@@ -258,7 +266,7 @@ function Assessment() {
                                         <TableCell>{assessment.type}</TableCell>
                                         <TableCell>{assessment.maxMarks}</TableCell>
                                         <TableCell>{Array.isArray(assessment.subjects) ? assessment.subjects.join(', ') : assessment.subjects}</TableCell>
-                                        <TableCell><button className='btn btn-primary '> Rubrics</button></TableCell>
+                                        <TableCell><button onClick={() => handleRubrics(assessment._id)} className='btn btn-primary '>Add Rubrics</button>{<GradeSelect openRubrics={openRubrics} setOpenRubrics={setOpenRubrics} id={assessment._id} />}</TableCell>
                                         <TableCell><button onClick={handleOpen} className='btn btn-warning'><EditBtn /></button><AssessmentDialog open={open} setOpen={setOpen} id={assessment._id}/></TableCell>
                                         <TableCell><button onClick={() => DeleteHandler(assessment._id)} className='btn btn-danger'><DeleteBtn /></button></TableCell>
 

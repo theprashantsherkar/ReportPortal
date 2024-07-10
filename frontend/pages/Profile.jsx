@@ -1,9 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import '../styles/profile.css'
 import Header from '../components/Header';
-import axios from 'axios';
-import toast from 'react-hot-toast';
-import { backend_URL } from '../src/App';
 import { useNavigate } from 'react-router-dom';
 import { LoginContext } from '../src/main';
 
@@ -13,7 +10,8 @@ function Profile() {
   const { user, isLoggedIn, loading } = useContext(LoginContext);
   
   useEffect(() => {
-    console.log('refreshed')
+    console.log(user)
+    
   },[isLoggedIn])
   console.log(isLoggedIn);
 

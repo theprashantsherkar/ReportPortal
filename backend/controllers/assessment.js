@@ -139,3 +139,37 @@ export const UpdateAss = async(req, res, next) => {
         assessment
     })
 }
+
+export const addRubrics = async (req, res, next) => {
+
+    if (!req.params.id || req.params.id == undefined) {
+        return res.json({
+            success: false,
+            message:"empty params!"
+        })
+    }
+    const assessment = await Assessment.findById({ _id: req.params.id });
+    console.log(assessment);
+    if (!assessment) {
+        return res.status(404).json({
+            success: false,
+            message: "no assessment found",
+        })
+    }
+    const grade = req.body.grade;
+
+    assessment.rubrics = grade;
+    const isUpdated = await assessment.save();
+
+    if (!isUpdated) {
+        return res.status(500).json({
+            success: false,
+            message: "grade not Updated."
+        })
+    }
+    res.status(200).json({
+        success: true,
+        message: "Grade Updated Successfully",
+        updatedAss: assessment
+    })
+}

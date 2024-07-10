@@ -1,5 +1,12 @@
 import express from 'express'
-import { DeleteExam, UpdateAss, getAssessments, getExamsAss, newAss } from '../controllers/assessment.js';
+import {
+    DeleteExam,
+    UpdateAss,
+    addRubrics,
+    getAssessments,
+    getExamsAss,
+    newAss
+} from '../controllers/assessment.js';
 
 const router = express.Router()
 
@@ -10,7 +17,8 @@ router.route('/:id')
     .get(getExamsAss)
     .delete(DeleteExam)
     .put(UpdateAss)
-
+    
+router.put('/rubrics/:id', addRubrics);
 
 
 export default router;

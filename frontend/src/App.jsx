@@ -28,6 +28,7 @@ function App() {
     }).then((res) => {
       console.log("data is being set")
       setUser(res.data.User)
+      console.log(res.data.User)
       setIsLoggedIn(true)
     }).catch((error) => {
       setUser({})
