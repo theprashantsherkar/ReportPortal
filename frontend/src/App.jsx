@@ -12,6 +12,7 @@ import Register from '../pages/Register.jsx';
 import axios from 'axios';
 import { LoginContext } from './main.jsx';
 import Assessment from '../pages/Assessment.jsx';
+import Evaluation from '../pages/Evaluation.jsx';
 // import ProtectedRoute from '../ProtectedRoute/ProtectedRoute.jsx';
 
 
@@ -45,7 +46,7 @@ function App() {
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
-
+        <Route path='/evaluate' element={<Evaluation />} />
         <Route path='/' element={<Dashboard />} />
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path='/profile' element={<Profile />} />

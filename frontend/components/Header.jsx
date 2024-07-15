@@ -48,12 +48,6 @@ function Drop() {
 
 
 function Header() {
-    // const userData = axios.get(`${backend_URL}/users/userData`).then((data) => {
-
-    // }).catch((err) => {
-
-    // })
-
 
 
     const [user, setUser] = useState("")
@@ -72,6 +66,7 @@ function Header() {
                     <ul>
                         <li><NavLink className='links' activeClassName="active" to={'/dashboard'}>Dashboard</NavLink></li>
                         <li><NavLink className='links' activeClassName="active" to={'/exam'} >Exam</NavLink></li>
+                        <li><NavLink className='links' activeClassName="active" to={'/evaluate'} >Evaluate</NavLink></li>
                         <li><NavLink className='links' activeClassName="active" to={'/profile'}>Profile</NavLink></li>
                         <li><NavLink className='links' activeClassName="active" to={'/changepassword'}>Change Password</NavLink></li>
                     </ul>
