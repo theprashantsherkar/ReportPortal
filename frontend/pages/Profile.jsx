@@ -9,10 +9,7 @@ function Profile() {
   const navigate = useNavigate();
   const { user, isLoggedIn, loading } = useContext(LoginContext);
   
-  useEffect(() => {
-    console.log(user)
-    
-  },[isLoggedIn])
+
   console.log(isLoggedIn);
 
 

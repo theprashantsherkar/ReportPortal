@@ -1,50 +1,75 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { TextField, Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import Header from '../components/Header'
 import axios from 'axios';
+import { backend_URL } from '../src/App';
+import { LoginContext } from '../src/main';
+import toast from 'react-hot-toast';
 
 function Evaluation() {
     const [classes, setClasses] = useState([]);
     const [assessments, setAssessments] = useState([]);
-    const [subjects, setSubjects] = useState([]);
     const [selectedClass, setSelectedClass] = useState('');
     const [selectedAssessment, setSelectedAssessment] = useState('');
     const [students, setStudents] = useState([]);
     const [marks, setMarks] = useState({});
-
-    useEffect(() => {
-        axios.get('/api/classes').then((res) => setClasses(res.data));
-        axios.get('/api/assessments').then((res) => setAssessments(res.data));
-    }, []);
+    const { user } = useContext(LoginContext);
 
     useEffect(() => {
 
-        if (selectedAssessment) {
-            axios.get(`/api/subjects?assessment=${selectedAssessment}`).then((res) => setSubjects(res.data));
+        const fetchClasses = async () => {
+            try {
+                const response = await axios.post(`${backend_URL}/teachers/class`, {
+                    teacher: user.name
+                }, {
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    withCredentials: true,
+                }
+
+                )
+                if (!response.data.message) {
+                    return toast.error("Cant select Classes")
+                }
+                setClasses(response.data.names);
+
+            } catch (error) {
+                console.log(error);
+                toast.error('internal server error!')
+            }
         }
-    }, [selectedAssessment]);
+        fetchClasses();
+    }, [user.name])
 
-    const handleShowStudents = () => {
+    useEffect(() => {
+        const fetchSubject = async () => {
 
-        axios.get(`/api/students?class=${selectedClass}`).then((res) => setStudents(res.data));
-    };
+            try {
+                const { data } = await axios.post(`${backend_URL}/teachers/getassessment`, {
+                    Class: selectedClass,
+                    teacher: user.name,
 
-    const handleMarksChange = (studentId, subject, value) => {
-        setMarks({
-            ...marks,
-            [studentId]: {
-                ...marks[studentId],
-                [subject]: value,
-            },
-        });
-    };
+                }, {
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    withCredentials: true,
 
-    const handleSaveMarks = () => {
+                })
 
-        axios.post('/api/marks', { marks }).then((res) => {
-            console.log('Marks saved successfully', res.data);
-        });
-    };
+
+                console.log(data);
+                setAssessments(data.assTitles);
+            } catch (error) {
+                console.log(error)
+                toast.error('internal server error');
+            }
+        }
+        fetchSubject();
+    }, [selectedClass])
+
+
     return (
         <>
             <Header />
@@ -59,38 +84,43 @@ function Evaluation() {
                         <FormControl fullWidth margin="normal">
                             <InputLabel>Class</InputLabel>
                             <Select
-                                value={classes}
-                                onChange={(e) => setClasses(e.target.value)}
+                                value={selectedClass}
+                                onChange={(e) => setSelectedClass(e.target.value)}
                                 label="Class"
                             >
-                                <MenuItem value="Class 1">Class 1</MenuItem>
-                                <MenuItem value="Class 2">Class 2</MenuItem>
+                                {Array.isArray(classes) && classes.length > 0 ? (
+                                    classes.map((cls) => (
+                                        <MenuItem key={cls} value={cls}>
+                                            {cls}
+                                        </MenuItem>
+                                    ))
+                                ) : (
+                                    <MenuItem disabled>No classes available</MenuItem>
+                                )}
                             </Select>
                         </FormControl>
 
                         <FormControl fullWidth margin="normal">
                             <InputLabel>Assessment</InputLabel>
                             <Select
-                                value={assessments}
-                                onChange={(e)=>setAssessments(e.target.value)}
+                                value={selectedAssessment}
+                                onChange={(e) => setSelectedAssessment(e.target.value)}
                                 label="Assessment"
                             >
-                                <MenuItem value="Assessment 1">Assessment 1</MenuItem>
-                                <MenuItem value="Assessment 2">Assessment 2</MenuItem>
+                                {Array.isArray(assessments) && assessments.length > 0 ? (
+
+                                    assessments.map((ass, index) => {
+                                        <MenuItem value={ass.title} key={index}>
+                                            {ass.title}
+                                        </MenuItem>
+                                    })
+
+                                ) : (
+                                    <MenuItem disabled> No Assessments Found</MenuItem>
+                                )}
                             </Select>
                         </FormControl>
-                        <FormControl fullWidth margin="normal">
-                            <InputLabel>Subjects</InputLabel>
-                            <Select
-                                value={subjects}
-                                onChange={(e) => setSubjects(e.target.value)}
-                                label="Subjects"
-                            >
-                                <MenuItem value="Subject 1">Subject 1</MenuItem>
-                                <MenuItem value="Subject 2">Subject 2</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <Button variant="contained" onClick={handleShowStudents}>
+                        <Button variant="contained" >
                             Show
                         </Button>
                     </div>

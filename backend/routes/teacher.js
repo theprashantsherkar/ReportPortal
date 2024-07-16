@@ -4,8 +4,8 @@ import { getAssessmentsForTeacher, getClass, getSubjects } from "../controllers/
 
 const router = express.Router()
 
-router.get('/class', getClass);
-router.get('/assessment', getAssessmentsForTeacher);
+router.post('/class', getClass);
+router.post('/getassessment', getAssessmentsForTeacher);
 router.get('/subjects', getSubjects);
 
 

@@ -19,11 +19,9 @@ const AssessmentSchema = new mongoose.Schema({
     },
     rubrics: {
         type: String,
-
     },
     subjects: {
         type: String
-        
     },
     parentExam: {
         type: mongoose.Schema.Types.ObjectId,

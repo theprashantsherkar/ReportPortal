@@ -20,6 +20,7 @@ function Register() {
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [role, setRole] = useState("")
     const submitHandler = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -27,6 +28,7 @@ function Register() {
             const { data } = await axios.post(`${backend_URL}/admin/register`, {
                 name,
                 email,
+                role,
                 password
             }, {
                 headers: {
@@ -72,6 +74,15 @@ function Register() {
                             onChange={(e) => setEmail(e.target.value)}
                             required
                             placeholder='Email' />
+                        <br />
+                        <div className='py-1 px-2 border border-black border-t-0'>
+                            <label htmlFor="role">Select Role: </label>
+                            <select onChange={(e)=> setRole(e.target.value)} name="role" id="role" >
+                                <option value=""  >Select Role</option>
+                                <option value="Teacher">Teacher</option>
+                                <option value="Admin">Admin</option>
+                            </select>
+                        </div>
                         <br />
                         <input
                             className='pass'

@@ -37,7 +37,7 @@ export const loginFunc = async (req, res) => {
 }
 
 export const signinFunc = async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email,role, password } = req.body;
     const oldUser = await Users.findOne({ email });
 
     if (oldUser) return res.json({
@@ -50,6 +50,7 @@ export const signinFunc = async (req, res) => {
     const user = await Users.create({
         name,
         email,
+        role,
         password: hashedPass,
 
     })
@@ -61,7 +62,7 @@ export const signinFunc = async (req, res) => {
         maxAge: 60 * 60 * 1000,
     }).json({
         success: true,
-        message: 'user created successfully!'
+        message: `${role} created successfully!`
     })
 
 }

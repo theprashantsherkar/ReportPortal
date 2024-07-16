@@ -28,49 +28,47 @@ export const getClass = async (req, res, next) => {
 }
 
 export const getAssessmentsForTeacher = async (req, res, next) => {
-    const { Class } = req.body;
-    var exams = await Exam.find({ Class: Class });
+    const { Class, teacher } = req.body;
+    var exams = await Exam.find({ Class: Class, teacher:teacher});
     if (!exams) {
         return res.status(404).json({
             success: false,
-            message:"no exams are found"
+            message: "no exams are found"
         })
     }
     var assessments = [];
 
-    exams.map((element) => {
-        Assessment.find({ parentExam: element._id })
-            .then((res) => {
-                console.log(res)
-                assessments = res
-            })
-            .catch((err) => {
-                console.log(err)
-            })
+    await Promise.all(exams.map(async (element) => {
+        const ass = await Assessment.find({ parentExam: element._id });
+        assessments = ass;
+        
     })
-    console.log(assessments)
+    )
 
     if (!assessments || !assessments.length) {
-        return res.status(404).json({
+        return res.json({
             success: false,
-            message:"no assessments found."
+            message: "no assessments found."
         })
     }
     const assTitles = [];
     assessments.map((element) => {
-        assTitles.push(element.title);
+        assTitles.push({ title: element.title, subjects: element.subjects });
     })
+
+
+
     res.status(200).json({
-            success: true,
-            message: "Assessments Found",
-            assTitles,
+        success: true,
+        message: "Assessments Found",
+        assTitles,
     })
 
 }
 
-export const getSubjects = async(req, res, next) => {
-    const { title } = req.query;
-    const { exam } = req.query;
+export const getSubjects = async (req, res, next) => {
+    const { title } = req.body;
+    const { exam } = req.body;
     console.log(title, exam)
     const assessments = await Assessment.find({ title: title, parentExam: exam });
     if (!assessments) {
