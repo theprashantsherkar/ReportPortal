@@ -17,6 +17,7 @@ function Exam() {
   const [teacher, setTeacher] = useState('')
   const [examData, setExamData] = useState([]);
   const [activeRow, setActiveRow] = useState(null)
+  const [subjects, setSubjects] = useState([]);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -36,8 +37,16 @@ function Exam() {
   }
 
 
-  const handleAssessments = (id) => {
+  const handleAssessments =async (id) => {
     console.log(`exam with id:${id} was clicked`)
+    const { data } = await axios.get(`${backend_URL}/assessments/sendsubjects/${id}`, {
+      headers: {
+        "Content-Type":"application/json"
+      },
+      withCredentials: true,
+
+    })
+    setSubjects(data.subjects);
     navigate(`/assessment/${id}`);
   }
 

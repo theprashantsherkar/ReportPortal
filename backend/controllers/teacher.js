@@ -1,5 +1,6 @@
 import { Exam } from "../model/examModel.js";
 import { Assessment } from "../model/assessments.js";
+import { Student } from "../model/studentsModel.js";
 
 
 export const getClass = async (req, res, next) => {
@@ -66,33 +67,20 @@ export const getAssessmentsForTeacher = async (req, res, next) => {
 
 }
 
-export const getSubjects = async (req, res, next) => {
-    const { title } = req.body;
-    const { exam } = req.body;
-    console.log(title, exam)
-    const assessments = await Assessment.find({ title: title, parentExam: exam });
-    if (!assessments) {
+export const getStudents = async (req, res, next) => {
+    const { Class } = req.query;
+    const students = await Student.find({ Class: Class });
+    if (!students) {
         return res.status(404).json({
             success: false,
-            message: "no assessments found"
-        })
-    }
-
-    const subjects = [];
-    assessments.map((element) => {
-        subjects.push(element.subjects)
-    })
-
-    if (!subjects || !subjects.length) {
-        return res.status(404).json({
-            success: false,
-            message: "no subjects found"
+            message:"no students added for this class"
         })
     }
     res.status(200).json({
         success: true,
-        message: "subjects fetched successfully",
-        subjects
+        message: "students fetched successfully",
+        strength:students.length,
+        students
     })
 
 }

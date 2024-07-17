@@ -1,6 +1,6 @@
 import { Assessment } from "../model/assessments.js"
 import { Exam } from "../model/examModel.js"
-import mongoose from "mongoose";
+
 
 export const getAssessments = async(req, res) => {
 
@@ -172,4 +172,28 @@ export const addRubrics = async (req, res, next) => {
         message: "Grade Updated Successfully",
         updatedAss: assessment
     })
+}
+
+export const sendSubs = async (req, res, next) => {
+    const { id } = req.params;
+    const exam = await Exam.findById(id);
+    if (!exam) {
+        return res.json({
+            success: false,
+            message:"no exam found"
+        })
+    }
+    const subjects = exam.subjects;
+    if (!subjects) {
+        return res.json({
+            success: false,
+            message:"select subjects first!"
+        })
+
+    }
+    res.status(200).json({
+        success: true,
+        message: "subjects sent",
+        subjects
+})
 }

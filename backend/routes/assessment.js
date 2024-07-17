@@ -5,7 +5,8 @@ import {
     addRubrics,
     getAssessments,
     getExamsAss,
-    newAss
+    newAss,
+    sendSubs
 } from '../controllers/assessment.js';
 
 const router = express.Router()
@@ -20,5 +21,6 @@ router.route('/:id')
     
 router.put('/rubrics/:id', addRubrics);
 
+router.get('/sendsubjects/:id', sendSubs)
 
 export default router;

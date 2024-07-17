@@ -83,7 +83,7 @@ function UpdateDialogs({ open, onClose, id }) {
                                     fullWidth
                                     label="Class"
                                     name="Class"
-                                    value={formValues.class}
+                                    value={formValues.Class}
                                     onChange={handleChange}
                                 />
                             </Grid>

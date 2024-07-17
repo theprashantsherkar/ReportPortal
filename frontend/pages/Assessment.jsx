@@ -23,68 +23,28 @@ import GradeSelect from '../components/Dialogs/GradeSelect'
 
 
 
-function Assessment() {
+function Assessment({subjects}) {
     const exam  = useParams();
     const [title, setTitle] = useState('');
     const [term, setTerm] = useState('');
     const [type, setType] = useState('');
     const [maxMarks, setMaxMarks] = useState('');
     const [rubrics, setRubrics] = useState('');
-    const [subjects, setSubjects] = useState([]);
+    
     const [assessments, setAssessments] = useState([]);
     const [open, setOpen] = useState(false);
     const [openRubrics, setOpenRubrics] = useState(false);
-    const subjectsList = ['Math', 'Science', 'History', 'English', 'Physical Education'];
+
 
     const handleRubrics = (id) => {
         console.log(`button id:${id} clicked`);
         setOpenRubrics(!openRubrics);
-        if (openRubrics) {
-            
-        }
+        
     }
 
-    const MenuProps = {
-        PaperProps: {
-            style: {
-                maxHeight: 224,
-                width: 250,
-            },
-        },
-    };
-
-    const renderValue = (selected) => {
-        if (selected.length === 0) {
-            return <em>Select Subjects</em>;
-        }
-
-        const displayed = selected.slice(0, 2);
-        const rest = selected.length - displayed.length;
-
-        return (
-            <Box>
-                {displayed.map((value) => (
-                    <Chip key={value} label={value} style={{ margin: 2 }} />
-                ))}
-                {rest > 0 && <Chip label={`+${rest} more`} style={{ margin: 2 }} />}
-            </Box>
-        );
-    };
-
-    const handleSubjectsChange = (event) => {
-        const {
-            target: { value },
-        } = event;
-        setSubjects(typeof value === 'string' ? value.split(',') : value)
-
-    }
     const handleOpen = () => {
         setOpen(true);
     }
-    const handleSubjectChange = (e) => {
-        setSubjects(e.target.value.split(','));
-    };
-
 
     const DeleteHandler = async(id) => {
         try {
@@ -153,7 +113,7 @@ function Assessment() {
                 <hr />
                 <div className=''>
                     <form action="" className='p-3'>
-                        <div className='d-flex align-items-center justify-content-center flex-wrap '>
+                        <div className='d-flex align-items-baseline justify-content-center flex-wrap '>
                             <div className='px-3 '>
                                 {/* <TextField className='px-2' label="Title" value={title} onChange={(e) => setTitle(e.target.value)}  margin="normal" /> */}
                                 <TextField
@@ -190,7 +150,7 @@ function Assessment() {
                                     </Select>
                                 </FormControl>
                             </div>
-                            <div className='px-3 '>
+                            <div className='px-3'>
                                 <TextField
                                     fullWidth
                                     margin="normal"
@@ -213,25 +173,7 @@ function Assessment() {
 
                                     </Select>
                                 </FormControl>
-                                <FormControl fullWidth margin="normal" variant="standard">
-                                    <InputLabel>Select Subjects</InputLabel>
-                                    <Select
-                                        label="Subjects"
-                                        name="subjects"
-                                        multiple
-                                        value={subjects}
-                                        onChange={handleSubjectsChange}
-                                        renderValue={renderValue}
-                                        MenuProps={MenuProps}
-                                    >
-                                        {subjectsList.map((subject) => (
-                                            <MenuItem key={subject} value={subject}>
-                                                <Checkbox checked={subjects.indexOf(subject) > -1} />
-                                                <ListItemText primary={subject} />
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
+                               
                             </div>
 
                         </div>
