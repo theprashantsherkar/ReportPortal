@@ -16,12 +16,14 @@ function Evaluation() {
     const [selectedAssessment, setSelectedAssessment] = useState('');
     const [students, setStudents] = useState([]);
     const [showTable, setShowTable] = useState(false)
+    const [details, setDetails] = useState([]);
     const [marks, setMarks] = useState({});
     const { user } = useContext(LoginContext);
+    const [assessmentName, subjectName] = selectedAssessment?.split(' - ')
 
-    const ShowButton = async() => {
+    const ShowButton = async () => {
         try {
-            console.log(selectedClass);
+            
             const response = await axios.get(`${backend_URL}/teachers/getstudents`, {
                 params: {
                     Class: selectedClass,
@@ -33,6 +35,7 @@ function Evaluation() {
            })
             setStudents(response.data.students);
             setShowTable(true);
+            console.log(selectedAssessment);
           
        } catch (error) {
            console.log(error)
@@ -132,7 +135,7 @@ function Evaluation() {
                                 {Array.isArray(assessments) && assessments.length > 0 ? (
 
                                     assessments.map((ass, index) => (
-                                        <MenuItem key={index} value={ass.title}>
+                                        <MenuItem key={index} value={`${ass.title} - ${ass.subjects}`}>
                                             {`${ass.title} - ${ass.subjects}`}
                                         </MenuItem>
                                     ))
@@ -148,8 +151,9 @@ function Evaluation() {
                     </div>
                     <hr />
                     <div className="headings px-2 py-3 d-flex gap-5 fs-6 fw-medium align-items-center justify-content-between">
-                        <h1>Assessment Title: {selectedAssessment}</h1>
-                        <h1>Subject: {selectedAssessment}</h1>
+                        
+                        <h1>Assessment Title: {assessmentName}</h1>
+                        <h1>Subject: {subjectName}</h1>
                         <Button variant='contained'>Update All</Button>
                     </div>
                     <hr />

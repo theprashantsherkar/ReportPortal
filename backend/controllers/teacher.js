@@ -63,6 +63,7 @@ export const getAssessmentsForTeacher = async (req, res, next) => {
         success: true,
         message: "Assessments Found",
         assTitles,
+        assessments,
     })
 
 }

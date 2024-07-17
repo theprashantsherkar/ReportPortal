@@ -24,7 +24,7 @@ export const newAss = async (req, res) => {
             });
         }
 
-        const { title, term, type, maxMarks, rubrics, subs } = req.body;
+        const { title, term, type, maxMarks, isRubrics, subs } = req.body;
         if (!title || !term || !type  || !subs) {
             return res.status(400).json({
                 success: false,
@@ -38,7 +38,7 @@ export const newAss = async (req, res) => {
             term,
             type,
             maxMarks,
-            rubrics,
+            isRubrics,
             subjects: subs,
             parentExam: exam._id
 
@@ -51,7 +51,7 @@ export const newAss = async (req, res) => {
         //         term,
         //         type,
         //         maxMarks,
-        //         rubrics,
+        //         isRubrics,
         //         subjects: element,
         //         parentExam: exam._id
         //     }).then()
@@ -123,13 +123,13 @@ export const UpdateAss = async (req, res, next) => {
             message: "no assessment found"
         })
     }
-    const { title, term, type, maxMarks, rubrics } = req.body;
+    const { title, term, type, maxMarks, isRubrics } = req.body;
 
     title ? assessment.title = title : assessment.title
     term ? assessment.term = term : assessment.term
     type ? assessment.type = type : assessment.type
     maxMarks ? assessment.maxMarks = maxMarks : assessment.maxMarks
-    rubrics ? assessment.rubrics = rubrics : assessment.rubrics
+    isRubrics ? assessment.isRubrics = isRubrics : assessment.isRubrics
 
     const isUpdated = await assessment.save();
     if (!isUpdated) {
@@ -155,28 +155,28 @@ export const addRubrics = async (req, res, next) => {
         })
     }
     const assessment = await Assessment.findById({ _id: req.params.id });
-    console.log(assessment);
+
     if (!assessment) {
         return res.status(404).json({
             success: false,
             message: "no assessment found",
         })
     }
-    const grade = req.body.grade;
+    const { rubrics } = req.body;
 
-    assessment.rubrics = grade;
+    assessment.rubrics = rubrics;
     const isUpdated = await assessment.save();
 
     if (!isUpdated) {
         return res.status(500).json({
             success: false,
-            message: "grade not Updated."
+            message: "Rubrics not added."
         })
     }
     res.status(200).json({
         success: true,
-        message: "Grade Updated Successfully",
-        updatedAss: assessment
+        message: "Rubrics added Successfully",
+        rubrics: assessment.rubrics
     })
 }
 

@@ -5,9 +5,7 @@ import {
     DialogContent,
     DialogTitle,
     FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
+    TextField,
     Box,
     Button
 } from '@mui/material';
@@ -15,66 +13,67 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import { backend_URL } from '../../src/App';
 
-const gradesList = ['O', 'A', 'B', 'C', 'D', 'E', 'F'];
 
-const GradeSelect = ({ openRubrics, setOpenRubrics, id}) => {
-    const [grade, setGrade] = useState('');
 
-    const handleGradeChange = (event) => {
-        setGrade(event.target.value);
-    };
+const GradeSelect = ({ openRubrics, setOpenRubrics, id }) => {
+    const [input, setInput] = useState("");
+    const [rubrics, setRubrics] = useState([]);
 
-    const handleSubmit = async(id) => {
-        console.log('Selected Grade:', grade);
-        console.log(`updated rubrics of assessment: ${id}`)
-        // try {
-        //     if (!grade) {
-        //         setOpenRubrics(false);
-        //         return toast.success('No Grade selected')
-        //     }
-        //     const response = await axios.put(`${backend_URL}/assessments/rubrics/${id}`,
-        //         {grade},
-        //         {
-        //             headers: {
-        //                 "Content-Type":"application/json"
-        //             },
-        //             withCredentials: true,
-        //         }
-        //     )
-        //     if (!response.data.success) {
-        //         toast.error('something went wrong')
-        //         return setOpenRubrics(false);
-        //     }
-        //     toast.success(response.data.message);
-        // } catch (error) {
-        //     console.log(error)
-        //     toast.error('Something went Wrong!')
-        // }
+ 
+
+    const handleSubmit = async (id) => {
+        const newRubrics = (input.split(", "));
+        setRubrics(newRubrics);
+        console.log(rubrics);
+        console.log(newRubrics);
+        try {
+            if (!rubrics) {
+                setOpenRubrics(false);
+                return toast.success('No rubrics entered')
+            }
+            const response = await axios.put(`${backend_URL}/assessments/rubrics/${id}`,
+                {rubrics:newRubrics},
+                {
+                    headers: {
+                        "Content-Type":"application/json"
+                    },
+                    withCredentials: true,
+                }
+            )
+            if (!response.data.success) {
+                toast.error('something went wrong')
+                return setOpenRubrics(false);
+            }
+            toast.success(response.data.message);
+           console.log(response.data)
+        } catch (error) {
+            console.log(error)
+            toast.error('Something went Wrong!')
+        }
         setOpenRubrics(false);
 
     };
 
     return (
-        <Dialog open={openRubrics} onClose={()=>setOpenRubrics(false)}>
+        <Dialog open={openRubrics} onClose={() => setOpenRubrics(false)}>
             <DialogTitle>
-                Add Rubrics/Grade
+                Add Rubrics:
             </DialogTitle>
             <DialogContent>
 
-                <Box sx={{ minWidth: 30 }}>
+                <Box sx={{ minWidth: 100}}>
                     <FormControl fullWidth margin="normal" variant="standard">
-                        <InputLabel>Select Grade</InputLabel>
-                        <Select
-                            label="Grade"
-                            value={grade}
-                            onChange={handleGradeChange}
-                        >
-                            {gradesList.map((grade) => (
-                                <MenuItem key={grade} value={grade}>
-                                    {grade}
-                                </MenuItem>
-                            ))}
-                        </Select>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            name="rubrics"
+                            label="Rubrics"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            value={input}
+                            onChange={(e)=>setInput(e.target.value)}
+                        />
                     </FormControl>
                     <DialogActions>
                         <Button variant="contained" color="primary" onClick={() => handleSubmit(id)}>

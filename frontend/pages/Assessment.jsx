@@ -30,7 +30,7 @@ function Assessment() {
     const [term, setTerm] = useState('');
     const [type, setType] = useState('');
     const [maxMarks, setMaxMarks] = useState('');
-    const [rubrics, setRubrics] = useState('');
+    const [isRubrics, setIsRubrics] = useState('');
     const { subjects } = useContext(LoginContext);
     const [assessments, setAssessments] = useState([]);
     const [open, setOpen] = useState(false);
@@ -78,7 +78,7 @@ function Assessment() {
                 term,
                 type,
                 maxMarks,
-                rubrics,
+                isRubrics,
                 subs: selectedSubject
             },
                 {
@@ -169,8 +169,8 @@ function Assessment() {
                                     <InputLabel>Select Rubrics</InputLabel>
                                     <Select
                                         name="rubrics"
-                                        value={rubrics}
-                                        onChange={(e) => setRubrics(e.target.value)}
+                                        value={isRubrics}
+                                        onChange={(e) => setIsRubrics(e.target.value)}
                                     >
                                         <MenuItem value="Yes">Yes</MenuItem>
                                         <MenuItem value="No">No</MenuItem>
@@ -180,8 +180,8 @@ function Assessment() {
                                     <InputLabel>Select Rubrics</InputLabel>
                                     <Select
                                         name="rubrics"
-                                        value={rubrics}
-                                        onChange={(e) => setRubrics(e.target.value)}
+                                        value={isRubrics}
+                                        onChange={(e) => setIsRubrics(e.target.value)}
                                     >
                                         <MenuItem value="Yes">Yes</MenuItem>
                                         <MenuItem value="No">No</MenuItem>

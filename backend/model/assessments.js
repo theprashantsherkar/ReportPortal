@@ -17,8 +17,12 @@ const AssessmentSchema = new mongoose.Schema({
     maxMarks: {
         type: Number,
     },
-    rubrics: {
+    isRubrics: {
         type: String,
+    },
+    rubrics: {
+        type: [String],
+
     },
     subjects: {
         type: String
