@@ -9,6 +9,25 @@ import { fileURLToPath } from 'url';
 
 
 
+export const getUsers = async(req, res, next) => {
+    const users = await Users.find({});
+    if (!users) {
+        return res.status(404).json({
+            success: false,
+            message:"no users found"
+        })
+    }
+    const names = []
+    users.map(element => {
+        names.push(element.name);
+    })
+    res.status(200).json({
+        success: true,
+        message: "users found",
+        names,
+    })
+}
+
 export const loginFunc = async (req, res) => {
     const { email, password } = req.body;
     const user = await Users.findOne({ email });

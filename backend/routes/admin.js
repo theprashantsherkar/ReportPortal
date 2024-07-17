@@ -4,6 +4,7 @@ import {
     changePass,
     dashboardAPI,
     getStudents,
+    getUsers,
     loginFunc,
     logout,
     profile,
@@ -21,6 +22,7 @@ router.post('/register', signinFunc)  //tested
 router.put('/changepass', isAuthenticated, changePass);//tested
 router.get('/profile', isAuthenticated, profile); //tested
 router.post('/upload', isAuthenticated, upload.single('file'), dashboardAPI);//tested
+router.get('/getallusers', isAuthenticated, getUsers);
 router.get('/fetchStudents', isAuthenticated, getStudents); //tested
 
 router.get('/logout', logout);   //tested

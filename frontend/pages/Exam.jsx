@@ -16,6 +16,7 @@ function Exam() {
   const [session, setSession] = useState('')
   const [section, setSection] = useState('')
   const [teacher, setTeacher] = useState('')
+  const [names, setNames] = useState([]);
   const [examData, setExamData] = useState([]);
   const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -109,6 +110,20 @@ function Exam() {
 
   }, [handleSubmit, DeleteHandler, dialogOpen])
 
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const { data } = await axios.get(`${backend_URL}/admin/getallusers`, {
+        headers: {
+          "Content-Type": "application/json"
+        },
+        withCredentials: true,
+
+      })
+      setNames(data.names)
+    }
+    fetchUsers();
+  }, [])
+
 
 
   if (examData && examData.length > 1) {
@@ -156,9 +171,9 @@ function Exam() {
                 id="admins" onChange={teacherSubmit}
                 className="mt-1 pl-3 pr-10 py-2 text-base border border-black  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
               >
-                <option value="Vivek Kumar">Vivek Kumar</option>
-                <option value="Monu">Monu</option>
-                <option value="Prashant">Prashant</option>
+                {names?.map((element) => (
+                  <option value={element}>{ element}</option>
+                ))}
 
 
               </select>
