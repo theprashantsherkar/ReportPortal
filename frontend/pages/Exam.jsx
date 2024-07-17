@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Header from '../components/Header'
 import '../styles/exam.css'
 import axios from 'axios'
@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import DeleteBtn from '../components/Buttons/DeleteBtn'
 import EditBtn from '../components/Buttons/EditBtn'
 import UpdateDialogs from '../components/Dialogs/UpdateDialogs'
+import { LoginContext } from '../src/main'
 
 
 function Exam() {
@@ -16,11 +17,9 @@ function Exam() {
   const [section, setSection] = useState('')
   const [teacher, setTeacher] = useState('')
   const [examData, setExamData] = useState([]);
-  const [activeRow, setActiveRow] = useState(null)
-  const [subjects, setSubjects] = useState([]);
-  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState(false);
+  const { subjects, setSubjects } = useContext(LoginContext);
 
   const classSubmit = (e) => {
     setClass(e.target.value)

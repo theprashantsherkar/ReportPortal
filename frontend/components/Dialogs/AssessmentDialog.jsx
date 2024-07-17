@@ -97,8 +97,8 @@ function AssessmentDialog({open, id, setOpen}) {
                           value={formData.type}
                           onChange={handleChange}
                       >
-                          <MenuItem value="Type 1">Marks</MenuItem>
-                          <MenuItem value="Type 2">Rubrics</MenuItem>
+                          <MenuItem value="Marks">Marks</MenuItem>
+                          <MenuItem value="Rubrics">Rubrics</MenuItem>
                       </Select>
                   </FormControl>
                   <TextField

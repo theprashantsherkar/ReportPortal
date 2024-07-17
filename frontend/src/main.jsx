@@ -3,16 +3,15 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css'
-import Temp from './Temp.jsx';
-// import { Tab } from 'bootstrap';
 
 
-export const LoginContext = createContext({ isLoggedIn: false, loading: false });
+export const LoginContext = createContext({ isLoggedIn: false, loading: false, subjects:[] });
 
 const AppWrapper = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({});
+  const [subjects, setSubjects] = useState([]);
   return (
     <LoginContext.Provider value={{
       isLoggedIn,
@@ -20,7 +19,9 @@ const AppWrapper = () => {
       loading,
       setLoading,
       user,
-      setUser
+      setUser,
+      subjects,
+      setSubjects,
     }} >
       <App />
     </LoginContext.Provider>

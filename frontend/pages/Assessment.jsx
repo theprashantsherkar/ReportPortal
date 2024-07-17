@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Header from '../components/Header'
 import '../styles/assessments.css'
 import axios from 'axios'
@@ -20,37 +20,39 @@ import EditBtn from '../components/Buttons/EditBtn'
 import DeleteBtn from '../components/Buttons/DeleteBtn'
 import AssessmentDialog from '../components/Dialogs/AssessmentDialog'
 import GradeSelect from '../components/Dialogs/GradeSelect'
+import { LoginContext } from '../src/main'
 
 
 
-function Assessment({subjects}) {
-    const exam  = useParams();
+function Assessment() {
+    const exam = useParams();
     const [title, setTitle] = useState('');
     const [term, setTerm] = useState('');
     const [type, setType] = useState('');
     const [maxMarks, setMaxMarks] = useState('');
     const [rubrics, setRubrics] = useState('');
-    
+    const { subjects } = useContext(LoginContext);
     const [assessments, setAssessments] = useState([]);
     const [open, setOpen] = useState(false);
     const [openRubrics, setOpenRubrics] = useState(false);
+    const [selectedSubject, setSelectedSubject] = useState([]);
 
 
     const handleRubrics = (id) => {
         console.log(`button id:${id} clicked`);
         setOpenRubrics(!openRubrics);
-        
+
     }
 
     const handleOpen = () => {
         setOpen(true);
     }
 
-    const DeleteHandler = async(id) => {
+    const DeleteHandler = async (id) => {
         try {
             const response = await axios.delete(`${backend_URL}/assessments/${id}`, {
                 headers: {
-                    "Content-Type":"application/json"
+                    "Content-Type": "application/json"
                 },
                 withCredentials: true,
             })
@@ -64,33 +66,33 @@ function Assessment({subjects}) {
         }
     }
 
-    const handleSubmit = async() => {
+    const handleSubmit = async () => {
         try {
-            if (!title || !term || !type || !maxMarks || !rubrics || !subjects) {
+            if (!title || !term || !type  || !selectedSubject) {
                 console.log("Every field is mandatory!")
                 return toast.error("Every field is mandatory!")
             }
 
-           const response = await axios.post(`${backend_URL}/assessments/${exam.id}`, {
-               title,
-               term,
-               type,
-               maxMarks,
-               rubrics,
-               subs: subjects
-           },
-               {
-                   headers: {
-                   "Content-Type":"application/json"
-                   },
-                   withCredentials:true,
-           })
+            const response = await axios.post(`${backend_URL}/assessments/${exam.id}`, {
+                title,
+                term,
+                type,
+                maxMarks,
+                rubrics,
+                subs: selectedSubject
+            },
+                {
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    withCredentials: true,
+                })
 
-           toast.success(response.data.message)
-       } catch (error) {
-           console.log(error)
-           toast.error("something went wrong")
-       }
+            toast.success(response.data.message)
+        } catch (error) {
+            console.log(error)
+            toast.error("something went wrong")
+        }
     }
 
     useEffect(() => {
@@ -103,7 +105,7 @@ function Assessment({subjects}) {
         }).then((response) => {
             setAssessments(response.data.assessments);
         })
-    }, [handleSubmit, DeleteHandler, openRubrics])
+    }, [handleSubmit, DeleteHandler, openRubrics, assessments])
 
     return (
         <>
@@ -127,7 +129,7 @@ function Assessment({subjects}) {
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                 />
-                                <FormControl  margin="normal" fullWidth variant="standard">
+                                <FormControl margin="normal" fullWidth variant="standard">
                                     <InputLabel>Select Term</InputLabel>
                                     <Select
                                         name="term"
@@ -138,20 +140,55 @@ function Assessment({subjects}) {
                                         <MenuItem value="Term 2">Term 2</MenuItem>
                                     </Select>
                                 </FormControl>
-                                <FormControl  margin="normal" fullWidth variant="standard">
-                                    <InputLabel>Select Evaluation Type</InputLabel>
+                                <FormControl margin="normal" fullWidth variant="standard">
+                                    <InputLabel>Select Subjects</InputLabel>
                                     <Select
-                                        name="type"
-                                        value={type}
-                                        onChange={(e)=>setType(e.target.value)}
+                                        name="subjects"
+                                        value={selectedSubject}
+                                        onChange={(e) => setSelectedSubject(e.target.value)}
                                     >
-                                        <MenuItem value="Type 1">Marks</MenuItem>
-                                        <MenuItem value="Type 2">Rubrics</MenuItem>
+                                        {subjects.length > 0 ? (subjects.map((element, index) => (<MenuItem key={index} value={element}>{element}</MenuItem>))) : (<MenuItem disabled value="">No Subjects Added</MenuItem>)}
+
                                     </Select>
                                 </FormControl>
                             </div>
                             <div className='px-3'>
-                                <TextField
+                                <FormControl margin="normal" fullWidth variant="standard">
+                                    <InputLabel>Select Evaluation Type</InputLabel>
+                                    <Select
+                                        name="type"
+                                        value={type}
+                                        onChange={(e) => setType(e.target.value)}
+                                    >
+                                        <MenuItem value="Marks">Marks</MenuItem>
+                                        <MenuItem value="Rubrics">Rubrics</MenuItem>
+                                    </Select>
+                                </FormControl>
+                               
+                                {type == "Marks" ? (<FormControl fullWidth disabled margin="normal" variant="standard">
+                                    <InputLabel>Select Rubrics</InputLabel>
+                                    <Select
+                                        name="rubrics"
+                                        value={rubrics}
+                                        onChange={(e) => setRubrics(e.target.value)}
+                                    >
+                                        <MenuItem value="Yes">Yes</MenuItem>
+                                        <MenuItem value="No">No</MenuItem>
+
+                                    </Select>
+                                </FormControl>) : (<FormControl fullWidth  margin="normal" variant="standard">
+                                    <InputLabel>Select Rubrics</InputLabel>
+                                    <Select
+                                        name="rubrics"
+                                        value={rubrics}
+                                        onChange={(e) => setRubrics(e.target.value)}
+                                    >
+                                        <MenuItem value="Yes">Yes</MenuItem>
+                                        <MenuItem value="No">No</MenuItem>
+
+                                    </Select>
+                                </FormControl>)}
+                                {type == "Marks" ? (<TextField
                                     fullWidth
                                     margin="normal"
                                     name="maxMarks"
@@ -160,20 +197,18 @@ function Assessment({subjects}) {
                                     variant="standard"
                                     value={maxMarks}
                                     onChange={(e) => setMaxMarks(e.target.value)}
-                                />
-                                <FormControl fullWidth margin="normal" variant="standard">
-                                    <InputLabel>Select Rubrics</InputLabel>
-                                    <Select
-                                        name="rubrics"
-                                        value={rubrics}
-                                        onChange={(e)=> setRubrics(e.target.value)}
-                                    >
-                                        <MenuItem value="Yes">Yes</MenuItem>
-                                        <MenuItem value="No">No</MenuItem>
-
-                                    </Select>
-                                </FormControl>
-                               
+                                />) : (<TextField
+                                        fullWidth
+                                        disabled
+                                    margin="normal"
+                                    name="maxMarks"
+                                    label="Maximum Marks"
+                                    type="number"
+                                    variant="standard"
+                                    value={maxMarks}
+                                    onChange={(e) => setMaxMarks(e.target.value)}
+                                />)}
+                                
                             </div>
 
                         </div>
@@ -206,10 +241,18 @@ function Assessment({subjects}) {
                                         <TableCell>{assessment.title}</TableCell>
                                         <TableCell>{assessment.term}</TableCell>
                                         <TableCell>{assessment.type}</TableCell>
-                                        <TableCell>{assessment.maxMarks}</TableCell>
+                                        <TableCell>{assessment.type == "Rubrics" ? (
+                                        <> - </>
+                                        ) : (<>{ assessment.maxMarks}</>)}</TableCell>
                                         <TableCell>{Array.isArray(assessment.subjects) ? assessment.subjects.join(', ') : assessment.subjects}</TableCell>
-                                        <TableCell><button onClick={() => handleRubrics(assessment._id)} className='btn btn-primary '>Add Rubrics</button>{<GradeSelect openRubrics={openRubrics} setOpenRubrics={setOpenRubrics} id={assessment._id} />}</TableCell>
-                                        <TableCell><button onClick={handleOpen} className='btn btn-warning'><EditBtn /></button><AssessmentDialog open={open} setOpen={setOpen} id={assessment._id}/></TableCell>
+                                        <TableCell>{assessment.type == "Rubrics" ? (
+                                            <>
+                                                <button onClick={() => handleRubrics(assessment._id)} className='btn btn-primary '>Add Rubrics</button>{<GradeSelect openRubrics={openRubrics} setOpenRubrics={setOpenRubrics} id={assessment._id} />}
+                                            </>
+                                        ) : (
+                                            <button  className='btn btn-primary disabled'>Add Rubrics</button>
+                                        )}</TableCell>
+                                        <TableCell><button onClick={handleOpen} className='btn btn-warning'><EditBtn /></button><AssessmentDialog open={open} setOpen={setOpen} id={assessment._id} /></TableCell>
                                         <TableCell><button onClick={() => DeleteHandler(assessment._id)} className='btn btn-danger'><DeleteBtn /></button></TableCell>
 
                                     </TableRow>

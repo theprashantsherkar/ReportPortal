@@ -13,7 +13,6 @@ import axios from 'axios';
 import { LoginContext } from './main.jsx';
 import Assessment from '../pages/Assessment.jsx';
 import Evaluation from '../pages/Evaluation.jsx';
-// import ProtectedRoute from '../ProtectedRoute/ProtectedRoute.jsx';
 
 
 
@@ -40,7 +39,6 @@ function App() {
 
   return (
 
-
     <Router>
       <Routes>
         <Route path='/login' element={<Login />} />
@@ -52,7 +50,6 @@ function App() {
         <Route path='/exam' element={<Exam />} />
         <Route path='/changepassword' element={<Passchange />} />
         <Route path='/assessment/:id' element={<Assessment />} />
-
       </Routes>
       <Toaster />
     </Router>
