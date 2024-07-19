@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { backend_URL } from '../../src/App';
+import toast from 'react-hot-toast';
 import {
     Dialog,
     DialogActions,
@@ -14,19 +17,25 @@ import {
     Checkbox,
     ListItemText,
 } from '@mui/material';
-import axios from 'axios';
-import { backend_URL } from '../../src/App';
-import toast from 'react-hot-toast';
 
-function UpdateDialogs({ open, onClose, id }) {
+const UpdateDialogs = ({ open, onClose, id }) => {
     const [formValues, setFormValues] = useState({
         Class: '',
         session: '',
         section: '',
-        subjects: [],
         teacher: '',
     });
-    const subjectsList = ['Math', 'Science', 'History', 'English', 'Physical Education'];
+    const [subjects, setSubjects] = useState([]);
+    const [newSubject, setNewSubject] = useState('');
+
+   
+
+    const handleAddSubject = () => {
+        if (newSubject) {
+            setSubjects([...subjects, newSubject]);
+            setNewSubject('');
+        }
+    };
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormValues({
@@ -35,119 +44,102 @@ function UpdateDialogs({ open, onClose, id }) {
         });
     };
 
-    const handleSubjectsChange = (event) => {
-        const {
-            target: { value },
-        } = event;
-        setFormValues({
-            ...formValues,
-            subjects: typeof value === 'string' ? value.split(',') : value,
-        });
-
-    }
-    const handleUpdate = async(id) => {
-        console.log('Form values:', formValues);
-        if (!formValues) {
-            onClose();
-            return toast.success("nothing to Update")
-        }
+    const handleSave = async (id) => {
         try {
-            const { data } = await axios.put(`${backend_URL}/exam/${id}`,
+            console.log(subjects);
+            const response = await axios.put(`${backend_URL}/exam/${id}`, {
                 formValues,
-                {
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                })
-            if (!data.success) {
-                return toast.error(data.message)
+                subjects,
+            }, {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                withCredentials: true,
+            });
+            if (response.data.success) {
+                toast.success('Exam updated successfully');
+
+                onClose();
+            } else {
+                toast.error(response.data.message);
             }
-            toast.success(data.message);
-            onClose();
         } catch (error) {
-            console.log(error)
-            toast.error("something went wrong")
-            onClose();
+            toast.error('Something went wrong!');
+            console.log(error);
         }
     };
 
     return (
-        <>
-            <div className=''>
-                <Dialog open={open} onClose={onClose}>
-                    <DialogTitle>Update Exam Details</DialogTitle>
-                    <DialogContent>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    fullWidth
-                                    label="Class"
-                                    name="Class"
-                                    value={formValues.Class}
-                                    onChange={handleChange}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    fullWidth
-                                    label="Session"
-                                    name="session"
-                                    value={formValues.session}
-                                    onChange={handleChange}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    fullWidth
-                                    label="Section"
-                                    name="section"
-                                    value={formValues.section}
-                                    onChange={handleChange}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <FormControl fullWidth>
-                                    <InputLabel>Subjects</InputLabel>
-                                    <Select
-                                        label="Subjects"
-                                        name="subjects"
-                                        multiple
-                                        value={formValues.subjects}
-                                        onChange={handleSubjectsChange}
-                                        renderValue={(selected) => selected.join(', ')}
-                                    >
-                                        {subjectsList.map((subject) => (
-                                            <MenuItem key={subject} value={subject}>
-                                                <Checkbox checked={formValues.subjects.indexOf(subject) > -1} />
-                                                <ListItemText primary={subject} />
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    fullWidth
-                                    label="Teacher"
-                                    name="teacher"
-                                    value={formValues.teacher}
-                                    onChange={handleChange}
-                                />
-                            </Grid>
-                        </Grid>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={onClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button onClick={()=>handleUpdate(id, onClose)} color="primary">
-                            Update
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-        </div>
-        </>
+        <Dialog open={open} onClose={onClose}>
+            <DialogTitle>Update Exam</DialogTitle>
+            <DialogContent>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <TextField
+                            fullWidth
+                            label="Class"
+                            name="Class"
+                            value={formValues.Class}
+                            onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            fullWidth
+                            label="Session"
+                            name="session"
+                            value={formValues.session}
+                            onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            fullWidth
+                            label="Section"
+                            name="section"
+                            value={formValues.section}
+                            onChange={handleChange}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <TextField
+                            fullWidth
+                            label="Teacher"
+                            name="teacher"
+                            value={formValues.teacher}
+                            onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <div className='d-flex justify-content-center align-items-center'>
+                            <TextField
+                                fullWidth
+                                label="Subjects"
+                                name="Subjects"
+                                value={newSubject}
+                                onChange={(e) => setNewSubject(e.target.value)}
+                            />
+                            <div>
+                                <Button variant='contained' onClick={handleAddSubject}>Add</Button>
+                            </div>
+                        </div>
+                    </Grid>
+                </Grid>
+
+
+                <ul>
+                    {subjects.map((subject, index) => (
+                        <li key={index}>{subject}</li>
+                    ))}
+                </ul>
+            </DialogContent>
+            <DialogActions>
+                <Button variant='contained' onClick={onClose}>Cancel</Button>
+                <Button variant='contained' onClick={() => handleSave(id)}>Save</Button>
+            </DialogActions>
+        </Dialog>
     );
-}
+};
 
 export default UpdateDialogs;

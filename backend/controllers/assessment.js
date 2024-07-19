@@ -31,7 +31,7 @@ export const newAss = async (req, res) => {
                 message: "Enter all fields first"
             });
         }
-        console.log(subs);
+        
 
         const assessments = await Assessment.create({
             title,

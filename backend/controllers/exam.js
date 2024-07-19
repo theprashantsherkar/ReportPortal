@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Exam } from "../model/examModel.js";
 
 export const prevExams = async (req, res, next) => {
@@ -51,59 +52,27 @@ export const createExam = async (req, res, next) => {
 }
 
 
-export const addSubs = async (req, res) => {
-    const exam = await Exam.findOne({ _id: req.params.id })
-    if (!exam) {
-        return res.send({
-            success: false,
-            message: "no exam found."
-        })
-    }
-    const { subs } = req.body;
-    console.log(subs);
-    const subjects = [];
-    subs.forEach((element => {
-        subjects.push(element.title);
-    }));
-
-    if (subjects.includes(undefined)) {
-        return res.json({
-            success: false,
-            message:"subjects not added."
-        })
-    }
-    const uniqueSubjects = [...new Set(subjects)];
-    const updatedSubjects = [...new Set([...exam.subjects, ...uniqueSubjects])];
-    exam.subjects = updatedSubjects;
-    console.log("check")
-    const isAdded = await exam.save();
-    console.log("check2")
-    if ((!isAdded) || (!exam.subjects)) {
-        return res.json({
-            success: false,
-            message:"subjects not added."
-        })
-    }
-    res.status(200).json({
-        success: true,
-        message: "subjects added successfully",
-        subjects: exam.subjects,
-
-    })
-
-}
-
 
 export const updateExam = async(req, res) => {
     try {
-        const exam = await Exam.findOne({ _id: req.params.id })
+
+        const { id } = req.params;
+
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid exam ID."
+            });
+        }
+
+        const exam = await Exam.findById(id);
         if (!exam) {
             return res.status(404).json({
                 success: false,
                 message: "exam not found."
             })
         }
-      
+
         const {Class, session, section, subjects, teacher} = req.body
         const updatedSubjects = [];
         Class ? (exam.Class = Class) : exam.Class
@@ -112,7 +81,7 @@ export const updateExam = async(req, res) => {
         teacher ? (exam.teacher = teacher) : exam.teacher
         let bodySubs = [];
         subjects ? (bodySubs = subjects) : exam.subjects;
-        
+
         bodySubs.forEach((element) => {
             updatedSubjects.push(element)
         })
@@ -142,7 +111,7 @@ export const updateExam = async(req, res) => {
         })
     } catch (error) {
         console.log(error)
-        
+
     }
 
 }

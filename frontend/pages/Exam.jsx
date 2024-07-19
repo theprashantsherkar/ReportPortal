@@ -1,54 +1,52 @@
-import React, { useContext, useEffect, useState } from 'react'
-import Header from '../components/Header'
-import '../styles/exam.css'
-import axios from 'axios'
-import { backend_URL } from '../src/App'
-import toast from 'react-hot-toast'
-import { useNavigate } from 'react-router-dom'
-import DeleteBtn from '../components/Buttons/DeleteBtn'
-import EditBtn from '../components/Buttons/EditBtn'
-import UpdateDialogs from '../components/Dialogs/UpdateDialogs'
-import { LoginContext } from '../src/main'
+import React, { useContext, useEffect, useState } from 'react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 
+} from '@mui/material';
+import axios from 'axios';
+import { backend_URL } from '../src/App';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import DeleteBtn from '../components/Buttons/DeleteBtn';
+import EditBtn from '../components/Buttons/EditBtn';
+import { LoginContext } from '../src/main';
+import UpdateDialogs from '../components/Dialogs/UpdateDialogs';
+import Header from '../components/Header';
 
 function Exam() {
-  const [Class, setClass] = useState('')
-  const [session, setSession] = useState('')
-  const [section, setSection] = useState('')
-  const [teacher, setTeacher] = useState('')
+  const [Class, setClass] = useState('');
+  const [session, setSession] = useState('');
+  const [section, setSection] = useState('');
+  const [teacher, setTeacher] = useState('');
   const [names, setNames] = useState([]);
   const [examData, setExamData] = useState([]);
-  const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState(false);
   const { subjects, setSubjects } = useContext(LoginContext);
+  const navigate = useNavigate();
 
-  const classSubmit = (e) => {
-    setClass(e.target.value)
+  const classSubmit = (e) => setClass(e.target.value);
+  const sessionSubmit = (e) => setSession(e.target.value);
+  const sectionSubmit = (e) => setSection(e.target.value);
+  const teacherSubmit = (e) => setTeacher(e.target.value);
 
-  }
-  const sessionSubmit = (e) => {
-    setSession(e.target.value)
-  }
-  const sectionSubmit = (e) => {
-    setSection(e.target.value)
-  }
-  const teacherSubmit = (e) => {
-    setTeacher(e.target.value)
-  }
-
-
-  const handleAssessments =async (id) => {
-    console.log(`exam with id:${id} was clicked`)
-    const { data } = await axios.get(`${backend_URL}/assessments/sendsubjects/${id}`, {
-      headers: {
-        "Content-Type":"application/json"
-      },
-      withCredentials: true,
-
-    })
-    setSubjects(data.subjects);
-    navigate(`/assessment/${id}`);
-  }
+  const handleAssessments = async (id) => {
+    try {
+      const { data } = await axios.get(`${backend_URL}/assessments/sendsubjects/${id}`, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
+      setSubjects(data.subjects);
+      navigate(`/assessment/${id}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,45 +55,69 @@ function Exam() {
     }
     try {
       const response = await axios.post(`${backend_URL}/exam/createExam`, {
-        Class,
-        session,
-        section,
-        teacher
+        Class, session, section, teacher,
       }, {
-        headers: {
-          "Content-Type": "application/json"
-        },
-        withCredentials: true
-
-      })
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
       if (!response.data.success) {
         return toast.error(response.data.message);
       }
-      toast.success(response.data.message)
+      toast.success(response.data.message);
+      setExamData([...examData, response.data.exam]);
     } catch (error) {
-      toast.error('Something went wrong!')
-      console.log(error)
+      toast.error('Something went wrong!');
+      console.log(error);
     }
-
-  }
-
-
+  };
 
   const DeleteHandler = async (id) => {
-    // e.preventDefault();
-    const response = await axios.delete(`${backend_URL}/exam/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    })
-    if (!response.data.success) {
-      return toast.error("something went wrong")
+    try {
+      const response = await axios.delete(`${backend_URL}/exam/${id}`, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
+      if (!response.data.success) {
+        return toast.error("Something went wrong");
+      }
+      toast.success(response.data.message);
+      setExamData(examData.filter((exam) => exam._id !== id));
+    } catch (error) {
+      console.log(error);
     }
-    toast.success(response.data.message)
+  };
 
-  }
+  useEffect(() => {
+    const fetchExams = async () => {
+      try {
+        const { data } = await axios.get(`${backend_URL}/exam/allExams`, {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        });
+        setExamData(data.exam);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
+    fetchExams();
+  }, []);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const { data } = await axios.get(`${backend_URL}/admin/getallusers`, {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        });
+        setNames(data.names);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   useEffect(() => {
     axios.get(`${backend_URL}/exam/allExams`, {
@@ -108,39 +130,20 @@ function Exam() {
       // console.log(examData);
     }).catch((err) => console.log(err));
 
-  }, [handleSubmit, DeleteHandler, dialogOpen])
+  }, [handleSubmit, DeleteHandler, dialogOpen, examData])
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const { data } = await axios.get(`${backend_URL}/admin/getallusers`, {
-        headers: {
-          "Content-Type": "application/json"
-        },
-        withCredentials: true,
-
-      })
-      setNames(data.names)
-    }
-    fetchUsers();
-  }, [])
-
-
-
-  if (examData && examData.length > 1) {
-    var headers = Object.keys(examData[0]).filter((header) => header !== "madeBy" && header !== "_id" && header !== "__v");
+  if (examData?.length > 1) {
+    var headers = Object.keys(examData[0]).filter(header => header !== "madeBy" && header !== "_id" && header !== "__v");
   }
+
   return (
-    //exam dashboard ui goes here
     <>
       <Header />
       <div className='w-100 h-100 p-5'>
-        <h1 className='head align-center'>
-          Exam:
-        </h1>
+        <h1 className='head align-center fs-4'>Exam:</h1>
         <hr />
-
-        <div className="options w-100 px-2 m-4">
-          <form onSubmit={handleSubmit} className='options'>
+        <div className="options w-100 px-2 m-4 d-flex align-items-center justify-content-center">
+          <form onSubmit={handleSubmit} className='options d-flex align-items-center justify-content-center'>
             <div className='mx-2 max-w-fit'>
               <label htmlFor="dropdown" className=" mx-2 text-sm font-medium text-gray-700">Select Class</label>
               <select
@@ -172,7 +175,7 @@ function Exam() {
                 className="mt-1 pl-3 pr-10 py-2 text-base border border-black  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
               >
                 {names?.map((element) => (
-                  <option value={element}>{ element}</option>
+                  <option value={element}>{element}</option>
                 ))}
 
 
@@ -216,61 +219,59 @@ function Exam() {
           </select> entries</p>
           <div className="tab">
             <label htmlFor="search">Search: </label>
-            <input className='search' type="search" name="" id="search" />
+            <input className='border border-black rounded px-2 mx-2' type="search" name="" id="search" />
           </div>
         </div>
-
+<hr />
         <div>
-          {(examData) ? (<>
-            <h2 className="text-xl font-bold mb-4">Submitted Data:</h2>
-            <div className="mt-10 d-flex align-items-center justify-content-center">
-              <table className="min-w-full border-collapse  border border-gray-300 ">
-                <thead>
-                  <tr>
-
-                    {examData.length > 1 && headers.map((header, index) => (
-                      <>
-                        <th key={index} className="border border-gray-300 px-4 py-2">{header.charAt(0).toUpperCase() + header.slice(1)}</th>
-                      </>
+          {examData?.length ? (
+            <>
+              <h2 className=" fs-5 font-bold my-4 ">Submitted Data:</h2>
+              <TableContainer component={Paper} >
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead>
+                    <TableRow >
+                      {headers.map((header, index) => (
+                        <TableCell key={index} sx={{ border: '1px solid black' }}><strong>{header.charAt(0).toUpperCase() + header.slice(1)}</strong></TableCell>
+                      ))}
+                      <TableCell sx={{ border: '1px solid black' }}><strong>Config</strong></TableCell>
+                      <TableCell sx={{ border: '1px solid black' }}><strong>Action</strong></TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {examData.map((item, rowIndex) => (
+                      <TableRow key={rowIndex}>
+                        {headers.map((header, colIndex) => (
+                          <TableCell key={colIndex} sx={{ border: '1px solid black' }}>{item[header]}</TableCell>
+                        ))}
+                        <TableCell sx={{ border: '1px solid black' }}>
+                          <button className='btn btn-primary' onClick={() => handleAssessments(item._id)}>Assessments</button>
+                        </TableCell>
+                        <TableCell className='mx-1 ' sx={{ border: '1px solid black' }}>
+                          <button className='btn btn-warning px-2' onClick={() => setDialogOpen(true)}><EditBtn /></button>{ "   "}
+                          <button className='btn btn-danger px-2' onClick={() => DeleteHandler(item._id)}><DeleteBtn /></button>
+                          {dialogOpen && (
+                            <UpdateDialogs
+                              open={dialogOpen}
+                              onClose={() => setDialogOpen(false)}
+                              id={item._id}
+                             
+                            />
+                          )}
+                        </TableCell>
+                      </TableRow>
                     ))}
-                    {examData.length > 1 && (<>
-                      <th className='border border-gray-300 px-4 py-2'>Config</th>
-                      <th className='border border-gray-300 px-4 py-2'>Action</th></>)}
-                  </tr>
-                </thead>
-                <tbody>
-                  {examData.length > 1 && examData.map((item, rowIndex) => (
-                    <tr key={rowIndex}>
-                      {examData.length > 1 && headers.map((header, colIndex) => (
-                        <>
-                          <td key={colIndex} className="border border-gray-300 px-3 py-2">{item[header].toString()}</td>
-                        </>
-                      )
-                      )}
-                      {examData.length > 0 && (<>
-                        <td className='border border-gray-300 '><button  onClick={() => handleAssessments(item._id)} className='btn btn-primary mx-2' >Assessments</button></td>
-                        <td className='border border-gray-300 px-1'><button className='btn btn-warning mx-1' onClick={() => setDialogOpen(true)}><EditBtn /></button>{dialogOpen && <><UpdateDialogs
-                          open={dialogOpen}
-                          onClose={() => setDialogOpen(false)}
-                          id={item._id}
-                        /></>}
-                          <button onClick={() => DeleteHandler(item._id)} className='btn btn-danger m-1'><DeleteBtn /></button></td>
-                      </>)
-                      }
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-          </>
-          ) : (<>
-            no data found</>)}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </>
+          ) : (
+            <h2 className='my-2 fs-6'>No data available.</h2>
+          )}
         </div>
       </div>
-
     </>
-  )
+  );
 }
 
-export default Exam
+export default Exam;

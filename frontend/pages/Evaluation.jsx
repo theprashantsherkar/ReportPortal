@@ -200,7 +200,8 @@ function Evaluation() {
                                                 <TableCell><strong>Grade</strong></TableCell>
                                             )}
                                            
-                                            {selectedDetails.type == "Marks" ? (<TableCell><strong>Remarks</strong></TableCell>):(<></>)}
+                                            {selectedDetails.type == "Marks" ? (<TableCell><strong>Remarks</strong></TableCell>) : (<></>)}
+                                            <TableCell>Upload</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -218,15 +219,15 @@ function Evaluation() {
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <TableCell className='py-2 my-2'>
+                                                        <TableCell className=''>
                                                             {titles.map((element, idx) => (
-                                                                <div key={idx}>{element}</div>
+                                                                <div className='py-2' key={idx}>{element}</div>
                                                             ))}
                                                         </TableCell>
                                                             <TableCell className='py-2 my-2'>
                                                             {titles.map((element, idx) => (
-                                                                <div key={idx}>
-                                                                    <select className='border border-black' name="" id="">
+                                                                <div className='py-1' key={idx}>
+                                                                    <select className='border  border-black p-2' name="" id="">
                                                                         <option value="O">O</option>
                                                                         <option value="A">A</option>
                                                                         <option value="B">B</option>
@@ -240,7 +241,8 @@ function Evaluation() {
                                                         </TableCell>
                                                     </>
                                                 )}
-                                                {selectedDetails.type == "Marks" ? (<TableCell><TextField type='text'/></TableCell>):(<></>)}
+                                                {selectedDetails.type == "Marks" ? (<TableCell><TextField type='text' /></TableCell>) : (<></>)}
+                                                <TableCell><Button variant='contained'>Upload</Button></TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
