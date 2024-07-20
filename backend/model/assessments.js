@@ -30,6 +30,10 @@ const AssessmentSchema = new mongoose.Schema({
     parentExam: {
         type: mongoose.Schema.Types.ObjectId,
         ref:"exam datas"
+    },
+    Class: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"exam datas",
     }
 })
 

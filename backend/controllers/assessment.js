@@ -40,7 +40,8 @@ export const newAss = async (req, res) => {
             maxMarks,
             isRubrics,
             subjects: subs,
-            parentExam: exam._id
+            parentExam: exam._id,
+            Class: exam.Class,
 
         })
         //todo:if vivek sir allows then this approach or else commented approach

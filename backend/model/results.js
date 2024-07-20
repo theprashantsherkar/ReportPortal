@@ -6,6 +6,9 @@ const resultSchema = new mongoose.Schema({
         ref: "students",
         required: true,
     },
+    credentials: {
+        type: Object,
+    },
     exam: {
         type: mongoose.Types.ObjectId,
         ref: "exam datas",
@@ -29,6 +32,9 @@ const resultSchema = new mongoose.Schema({
     },
     grade: {
         type: String,
+    },
+    remarks: {
+        type:String
     }
 
 })
