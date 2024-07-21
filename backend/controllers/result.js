@@ -69,20 +69,15 @@ export const sendGrades = async (req, res) => {
     const exam = await Exam.findById(examId);
     const assessment = await Assessment.findById(assessmentId);
 
-    const grades = [];
-    let i = 0;
-    assessment.rubrics.map((element) => {
-        const res = {
-            element: grade[i]
-        }
-        grades.push(res);
-        i++;
-    })
+    const grades = assessment.rubrics.reduce((acc, curr, index) => {
+        acc[curr] = grade[index];
+        return acc;
+    }, {});
 
     const resultAdded = await Result.create({
-        student: student.name,
+        student: student._id,
         exam: exam._id,
-        assessment: assessment,
+        assessment: assessment._id,
         Class: student.Class,
         grade: grades,
     })
@@ -94,7 +89,7 @@ export const sendGrades = async (req, res) => {
     }
     res.status(200).json({
         success: true,
-        message: "Marks Added Successfully.",
+        message: "Grades Added Successfully.",
         result: resultAdded,
 
     })
