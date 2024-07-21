@@ -78,29 +78,31 @@ function Dashboard() {
             <Header />
             <div className="dashboard">
                 <div className="w-75 dash">
-                    <div className="students text-2xl border-black">
-                        <select className="p-2 border-black" name="" id="">
-                            <option className='p-2' value=""><h1 className='text-2xl' >Students</h1></option>
-                            <option className='p-2' value=""><h1 className='text-2xl'>Teachers</h1></option>
+                    <div className="students text-2xl">
+                        <select className="p-2 border-black border  rounded-md" name="" id="">
+                            <option className='p-2' value="Students"><h1 className='text-2xl' >Students</h1></option>
+                            <option className='p-2' value="Teachers"><h1 className='text-2xl'>Teachers</h1></option>
                         </select>
                     </div>
                     <form onSubmit={submitHandler}>
-                        <div className="inputs border-2 bg-black-500 rounded p-3 flex justify-center w-100 ">
-                            <input onChange={handleFileChange} className='border-1 border-black p-2' type="file" name="file" id="excel" />
-                            <button type="submit">Upload</button>
+                        <div className="inputs border border-black   rounded p-3 flex justify-center w-100 ">
+                            <input onChange={handleFileChange} className='border-1 border-black rounded-md p-2 mx-2' type="file" name="file" id="excel" />
+<button type='submit' className='btn btn-primary'>Upload</button>
                         </div>
                     </form>
                     <hr />
-                    <div className="searches">
+                    <div className="d-flex align-items-center justify-content-between py-3">
                         <p>show
                             <select name="" id="">
-                                {generate}
+                               <option value="1">1</option>
+                               <option value="2">2</option>
+                               <option value="3">3</option>
                             </select>
                             entries.
                         </p>
-                        <div className="tab">
+                        <div className="">
                             <label htmlFor="search">Search: </label>
-                            <input className='search' type="search" name="" id="search" />
+                            <input className='border border-black rounded-md px-2 ' type="search" name="" id="search" />
                         </div>
                     </div>
 

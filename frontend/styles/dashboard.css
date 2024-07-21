@@ -22,14 +22,14 @@ padding: 0 20px;
 border: 1px solid black;
 }
 
-.buttons{
+/* .buttons{
     margin-top: 0;
     padding:5px 10px;
     background-color: rgb(51, 113, 194);
     border-radius: 6px;
     color: white;
     margin: 0 10px;
-}
+} */
 
 #table1{
     position: relative;
@@ -37,7 +37,7 @@ border: 1px solid black;
 }
 
 
-.inputs button{
+/* .inputs button{
     margin-top: 0;
     padding:5px 10px;
    
@@ -45,13 +45,14 @@ border: 1px solid black;
     border-radius: 6px;
     color: white;
     margin: 0 10px;
-}
+} */
 
 .inputs{
     margin: 30px ;
     display: flex;
     align-items: center;
     justify-content: center;
+   
 }
 
 .searches{
