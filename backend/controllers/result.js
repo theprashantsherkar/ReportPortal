@@ -78,6 +78,13 @@ export const sendGrades = async (req, res) => {
         student: student._id,
         exam: exam._id,
         assessment: assessment._id,
+        credentials: {
+            name: student.name,
+            Class: student.Class,
+            roll: student.rollNum,
+            assessment: assessment.title,
+            subject: assessment.subjects,
+        },
         Class: student.Class,
         grade: grades,
     })
@@ -97,3 +104,4 @@ export const sendGrades = async (req, res) => {
 }
 
 
+//todo:add the puppetter/ pdf api here
