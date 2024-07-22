@@ -32,8 +32,8 @@ const AssessmentSchema = new mongoose.Schema({
         ref:"exam datas"
     },
     Class: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref:"exam datas",
+        type: String,
+
     }
 })
 

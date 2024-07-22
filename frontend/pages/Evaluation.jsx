@@ -19,7 +19,8 @@ function Evaluation() {
     const [details, setDetails] = useState([]);
     const [selectedDetails, setSelectedDetails] = useState({});
     const [marks, setMarks] = useState({});
-    const [grade, setGrade] = useState('')
+    const [remarks, setRemarks] = useState('');
+    const [grade, setGrade] = useState([])
     const [titles, setTitles] = useState([])
     const { user } = useContext(LoginContext);
     const [assessmentName, subjectName] = selectedAssessment?.split(' - ')
@@ -38,13 +39,58 @@ function Evaluation() {
            })
             setStudents(response.data.students);
             setShowTable(true);
-            console.log(response.data.students)
-            
           
        } catch (error) {
            console.log(error)
            toast.error('Internal server Error');
        }
+    }
+    const uploadHandler = async(id) => {
+        if (selectedDetails.type == "Marks") {
+            try {
+                const { data } = await axios.post(`${backend_URL}/result/sendMarks`, {
+                    marks: marks,
+                    remarks:remarks,
+                },
+                    {
+                        params: {
+                            studentId: id,
+                            examId: selectedDetails.parentExam,
+                            assessmentId: selectedDetails._id,
+                    }
+                    })
+                if (!data.success) {
+                    toast.error("something went wrong")
+                }
+                toast.success(data.message);
+            } catch (error) {
+                console.log(error);
+                toast.error(error)
+            }
+
+        }
+        else if (selectedDetails.type == "Rubrics") {
+            try {
+                const { data } = await axios.post(`${backend_URL}/result/sendGrades`, {
+                    grade: grade,
+                },
+                    {
+                        params: {
+                            studentId: id,
+                            examId: selectedDetails.parentExam,
+                            assessmentId: selectedDetails._id,
+                        }
+                    })
+                if (!data.success) {
+                    toast.error("something went wrong")
+                }
+                toast.success(data.message);
+            } catch (error) {
+                console.log(error);
+                toast.error(error)
+            }
+
+        }
     }
 
     useEffect(() => {
@@ -214,7 +260,7 @@ function Evaluation() {
                                                     <>
                                                         <TableCell>{selectedDetails.maxMarks}</TableCell>
                                                         <TableCell>
-                                                            <TextField type='number' />
+                                                            <TextField type='number' value={marks} onChange={(e) => setMarks(e.target.value)} />
                                                         </TableCell>
                                                     </>
                                                 ) : (
@@ -227,7 +273,7 @@ function Evaluation() {
                                                             <TableCell className='py-2 my-2'>
                                                             {titles.map((element, idx) => (
                                                                 <div className='py-1' key={idx}>
-                                                                    <select className='border  border-black p-2' name="" id="">
+                                                                    <select className='border  border-black p-2' name="" id="" value={grade} onChange={(e)=>e.target.value}>
                                                                         <option value="O">O</option>
                                                                         <option value="A">A</option>
                                                                         <option value="B">B</option>
@@ -241,8 +287,8 @@ function Evaluation() {
                                                         </TableCell>
                                                     </>
                                                 )}
-                                                {selectedDetails.type == "Marks" ? (<TableCell><TextField type='text' /></TableCell>) : (<></>)}
-                                                <TableCell><Button variant='contained'>Upload</Button></TableCell>
+                                                {selectedDetails.type == "Marks" ? (<TableCell><TextField type='text' value={remarks} onChange={(e) => setRemarks(e.target.value)} /></TableCell>) : (<></>)}
+                                                <TableCell><Button variant='contained' onClick={()=>uploadHandler(student._id)}>Upload</Button></TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
