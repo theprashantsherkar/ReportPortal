@@ -7,9 +7,11 @@ import { LoginContext } from '../src/main';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
 import toast from 'react-hot-toast';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 
 function Evaluation() {
+    const navigate = useNavigate()
     const [classes, setClasses] = useState([]);
     const [assessments, setAssessments] = useState([]);
     const [selectedClass, setSelectedClass] = useState('');
@@ -19,11 +21,29 @@ function Evaluation() {
     const [details, setDetails] = useState([]);
     const [selectedDetails, setSelectedDetails] = useState({});
     const [marks, setMarks] = useState({});
-    const [remarks, setRemarks] = useState('');
-    const [grade, setGrade] = useState([])
+    const [grades, setGrades] = useState({});
+    const [remarks, setRemarks] = useState({});
+    const [response, setResponse] = useState(null);
+
     const [titles, setTitles] = useState([])
     const { user } = useContext(LoginContext);
     const [assessmentName, subjectName] = selectedAssessment?.split(' - ')
+
+    const handleMarksChange = (studentId, value) => {
+        setMarks(prevState => ({ ...prevState, [studentId]: value }));
+    };
+
+    const handleRemarksChange = (studentId, value) => {
+        setRemarks(prevState => ({ ...prevState, [studentId]: value }));
+    };
+
+    const handleGradeChange = (studentId, idx, value) => {
+        setGrades(prevState => ({
+            ...prevState,
+            [studentId]: { ...prevState[studentId], [idx]: value }
+        }));
+    };
+
 
     const ShowButton = async () => {
         try {
@@ -31,38 +51,42 @@ function Evaluation() {
             const response = await axios.get(`${backend_URL}/teachers/getstudents`, {
                 params: {
                     Class: selectedClass,
-               },
-               headers: {
-                   "Content-Type":"application/json"
-               },
-               withCredentials: true,
-           })
+                },
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                withCredentials: true,
+            })
             setStudents(response.data.students);
             setShowTable(true);
-          
-       } catch (error) {
-           console.log(error)
-           toast.error('Internal server Error');
-       }
+
+        } catch (error) {
+            console.log(error)
+            toast.error('Internal server Error');
+        }
     }
-    const uploadHandler = async(id) => {
+    const uploadHandler = async (id) => {
+        const studentId = id
+        const examId = selectedDetails.parentExam
+        const assessmentId = selectedDetails._id
         if (selectedDetails.type == "Marks") {
             try {
                 const { data } = await axios.post(`${backend_URL}/result/sendMarks`, {
-                    marks: marks,
-                    remarks:remarks,
+                    marks: marks[studentId],
+                    remarks: remarks[studentId]
                 },
                     {
                         params: {
-                            studentId: id,
-                            examId: selectedDetails.parentExam,
-                            assessmentId: selectedDetails._id,
-                    }
+                            studentId,
+                            assessmentId,
+                            examId
+                        }
                     })
                 if (!data.success) {
                     toast.error("something went wrong")
                 }
                 toast.success(data.message);
+                setResponse(data)
             } catch (error) {
                 console.log(error);
                 toast.error(error)
@@ -72,19 +96,20 @@ function Evaluation() {
         else if (selectedDetails.type == "Rubrics") {
             try {
                 const { data } = await axios.post(`${backend_URL}/result/sendGrades`, {
-                    grade: grade,
+                    grade: grades[studentId]
                 },
                     {
                         params: {
-                            studentId: id,
-                            examId: selectedDetails.parentExam,
-                            assessmentId: selectedDetails._id,
+                            studentId,
+                            assessmentId,
+                            examId,
                         }
                     })
                 if (!data.success) {
                     toast.error("something went wrong")
                 }
                 toast.success(data.message);
+                setResponse(data);
             } catch (error) {
                 console.log(error);
                 toast.error(error)
@@ -96,6 +121,7 @@ function Evaluation() {
     useEffect(() => {
 
         const fetchClasses = async () => {
+            
             try {
                 const response = await axios.post(`${backend_URL}/teachers/class`, {
                     teacher: user.name
@@ -114,6 +140,7 @@ function Evaluation() {
 
             } catch (error) {
                 console.log(error);
+                navigate('/login');
                 toast.error('internal server error!')
             }
         }
@@ -153,7 +180,7 @@ function Evaluation() {
             setTitles(selectedDetail.rubrics);
         }
     }, [selectedAssessment, details])
-    
+
 
     return (
         <>
@@ -222,7 +249,7 @@ function Evaluation() {
                                 '&:hover': {
                                     backgroundColor: '#FFD700', // Darker yellow on hover
                                 },
-                            }}>Download Report</Button>
+                            }}><Link to={'/reports'}>Download Report</Link></Button>
                         </div>
                     </div>
                     <hr />
@@ -245,8 +272,7 @@ function Evaluation() {
                                             ) : (
                                                 <TableCell><strong>Grade</strong></TableCell>
                                             )}
-                                           
-                                            {selectedDetails.type == "Marks" ? (<TableCell><strong>Remarks</strong></TableCell>) : (<></>)}
+                                            {selectedDetails.type === "Marks" ? (<TableCell><strong>Remarks</strong></TableCell>) : (<></>)}
                                             <TableCell>Upload</TableCell>
                                         </TableRow>
                                     </TableHead>
@@ -260,20 +286,28 @@ function Evaluation() {
                                                     <>
                                                         <TableCell>{selectedDetails.maxMarks}</TableCell>
                                                         <TableCell>
-                                                            <TextField type='number' value={marks} onChange={(e) => setMarks(e.target.value)} />
+                                                            <TextField
+                                                                type='number'
+                                                                value={marks[student._id] || ''}
+                                                                onChange={(e) => handleMarksChange(student._id, e.target.value)}
+                                                            />
                                                         </TableCell>
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <TableCell className=''>
+                                                        <TableCell>
                                                             {titles.map((element, idx) => (
                                                                 <div className='py-2' key={idx}>{element}</div>
                                                             ))}
                                                         </TableCell>
-                                                            <TableCell className='py-2 my-2'>
+                                                        <TableCell>
                                                             {titles.map((element, idx) => (
                                                                 <div className='py-1' key={idx}>
-                                                                    <select className='border  border-black p-2' name="" id="" value={grade} onChange={(e)=>e.target.value}>
+                                                                    <select
+                                                                        className='border border-black p-2'
+                                                                        value={grades[student._id]?.[idx] || ''}
+                                                                        onChange={(e) => handleGradeChange(student._id, idx, e.target.value)}
+                                                                    >
                                                                         <option value="O">O</option>
                                                                         <option value="A">A</option>
                                                                         <option value="B">B</option>
@@ -287,13 +321,25 @@ function Evaluation() {
                                                         </TableCell>
                                                     </>
                                                 )}
-                                                {selectedDetails.type == "Marks" ? (<TableCell><TextField type='text' value={remarks} onChange={(e) => setRemarks(e.target.value)} /></TableCell>) : (<></>)}
-                                                <TableCell><Button variant='contained' onClick={()=>uploadHandler(student._id)}>Upload</Button></TableCell>
+                                                {selectedDetails.type === "Marks" ? (
+                                                    <TableCell>
+                                                        <TextField
+                                                            type='text'
+                                                            value={remarks[student._id] || ''}
+                                                            onChange={(e) => handleRemarksChange(student._id, e.target.value)}
+                                                        />
+                                                    </TableCell>
+                                                ) : (<></>)}
+                                                <TableCell>
+                                                    <Button variant='contained' onClick={() => uploadHandler(student._id)}>Upload</Button>
+                                                </TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
                                 </Table>
+                                {response && <div>{response.message}</div>}
                             </TableContainer>
+
                         </>}
 
                     </div>

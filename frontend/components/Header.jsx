@@ -10,7 +10,8 @@ import { LoginContext } from '../src/main.jsx'
 
 function Drop() {
 
-    const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext);
+    const { isLoggedIn, setIsLoggedIn, user } = useContext(LoginContext);
+    
     const navigate = useNavigate()
     const logoutFunc = async () => {
         try {
@@ -22,7 +23,6 @@ function Drop() {
             })
             if (!data.success) {
                 return toast.error('something went wrong');
-                setIsLoggedIn(true);
             }
             toast.success(data.message)
             setIsLoggedIn(false);

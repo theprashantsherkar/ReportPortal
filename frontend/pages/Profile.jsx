@@ -10,7 +10,7 @@ function Profile() {
   const { user, isLoggedIn, loading } = useContext(LoginContext);
   
 
-  console.log(isLoggedIn);
+  console.log(user);
 
 
   return (

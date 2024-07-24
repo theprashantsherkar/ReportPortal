@@ -1,6 +1,7 @@
 import { Exam } from "../model/examModel.js";
 import { Assessment } from "../model/assessments.js";
 import { Student } from "../model/studentsModel.js";
+import { PDFDocument, rgb } from 'pdf-lib';
 
 
 export const getClass = async (req, res, next) => {
@@ -84,4 +85,9 @@ export const getStudents = async (req, res, next) => {
         students
     })
 
+}
+
+export const printReport = (req, res, next) => {
+    
+    
 }

@@ -31,12 +31,23 @@ function Assessment() {
     const [type, setType] = useState('');
     const [maxMarks, setMaxMarks] = useState('');
     const [isRubrics, setIsRubrics] = useState('');
-    const { subjects } = useContext(LoginContext);
+    const { subjects, user } = useContext(LoginContext);
     const [assessments, setAssessments] = useState([]);
     const [open, setOpen] = useState(false);
     const [openRubrics, setOpenRubrics] = useState(false);
     const [selectedSubject, setSelectedSubject] = useState([]);
 
+
+    // useEffect(() => {
+    //     if (!user) {
+    //         toast.error('Login First')
+    //         return navigate('/login')
+    //     }
+
+    //     if (user.role !== "admin") {
+    //         return navigate('/login');
+    //     }
+    // }, [])
 
     const handleRubrics = (id) => {
         console.log(`button id:${id} clicked`);

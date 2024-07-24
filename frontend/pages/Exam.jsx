@@ -27,13 +27,25 @@ function Exam() {
   const [names, setNames] = useState([]);
   const [examData, setExamData] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const { subjects, setSubjects } = useContext(LoginContext);
+  const { subjects, setSubjects, user } = useContext(LoginContext);
   const navigate = useNavigate();
 
   const classSubmit = (e) => setClass(e.target.value);
   const sessionSubmit = (e) => setSession(e.target.value);
   const sectionSubmit = (e) => setSection(e.target.value);
   const teacherSubmit = (e) => setTeacher(e.target.value);
+  // useEffect(() => {
+  //   console.log(user);
+  //   if (user.role !== "Admin") {
+  //     return navigate('/login');
+  //   }
+
+  //   if (!user) {
+  //     toast.error('Login First')
+  //     return navigate('/login')
+  //   }
+  // }, [])
+
 
   const handleAssessments = async (id) => {
     try {
@@ -232,22 +244,22 @@ function Exam() {
                   <TableHead>
                     <TableRow >
                       {headers.map((header, index) => (
-                        <TableCell key={index} sx={{ border: '1px solid black' }}><strong>{header.charAt(0).toUpperCase() + header.slice(1)}</strong></TableCell>
+                        <TableCell key={index} sx={{ border: '1px solid black', textAlign:'center' }}><strong>{header.charAt(0).toUpperCase() + header.slice(1)}</strong></TableCell>
                       ))}
-                      <TableCell sx={{ border: '1px solid black' }}><strong>Config</strong></TableCell>
-                      <TableCell sx={{ border: '1px solid black' }}><strong>Action</strong></TableCell>
+                      <TableCell sx={{ border: '1px solid black', textAlign: 'center' }}><strong>Config</strong></TableCell>
+                      <TableCell sx={{ border: '1px solid black', textAlign: 'center' }}><strong>Action</strong></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {examData.map((item, rowIndex) => (
                       <TableRow key={rowIndex}>
                         {headers.map((header, colIndex) => (
-                          <TableCell key={colIndex} sx={{ border: '1px solid black' }}>{item[header]}</TableCell>
+                          <TableCell key={colIndex} sx={{ border: '1px solid black', textAlign: 'center' }}>{item[header]}</TableCell>
                         ))}
-                        <TableCell sx={{ border: '1px solid black' }}>
+                        <TableCell sx={{ border: '1px solid black', textAlign: 'center' }}>
                           <button className='btn btn-primary' onClick={() => handleAssessments(item._id)}>Assessments</button>
                         </TableCell>
-                        <TableCell className='mx-1 ' sx={{ border: '1px solid black' }}>
+                        <TableCell className='mx-1 ' sx={{ border: '1px solid black', textAlign: 'center' }}>
                           <button className='btn btn-warning px-2' onClick={() => setDialogOpen(true)}><EditBtn /></button>{ "   "}
                           <button className='btn btn-danger px-2' onClick={() => DeleteHandler(item._id)}><DeleteBtn /></button>
                           {dialogOpen && (
