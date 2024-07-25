@@ -2,6 +2,7 @@ import { Exam } from "../model/examModel.js";
 import { Assessment } from "../model/assessments.js";
 import { Student } from "../model/studentsModel.js";
 import { PDFDocument, rgb } from 'pdf-lib';
+import { Result } from "../model/results.js";
 
 
 export const getClass = async (req, res, next) => {
@@ -87,7 +88,38 @@ export const getStudents = async (req, res, next) => {
 
 }
 
-export const printReport = (req, res, next) => {
-    
-    
+export const printReport = async(req, res, next) => {
+    try {
+        const studentId = req.params.id;
+        const student = await Student.findById(studentId);
+        if (!student) {
+            return res.status(404).json({
+                success: false,
+                message: "student not found"
+            })
+        }
+        const result = await Result.find({ student: student._id })
+        const pdf = await PDFDocument.create();
+        const page = pdf.addPage([600, 800]);
+        const { width, height } = page.getSize();
+
+        const fontSize = 13;
+        page.drawText('Report Card', { x: 50, y: height - 4 * fontSize, size: fontSize, color: rgb(0, 0, 0) });
+        page.drawText(`Student Name: ${student.name}`, { x: 50, y: height - 6 * fontSize, size: fontSize, color: rgb(0, 0, 0) })
+        page.drawText(`Class: ${student.Class}`, { x: 50, y: height - 8 * fontSize, size: fontSize, color: rgb(0, 0, 0) });
+
+
+        //todo: add result here after download is tested
+
+
+        const finalPDF = await pdf.save();
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename="report_card_${student.name}.pdf"`);
+        res.send(pdf);
+
+
+    } catch (error) {
+        console.log(error);
+    }
+
 }

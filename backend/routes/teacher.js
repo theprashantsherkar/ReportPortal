@@ -8,5 +8,4 @@ router.post('/class', getClass);
 router.post('/getassessment', getAssessmentsForTeacher);
 router.get('/getstudents', getStudents);
 
-
 export default router;
