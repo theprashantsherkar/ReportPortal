@@ -67,6 +67,7 @@ function Header() {
                         <li><NavLink className='links' activeClassName="active" to={'/dashboard'}>Dashboard</NavLink></li>
                         <li><NavLink className='links' activeClassName="active" to={'/exam'} >Exam</NavLink></li>
                         <li><NavLink className='links' activeClassName="active" to={'/evaluate'} >Evaluate</NavLink></li>
+                        <li><NavLink className='links' activeClassName="active" to={'/reports'}>Reports</NavLink></li>
                         <li><NavLink className='links' activeClassName="active" to={'/profile'}>Profile</NavLink></li>
                         <li><NavLink className='links' activeClassName="active" to={'/changepassword'}>Change Password</NavLink></li>
                     </ul>

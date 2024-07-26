@@ -88,5 +88,3 @@ export const getStudents = async (req, res, next) => {
 
 }
 
-// todo: add api for the pdf generation:
-

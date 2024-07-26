@@ -243,13 +243,7 @@ function Evaluation() {
                         <h1>Subject: {subjectName}</h1>
                         <div className='d-flex gap-2'>
                             <Button variant='contained'>Update All</Button>
-                            <Button variant='contained' sx={{
-                                backgroundColor: '#FFD700',
-                                color: 'black',
-                                '&:hover': {
-                                    backgroundColor: '#FFD700', // Darker yellow on hover
-                                },
-                            }}><Link to={'/reports'}>Download Report</Link></Button>
+                            
                         </div>
                     </div>
                     <hr />

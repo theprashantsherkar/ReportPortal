@@ -144,7 +144,7 @@ function Exam() {
 
   }, [handleSubmit, DeleteHandler, dialogOpen, examData])
 
-  if (examData?.length > 1) {
+  if (examData?.length > 0) {
     var headers = Object.keys(examData[0]).filter(header => header !== "madeBy" && header !== "_id" && header !== "__v");
   }
 
