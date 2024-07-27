@@ -24,7 +24,6 @@ function Evaluation() {
     const [grades, setGrades] = useState({});
     const [remarks, setRemarks] = useState({});
     const [response, setResponse] = useState(null);
-
     const [titles, setTitles] = useState([])
     const { user } = useContext(LoginContext);
     const [assessmentName, subjectName] = selectedAssessment?.split(' - ')
