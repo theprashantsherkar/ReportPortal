@@ -14,7 +14,7 @@ import { LoginContext } from './main.jsx';
 import Assessment from '../pages/Assessment.jsx';
 import Evaluation from '../pages/Evaluation.jsx';
 import Report from '../pages/Report.jsx';
-import Reports from '../components/Report/Reports.jsx'
+import Dummy from '../pages/Dummy.jsx';
 
 
 
@@ -52,7 +52,7 @@ function App() {
         <Route path='/exam' element={<Exam />} />
         <Route path='/changepassword' element={<Passchange />} />
         <Route path='/reports' element={<Report />} />
-        <Route path='/report/dummy' element={<Reports />} />
+        <Route path='/report/dummy' element={<Dummy />} />
         <Route path='/assessment/:id' element={<Assessment />} />
       </Routes>
       <Toaster />

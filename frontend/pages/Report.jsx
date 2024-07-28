@@ -14,17 +14,11 @@ function Report() {
     const navigate = useNavigate();
     const [studentResult, setStudentResult] = useState([]);
     const [classes, setClasses] = useState([]);
-    const [assessments, setAssessments] = useState([]);
     const [selectedClass, setSelectedClass] = useState('');
-    const [selectedAssessment, setSelectedAssessment] = useState('');
     const [students, setStudents] = useState([]);
     const [showTable, setShowTable] = useState(false);
-    const [selectedDetail, setSelectedDetails] = useState({});
-    const [titles, setTitles] = useState([]);
-    const [details, setDetails] = useState([]);
-    const [response, setResponse] = useState(null);
     const { user } = useContext(LoginContext);
-    const [assessmentName, subjectName] = selectedAssessment?.split(' - ');
+
 
     useEffect(() => {
         const fetchClasses = async () => {
@@ -52,36 +46,6 @@ function Report() {
         fetchClasses();
     }, [user]);
 
-    useEffect(() => {
-        const fetchSubject = async () => {
-            try {
-                const { data } = await axios.post(`${backend_URL}/teachers/getassessment`, {
-                    Class: selectedClass,
-                    teacher: user.name,
-                }, {
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    withCredentials: true,
-                });
-
-                setAssessments(data.assTitles);
-                setDetails(data.assessments);
-            } catch (error) {
-                console.log(error);
-                toast.error('Internal server error');
-            }
-        };
-        fetchSubject();
-    }, [selectedClass]);
-
-    useEffect(() => {
-        if (selectedAssessment && details.length > 0) {
-            const selectedDetail = details.find(element => element.title === assessmentName && element.subjects === subjectName);
-            setSelectedDetails(selectedDetail || {});
-            setTitles(selectedDetail?.rubrics);
-        }
-    }, [selectedAssessment, details]);
 
     const handleSelectAllChange = (event) => {
         const isChecked = event.target.checked;
@@ -171,30 +135,11 @@ function Report() {
                             </Select>
                         </FormControl>
 
-                        <FormControl fullWidth margin="normal">
-                            <InputLabel>Assessment</InputLabel>
-                            <Select
-                                value={selectedAssessment}
-                                onChange={(e) => setSelectedAssessment(e.target.value)}
-                                label="Assessment"
-                            >
-                                {Array.isArray(assessments) && assessments.length > 0 ? (
-                                    assessments.map((ass, index) => (
-                                        <MenuItem key={index} value={`${ass.title} - ${ass.subjects}`}>
-                                            {`${ass.title} - ${ass.subjects}`}
-                                        </MenuItem>
-                                    ))
-                                ) : (
-                                    <MenuItem disabled>No Assessments Found</MenuItem>
-                                )}
-                            </Select>
-                        </FormControl>
+                        
                         <Button variant="contained" onClick={ShowButton}>Show</Button>
                     </div>
                     <hr />
                     <div className="headings px-2 py-3 d-flex gap-5 fs-6 fw-medium align-items-center justify-content-between">
-                        <h1>Assessment Title: {assessmentName}</h1>
-                        <h1>Subject: {subjectName}</h1>
                         <div className='d-flex gap-2'>
                             <Button variant='contained' onClick={downloadHandler} sx={{
                                 backgroundColor: '#FFD700',

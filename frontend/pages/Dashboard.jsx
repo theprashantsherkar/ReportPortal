@@ -7,7 +7,6 @@ import axios from 'axios';
 
 
 function Dashboard() {
-    //dashboard api goes here
     const [data, setData] = useState([]);
     const [file, setFile] = useState("");
 
@@ -63,15 +62,7 @@ function Dashboard() {
         var headers = Object.keys(data[0]).filter((title) => title !== "_id" && title !== "__v")
     }
 
-    function generate() {
-        for (let i = 0; i < data.length; i++) {
-            return (
-                <>
-                    <option value={i}>{i}</option>
-                </>
-            )
-        }
-    }
+
 
     return (
         <>

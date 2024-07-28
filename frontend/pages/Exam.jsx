@@ -139,7 +139,6 @@ function Exam() {
       withCredentials: true,
     }).then((res) => {
       setExamData(res.data.exam)
-      // console.log(examData);
     }).catch((err) => console.log(err));
 
   }, [handleSubmit, DeleteHandler, dialogOpen, examData])
@@ -267,7 +266,6 @@ function Exam() {
                               open={dialogOpen}
                               onClose={() => setDialogOpen(false)}
                               id={item._id}
-                             
                             />
                           )}
                         </TableCell>
