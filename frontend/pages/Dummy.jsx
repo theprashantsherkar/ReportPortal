@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import Report from '../components/Report/Report.jsx'
+import Report from '../components/Report/Report'
 
 
 function Dummy() {
     return (
         <>
-            <Report/>
+            <Report />
         </>
     )
 

@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post('/sendMarks', sendMarks)
 router.post('/sendGrades', sendGrades)
-router.get('/report/:id', generateResult)
+router.post('/report', generateResult)
 
 
 

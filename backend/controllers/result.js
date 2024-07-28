@@ -107,14 +107,13 @@ export const sendGrades = async (req, res) => {
 //todo:add the puppetter/ pdf api here
 
 
-export const generateResult =async (req, res, next) => {
+export const generateResult =async ( req, res, next) => {
     try {
-        const studentId = req.params.id
-
-        const result = await Result.find({ student: studentId });
+        const studentId = req.body.id;
+        const result = await Result.find({ student: studentId});
         const subjects = [];
         result.map((element) => {
-            subjects.push(element.credentials.subject);
+            subjects.push(element?.credentials?.subject);
         })
         if (!subjects) {
             return res.status(404).json({
@@ -126,15 +125,14 @@ export const generateResult =async (req, res, next) => {
             success: true,
             message: "here are the results",
             subjects,
-            
             result,
         })
     } catch (error) {
-        return res.status(500).json({
+         res.status(500).json({
             success: false,
             message:"Internal Server Error!"
         })
         console.log(error)
     }
-    
+
 }

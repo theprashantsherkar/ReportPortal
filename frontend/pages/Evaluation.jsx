@@ -120,7 +120,7 @@ function Evaluation() {
     useEffect(() => {
 
         const fetchClasses = async () => {
-            
+
             try {
                 const response = await axios.post(`${backend_URL}/teachers/class`, {
                     teacher: user.name
@@ -242,7 +242,7 @@ function Evaluation() {
                         <h1>Subject: {subjectName}</h1>
                         <div className='d-flex gap-2'>
                             <Button variant='contained'>Update All</Button>
-                            
+
                         </div>
                     </div>
                     <hr />

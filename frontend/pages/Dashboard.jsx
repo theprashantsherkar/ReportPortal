@@ -44,10 +44,10 @@ function Dashboard() {
     useEffect(() => {
         axios.get(`${backend_URL}/admin/fetchStudents`, {
             headers: {
-                "Content-Type":"application'json"
+                "Content-Type": "application'json"
             },
             withCredentials: true,
-            
+
         }).then((res) => {
             setData(res.data.students);
         }).catch((err) => {
@@ -57,14 +57,14 @@ function Dashboard() {
 
     }, [submitHandler])
 
-   
-    
-    if (data && data.length>1) {
-        var headers = Object.keys(data[0]).filter((title)=> title!=="_id" && title!=="__v")
+
+
+    if (data && data.length > 1) {
+        var headers = Object.keys(data[0]).filter((title) => title !== "_id" && title !== "__v")
     }
 
     function generate() {
-        for (let i = 0; i < data.length; i++){
+        for (let i = 0; i < data.length; i++) {
             return (
                 <>
                     <option value={i}>{i}</option>
@@ -87,16 +87,16 @@ function Dashboard() {
                     <form onSubmit={submitHandler}>
                         <div className="inputs border border-black   rounded p-3 flex justify-center w-100 ">
                             <input onChange={handleFileChange} className='border-1 border-black rounded-md p-2 mx-2' type="file" name="file" id="excel" />
-<button type='submit' className='btn btn-primary'>Upload</button>
+                            <button type='submit' className='btn btn-primary'>Upload</button>
                         </div>
                     </form>
                     <hr />
                     <div className="d-flex align-items-center justify-content-between py-3">
                         <p>show
                             <select name="" id="">
-                               <option value="1">1</option>
-                               <option value="2">2</option>
-                               <option value="3">3</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
                             </select>
                             entries.
                         </p>

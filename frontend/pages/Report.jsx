@@ -10,9 +10,9 @@ import { useNavigate } from 'react-router-dom';
 
 function Report() {
     const [selectAll, setSelectAll] = useState(false);
-    const [strength, setStrength] = useState(0);
     const [checkboxes, setCheckboxes] = useState([]);
     const navigate = useNavigate();
+    const [studentResult, setStudentResult] = useState([]);
     const [classes, setClasses] = useState([]);
     const [assessments, setAssessments] = useState([]);
     const [selectedClass, setSelectedClass] = useState('');
@@ -105,18 +105,26 @@ function Report() {
         }
 
         const selectedIds = students
-            .map((student, index) => ({ id: student.id, isChecked: checkboxes[index] }))
+            .map((student, index) => ({ _id: student._id, isChecked: checkboxes[index] }))
             .filter(student => student.isChecked)
-            .map(student => student.id);
+            .map(student => student._id);
 
-        console.log("Selected IDs:", selectedIds); // Log selected IDs
         return selectedIds;
     };
 
-    const downloadHandler = () => {
-        const selectedStudentIds = getSelectedStudentIds();
-        // Perform action with selectedStudentIds, like API call
-        navigate(`/report/dummy`, { state: { studentIds: selectedStudentIds } });
+    const downloadHandler = async() => {
+        const id = getSelectedStudentIds();
+        const { data } = await axios.post(`${backend_URL}/result/report`,
+            { id }, {
+                headers: {
+                    "Content-Type":"application/json"
+                },
+                withCredentials: true,
+            }
+        )
+        toast.success(data.message);
+        setStudentResult(data.result);
+        navigate(`/report/dummy`, { state: { results: studentResult } });
     };
 
     const ShowButton = async () => {
@@ -128,8 +136,7 @@ function Report() {
             });
 
             setStudents(response.data.students);
-            setCheckboxes(response.data.students.map(() => false)); // Initialize checkboxes
-            setStrength(response.data.students.length);
+            setCheckboxes(response.data.students.map(() => false));
             setShowTable(true);
 
         } catch (error) {
