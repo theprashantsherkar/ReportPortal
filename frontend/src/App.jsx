@@ -26,17 +26,21 @@ function App() {
   const { setUser, user, setIsLoggedIn } = useContext(LoginContext);
 
   useEffect(() => {
-    axios.get(`${backend_URL}/admin/profile`, {
-      withCredentials: true,
-    }).then((res) => {
-      setUser(res.data.User)
-      setIsLoggedIn(true)
-    }).catch((error) => {
-      setUser({})
-      console.log("error in App.js")
-      console.log(error)
-      setIsLoggedIn(false);
-    })
+    async function getUser() {
+     try {
+       const { data } = await axios.get(`${backend_URL}/admin/profile`, {
+         headers: {
+           "Content-Type": "application/json"
+         },
+         withCredentials: true,
+       })
+       setUser(data.User);
+       setIsLoggedIn(true);
+     } catch (error) {
+      console.log('error in App.js')
+     }
+    }
+    getUser();
   }, [Routes, Profile])
 
   return (
