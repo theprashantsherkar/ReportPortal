@@ -11,8 +11,11 @@ import { useNavigate } from 'react-router-dom';
 function Report() {
     const [selectAll, setSelectAll] = useState(false);
     const [checkboxes, setCheckboxes] = useState([]);
+    const [toDownload, setToDownload] = useState(false)
     const navigate = useNavigate();
     const [studentResult, setStudentResult] = useState([]);
+    const [navigateReady, setNavigateReady] = useState(false);
+
     const [classes, setClasses] = useState([]);
     const [selectedClass, setSelectedClass] = useState('');
     const [students, setStudents] = useState([]);
@@ -76,20 +79,30 @@ function Report() {
         return selectedIds;
     };
 
-    const downloadHandler = async() => {
-        const id = getSelectedStudentIds();
-        const { data } = await axios.post(`${backend_URL}/result/report`,
-            { id }, {
+    const downloadHandler = async () => {
+        try {
+            const id = getSelectedStudentIds();
+            console.log(id);
+            if (id.length == 0) {
+                return toast.error("Select Student First.")
+            }
+            const { data } = await axios.post(`${backend_URL}/result/report`, { id }, {
                 headers: {
-                    "Content-Type":"application/json"
+                    "Content-Type": "application/json"
                 },
                 withCredentials: true,
-            }
-        )
-        toast.success(data.message);
-        setStudentResult(data.result);
-        navigate(`/report/dummy`, { state: { results: studentResult } });
+            });
+
+            toast.success(data.message);
+            console.log(data.results);
+            setStudentResult(data.results);
+            setNavigateReady(true);  // Set navigateReady to true after updating studentResult
+        } catch (error) {
+            console.error("Error fetching report:", error);
+            toast.error("Failed to download report.");
+        }
     };
+
 
     const ShowButton = async () => {
         try {
@@ -102,12 +115,22 @@ function Report() {
             setStudents(response.data.students);
             setCheckboxes(response.data.students.map(() => false));
             setShowTable(true);
+            setToDownload(true);
 
         } catch (error) {
             console.log(error);
             toast.error('Internal server Error');
         }
     };
+
+    useEffect(() => {
+        if (navigateReady) {
+            console.log(studentResult);
+            navigate(`/report/dummy`, { state: { results: studentResult } });
+            setNavigateReady(false);  // Reset navigateReady to false
+        }
+    }, [navigateReady, studentResult, navigate]);
+
 
     return (
         <>
@@ -141,13 +164,19 @@ function Report() {
                     <hr />
                     <div className="headings px-2 py-3 d-flex gap-5 fs-6 fw-medium align-items-center justify-content-between">
                         <div className='d-flex gap-2'>
-                            <Button variant='contained' onClick={downloadHandler} sx={{
+                            {toDownload ? (<Button variant='contained' onClick={downloadHandler} sx={{
                                 backgroundColor: '#FFD700',
                                 color: 'black',
                                 '&:hover': {
                                     backgroundColor: '#FFD700',
                                 },
-                            }}>Download Report</Button>
+                            }}>Download Report</Button>) : (<Button variant='contained' disabled  sx={{
+                                backgroundColor: '#FFD700',
+                                color: 'black',
+                                '&:hover': {
+                                    backgroundColor: '#FFD700',
+                                },
+                            }}>Download Report</Button>)}
                         </div>
                     </div>
                     <hr />

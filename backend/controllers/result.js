@@ -104,35 +104,36 @@ export const sendGrades = async (req, res) => {
 }
 
 
-//todo:add the puppetter/ pdf api here
-
-
-export const generateResult =async ( req, res, next) => {
+export const generateResult = async (req, res, next) => {
     try {
-        const studentId = req.body.id;
-        const result = await Result.find({ student: studentId});
-        const subjects = [];
-        result.map((element) => {
-            subjects.push(element?.credentials?.subject);
-        })
-        if (!subjects) {
+        const studentIds = req.body.id;
+        if (!Array.isArray(studentIds)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid input, expected an array of IDs"
+            });
+        }
+
+        const resultPromises = studentIds.map((element) => Result.find({ student: element }));
+        const results = await Promise.all(resultPromises);
+        if (!results) {
             return res.status(404).json({
                 success: false,
-                message:"no subjects/results found"
+                message:"Marks/Grades not added!",
             })
         }
+
         res.status(200).json({
             success: true,
-            message: "here are the results",
-            subjects,
-            result,
-        })
+            message: "Here are the results",
+            results,
+        });
     } catch (error) {
-         res.status(500).json({
+        res.status(500).json({
             success: false,
-            message:"Internal Server Error!"
-        })
-        console.log(error)
+            message: "Internal Server Error!"
+        });
+        console.log(error);
     }
+};
 
-}

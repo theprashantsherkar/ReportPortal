@@ -11,7 +11,41 @@ function Report({result}) {
     const location = useLocation();
     // const studentData = location.state?.results
 
- 
+
+    const styles = {
+        header: {
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontSize: '20px',
+            padding: '16px',
+            border: '1px solid black'
+        },
+        subHeader: {
+            fontWeight: 'bold',
+            border: '1px solid black',
+            padding: '8px',
+            backgroundColor: '#f2f2f2'
+        },
+        cell: {
+            border: '1px solid black',
+            padding: '8px',
+            textAlign: 'left'
+        },
+        row: {
+            display: 'flex',
+            borderBottom: '1px solid black',
+            padding: '8px 0',
+            fontSize: '16px'
+        },
+        label: {
+            flex: '1',
+            fontWeight: 'bold'
+        },
+        value: {
+            flex: '2',
+            textAlign: 'left'
+        }
+    };
 
     return (
         <>
@@ -32,7 +66,7 @@ function Report({result}) {
                                     <Typography variant="body1"><strong>Student Name:</strong></Typography>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Typography variant="body1"><strong>{result?.credentials.name || "Prashant Sherkar"}</strong></Typography>
+                                    <Typography variant="body1"><strong>{result[0]?.credentials.name || "Prashant Sherkar"}</strong></Typography>
                                     <Box borderBottom={1} mt={1}></Box>
                                 </Grid>
 
@@ -40,7 +74,7 @@ function Report({result}) {
                                     <Typography variant="body1"><strong>Class :</strong></Typography>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Typography variant="body1"><strong>{result?.credentials.Class || "Class X"}</strong></Typography>
+                                    <Typography variant="body1"><strong>{result[0]?.credentials.Class || "Class X"}</strong></Typography>
                                     <Box borderBottom={1} mt={1}></Box>
                                 </Grid>
 
@@ -48,7 +82,7 @@ function Report({result}) {
                                     <Typography variant="body1"><strong>Roll Number:</strong></Typography>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Typography variant="body1"><strong>{result?.credentials.roll || 23} </strong></Typography>
+                                    <Typography variant="body1"><strong>{result[0]?.credentials.roll || 23} </strong></Typography>
                                     <Box borderBottom={1} mt={1}></Box>
                                 </Grid>
 
@@ -74,11 +108,11 @@ function Report({result}) {
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
                             <tr>
-                                <th colSpan="3" style={styles.header}>Student Name: {result?.credentials.name}</th>
+                                <th colSpan="3" style={styles.header}>Student Name: {result[0]?.credentials.name}</th>
                             </tr>
                             <tr>
-                                <th colSpan="2" style={styles.subHeader}>{result?.credentials.Class}</th>
-                                <th style={styles.subHeader}>{result?.credentials.assessment}</th>
+                                <th colSpan="2" style={styles.subHeader}>{result[0]?.credentials.Class}</th>
+                                <th style={styles.subHeader}>{result[0]?.credentials.assessment}</th>
                             </tr>
                             <tr>
                                 <th style={styles.subHeader}>Subjects and Skills</th>
@@ -87,11 +121,11 @@ function Report({result}) {
                             </tr>
                         </thead>
                         <tbody>
-                            {studentData.subjects.map((subject, index) => (
+                            {result.map((subject, index) => (
                                 <tr key={index}>
-                                    <td style={styles.cell}>{subject.subject}</td>
-                                    <td style={styles.cell}>{subject.grade}</td>
-                                    <td style={styles.cell}>{subject.remarks}</td>
+                                    <td style={styles.cell}>{subject.credentials.subject}</td>
+                                    <td style={styles.cell}>{subject.marks || "grades to be added yet"}</td>
+                                    <td style={styles.cell}>{subject.remarks || "no remarks added"}</td>
                                 </tr>
                             ))}
                         </tbody>

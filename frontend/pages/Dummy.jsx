@@ -5,9 +5,9 @@ import toast from 'react-hot-toast';
 
 
 function Dummy() {
-    const [results, setResults] = useState([]);
     const location = useLocation();
-    setResults(location.state?.results);
+    const results = location.state?.results;
+    console.log(results);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -18,10 +18,10 @@ function Dummy() {
     })
     return (
         <>
-            {results.map((element) => (
+            {results.map((result) => (
                 <>
-                    <Reports result={element} />
-            </>
+                    <Reports result={result} />
+                </>
             ))}
 
         </>
