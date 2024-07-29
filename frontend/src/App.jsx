@@ -37,7 +37,7 @@ function App() {
        setUser(data.User);
        setIsLoggedIn(true);
      } catch (error) {
-      console.log('error in App.js')
+       console.log('error in App.js');
      }
     }
     getUser();
