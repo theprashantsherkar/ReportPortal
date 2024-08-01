@@ -50,7 +50,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/evaluate' element={<Evaluation />} />
-        <Route path='/' element={<Dashboard />} />
+        <Route path='/' element={<Login />} />
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/exam' element={<Exam />} />
@@ -67,3 +67,14 @@ function App() {
 }
 
 export default App
+
+
+//todo: add subjects in a separate page?. optional, will take suggestions
+// todo: make dashboard as the marks adding page
+//will check and take suggestions
+//todo: different format for different classes exams
+//todo: add a search thing to the class teacher dropdown
+//todo: there are some classes with just the grading system
+//todo: add a back button in the existing demo app on the manage rubrics to go back
+//todo: in subject of attendace the students arent showing
+//todo: for such assessments where the it is purely grade based, hide percentage form reports. (depemds what classes)
