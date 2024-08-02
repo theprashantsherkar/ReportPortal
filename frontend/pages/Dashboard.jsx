@@ -41,18 +41,32 @@ function Dashboard() {
     }
 
     useEffect(() => {
-        axios.get(`${backend_URL}/admin/fetchStudents`, {
-            headers: {
-                "Content-Type": "application'json"
-            },
-            withCredentials: true,
 
-        }).then((res) => {
-            setData(res.data.students);
-        }).catch((err) => {
-            console.log(err);
-            toast.error(err);
-        })
+        const getStudents = async () => {
+            try {
+                const response = await axios.get(`${backend_URL}/admin/fetchStudents`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    withCredentials: true,
+
+                })
+                if (!response.data.success) {
+                    setData('');
+                    return toast.error('Cant Fetch students right now')
+                }
+                setData(response.data.students)
+
+                
+            } catch (error) {
+                console.log(error)
+                toast.error('Something went wrong')
+            }
+
+
+        }
+
+        getStudents();
 
     }, [submitHandler])
 
@@ -108,29 +122,29 @@ function Dashboard() {
                                     <h2>no data</h2>
                                 </>
                             ) : (
-                                    <>
-                                        <table className='table table-bordered'>
+                                <>
+                                    <table className='table table-bordered'>
 
-                                            <thead>
+                                        <thead>
 
-                                                <tr>
-                                                    {data.length > 1 && headers.map((key) => <th key={key}>{key}</th>)}
+                                            <tr>
+                                                {data.length > 1 && headers.map((key) => <th key={key}>{key}</th>)}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {data.map((item, rowIndex) => (
+                                                <tr key={rowIndex}>
+                                                    {headers.map((header, colIndex) => (
+                                                        <>
+                                                            <td key={colIndex} className="border border-gray-300 px-4 py-2">{item[header].toString()}</td>
+                                                        </>
+                                                    )
+                                                    )}
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-                                                {data.map((item, rowIndex) => (
-                                                    <tr key={rowIndex}>
-                                                        {headers.map((header, colIndex) => (
-                                                            <>
-                                                                <td key={colIndex} className="border border-gray-300 px-4 py-2">{item[header].toString()}</td>
-                                                            </>
-                                                        )
-                                                        )}
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </>
                             )
                         }
                     </div>

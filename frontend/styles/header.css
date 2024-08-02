@@ -52,8 +52,8 @@
 .drop{
     position: absolute;
     text-align: center;
-    height: 120px;
-    width: 140px;
+    height: fit-content;
+    min-width: fit-content;
     top: 50px;
     right: 47px;
     font-size: 18px;
@@ -63,7 +63,7 @@
 }
 
 .drop ul li:hover{
-    font-weight: 700;
+    
     transition: linear 0.2s;
     background-color: rgb(86, 148, 184);
    
@@ -73,3 +73,11 @@
     padding: 10px;
      border-radius: 20px;
 }
+
+
+.drop:focus-visible{
+    border-radius: 20px;
+    background-color: rgb(86, 148, 184);
+
+}
+

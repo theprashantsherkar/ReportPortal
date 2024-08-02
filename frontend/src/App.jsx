@@ -15,8 +15,7 @@ import Assessment from '../pages/Assessment.jsx';
 import Evaluation from '../pages/Evaluation.jsx';
 import Report from '../pages/Report.jsx';
 import Dummy from '../pages/Dummy.jsx';
-
-
+import AddSubs from '../pages/AddSubs.jsx';
 
 
 
@@ -58,6 +57,7 @@ function App() {
         <Route path='/reports' element={<Report />} />
         <Route path='/report/dummy' element={<Dummy />} />
         <Route path='/assessment/:id' element={<Assessment />} />
+        <Route path='/addSubjects' element={<AddSubs />} />
       </Routes>
       <Toaster />
     </Router>

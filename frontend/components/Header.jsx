@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import '../styles/header.css'
 import { useNavigate } from 'react-router-dom'
@@ -39,6 +39,7 @@ function Drop() {
         <>
             <ul>
                 <li><Link to={'/profile'}>Profile</Link></li>
+                <li><Link to={'/changepassword'}>Change Password</Link></li>
                 <li onClick={logoutFunc}>Log Out</li>
             </ul>
         </>
@@ -50,8 +51,8 @@ function Drop() {
 function Header() {
 
 
-    const [user, setUser] = useState("")
     const [view, setView] = useState(false)
+
     return (
         <>
             <div className="headingCont">
@@ -69,7 +70,7 @@ function Header() {
                         <li><NavLink className='links' activeClassName="active" to={'/evaluate'} >Evaluate</NavLink></li>
                         <li><NavLink className='links' activeClassName="active" to={'/reports'}>Reports</NavLink></li>
                         <li><NavLink className='links' activeClassName="active" to={'/profile'}>Profile</NavLink></li>
-                        <li><NavLink className='links' activeClassName="active" to={'/changepassword'}>Change Password</NavLink></li>
+                        <li><NavLink className='links' activeClassName="active" to={'/addSubjects'}>Add Subjects</NavLink></li>
                     </ul>
                 </div>
                 <div className="user" onClick={() => setView(!view)}>
