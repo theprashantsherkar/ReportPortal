@@ -12,7 +12,7 @@ import {
 import axios from 'axios';
 import { backend_URL } from '../src/App';
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import DeleteBtn from '../components/Buttons/DeleteBtn';
 import EditBtn from '../components/Buttons/EditBtn';
 import { LoginContext } from '../src/main';
@@ -20,7 +20,7 @@ import UpdateDialogs from '../components/Dialogs/UpdateDialogs';
 import Header from '../components/Header';
 
 function Exam() {
-  const [Class, setClass] = useState('');
+  const [Class, setClass] = useState('--Select--');
   const [session, setSession] = useState('');
   const [section, setSection] = useState('');
   const [teacher, setTeacher] = useState('');
@@ -144,7 +144,7 @@ function Exam() {
   }, [handleSubmit, DeleteHandler, dialogOpen, examData])
 
   if (examData?.length > 0) {
-    var headers = Object.keys(examData[0]).filter(header => header !== "madeBy" && header !== "_id" && header !== "__v");
+    var headers = Object.keys(examData[0]).filter(header => header !== "madeBy" && header !== "_id" && header !== "__v" && header !== "subjects");
   }
 
   return (
@@ -156,12 +156,12 @@ function Exam() {
         <div className="options w-100 px-2 m-4 d-flex align-items-center justify-content-center">
           <form onSubmit={handleSubmit} className='options d-flex align-items-center justify-content-center'>
             <div className='mx-2 max-w-fit'>
-              <label htmlFor="dropdown" className=" mx-2 text-sm font-medium text-gray-700">Select Class</label>
+              <label htmlFor="dropdown" className=" mx-2 ">Select Class</label>
               <select
-                id="dropdown" onChange={classSubmit}
-                className="mt-1 py-2 text-base border border-black  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                id="dropdown" onChange={classSubmit} defaultValue={"--select--"}
+                className="mt-1 py-2 text-base border border-black focus:border-indigo-500 sm:text-sm rounded-md"
               >
-
+                <option  value="">--select--</option>
                 <option value="Nursery">Nursery</option>
                 <option value="LKG">LKG</option>
                 <option value="UKG">UKG</option>
@@ -185,6 +185,7 @@ function Exam() {
                 id="admins" onChange={teacherSubmit}
                 className="mt-1 pl-3 pr-10 py-2 text-base border border-black  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
               >
+                <option value="">--select--</option>
                 {names?.map((element) => (
                   <option value={element}>{element}</option>
                 ))}
@@ -198,7 +199,7 @@ function Exam() {
                 id="sections" onChange={sectionSubmit}
                 className="mt-1 pl-3 pr-10 py-2 text-base border border-black  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
               >
-                <option value="" disabled>Section</option>
+                <option value="">--select--</option>
                 <option value="A">A</option>
                 <option value="B">B</option>
                 <option value="C">C</option>
@@ -211,7 +212,8 @@ function Exam() {
               <select
                 id="sessions" onChange={sessionSubmit}
                 className="mt-1 pl-3 pr-10 py-2 text-base border border-black  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-              ><option value="" disabled>Session</option>
+              >
+                <option value="">--select--</option>
                 <option value="2024-25">2024-25</option>
                 <option value="2023-24">2023-24</option>
               </select>
@@ -222,12 +224,6 @@ function Exam() {
         <hr />
 
         <div className="searches">
-          <p>show <select name="" id="">
-            <option value="">1</option>
-            <option value="">2</option>
-            <option value="">3</option>
-            <option value="">4</option>
-          </select> entries</p>
           <div className="tab">
             <label htmlFor="search">Search: </label>
             <input className='border border-black rounded px-2 mx-2' type="search" name="" id="search" />
@@ -255,7 +251,8 @@ function Exam() {
                         {headers.map((header, colIndex) => (
                           <TableCell key={colIndex} sx={{ border: '1px solid black', textAlign: 'center' }}>{item[header]}</TableCell>
                         ))}
-                        <TableCell sx={{ border: '1px solid black', textAlign: 'center' }}>
+                        <TableCell sx={{ border: '1px solid black', textAlign: 'center', paddingX: 0 }}>
+                          <Link to={'/subjects'} className=''>Add Subjects</Link>{"               "}
                           <button className='btn btn-primary' onClick={() => handleAssessments(item._id)}>Assessments</button>
                         </TableCell>
                         <TableCell className='mx-1 ' sx={{ border: '1px solid black', textAlign: 'center' }}>

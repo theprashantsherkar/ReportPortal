@@ -41,7 +41,11 @@ function Dashboard() {
     }
 
     useEffect(() => {
-
+        const reloaded = sessionStorage.getItem('reloaded');
+        if (!reloaded) {
+            sessionStorage.setItem('reloaded', 'true');
+            window.location.reload();
+        }
         const getStudents = async () => {
             try {
                 const response = await axios.get(`${backend_URL}/admin/fetchStudents`, {

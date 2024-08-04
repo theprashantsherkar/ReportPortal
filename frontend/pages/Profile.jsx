@@ -10,6 +10,13 @@ function Profile() {
   const { user, isLoggedIn, loading } = useContext(LoginContext);
   
 
+  useEffect(() => {
+    const reloaded = sessionStorage.getItem('reloaded')
+    if (!reloaded) {
+      sessionStorage.setItem('reloaded', 'true');
+      window.location.reload();
+    }
+  })
   console.log(user);
 
 
