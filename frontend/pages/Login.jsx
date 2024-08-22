@@ -80,8 +80,8 @@ function Login() {
                             placeholder='Password' />
                         <br />
                         <IoEyeOutline className='loginEye' onClick={onTap} />
-                        <div className="btns">
-                            <button disabled={loading} type="submit">Log in</button>
+                        <div className="">
+                            <button type="submit">Log in</button>
                         </div>
                         <h4>
                             Or

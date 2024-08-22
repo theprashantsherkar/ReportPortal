@@ -77,4 +77,4 @@ export default App
 //todo: there are some classes with just the grading system
 //todo: add a back button in the existing demo app on the manage rubrics to go back
 //todo: in subject of attendace the students arent showing
-//todo: for such assessments where the it is purely grade based, hide percentage form reports. (depemds what classes)
+//todo: for such assessments where the it is purely grade based, hide percentage form reports. (depends what classes)
